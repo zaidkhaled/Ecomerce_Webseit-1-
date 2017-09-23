@@ -1,0 +1,264 @@
+@import "sass/materialize.scss";
+/* start main rules*/
+body{
+    background-color:#f4f4f4;
+    font-size: 16px;
+}
+
+//colors
+
+$col1:#C4BF9B;
+$col2:#B86E9A;
+$col3:#467885;
+$col4:#333333;
+
+//colors
+
+h1{
+    font-weight: bold;
+    color: $col2;
+    margin: 50px;
+}
+@media #{$small-and-down} {
+    // styles for small screens and down
+    
+    h1{
+        font-size: 36px;
+    }
+  }
+
+
+/*start  global form*/
+
+.text-center{
+    color:#333;
+    font-weight: bolder;
+    margin-bottom: 15px;
+}
+
+
+.input-field .prefix.active{
+    
+    color: $col3;
+}.input-field .prefix{
+    
+    color: $col1;
+}
+
+.contactForm{
+    margin-top: 22vh;
+}
+
+
+input[type=text]:not(.browser-default):focus:not([readonly]),
+input[type=password]:not(.browser-default):focus:not([readonly]),
+input[type=email]:not(.browser-default):focus:not([readonly])
+{
+    
+    border-bottom-color:$col3;
+    box-shadow: 0 1px 0 0 $col3;
+    color: $col3
+}
+input[type=password]:not(.browser-default),
+input[type=text]:not(.browser-default),
+input[type=email]:not(.browser-default)
+{
+    color: $col1;
+    border-bottom-color:$col1;
+    box-shadow: 0 1px 0 0 $col1;
+}
+input[type=password]:not(.browser-default):focus:not([readonly])+ label,
+input[type="text"]:not(.browser-default):focus:not([readonly])+ label,
+input[type="email"]:not(.browser-default):focus:not([readonly])+ label
+{
+    color: $col3;
+}
+
+input[type=password].valid:not(.browser-default),
+    input[type=text].valid:not(.browser-default),
+    input[type=email].valid:not(.browser-default)
+{
+    border-bottom: 1px solid $col4;
+    box-shadow: 0 1px 0 0 $col4;
+}
+
+.btn{
+    color: $col1;
+    background-color: $col3;
+    &:hover{
+     background-color: $col2;
+    }}
+
+
+.container .input-field span{
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: firebrick;
+    display: block;
+    float: right;
+    top: 10px;
+    right: 20px;
+    display: none;
+}
+.EditForm .input-field {
+   height: 120px;
+}
+
+.errmsg .msg, .succmsg .msg{
+    
+     text-align: center;
+     line-height: 50px;
+     padding: 2px;
+    margin-top:  20vh;
+    
+}
+
+.hm {
+    margin-top:  20vh;
+}
+.succmsg,.RecErrMsg,.errmsg{
+    border-radius: 15px;
+    margin-top:-20px;
+}
+
+.succmsg{//success msg 
+     background-color: #6499b5;
+}
+
+.RecErrMsg{ //Record Erorr Msg 
+    background-color: #b10000;
+}
+
+.errmsg{
+    background-color: indianred;
+    display: none;
+    }
+
+@media #{$small-and-down} {
+   .container .input-field .errmsg .msg {
+    line-height: 26px;
+}
+    
+    .EditForm .input-field {
+    height: 110px;
+}
+  }
+  @media #{$medium-and-up} {
+    // styles for medium screens and larger
+  }
+/*end form*/
+
+/*end main rules*/
+
+//start nav
+nav {
+    
+    background-color: $col1;
+}
+nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li>a{
+    color:$col3;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.dropdown-content {
+    
+    margin-top: 65px;
+   
+}
+#dropdownSM{
+    margin-top: 50px;
+}  
+.dropdown-content{
+   background-color: $col1;   
+}
+
+nav i,nav i.material-icons {
+    margin-left: 1px;
+}
+.dropdown-content li:hover, .dropdown-content li.active, .dropdown-content li.selected{
+    background-color: $col4;
+}
+
+
+@media #{$medium-and-up} {
+ .dropdown-button{
+    width: 115px;
+}   
+}
+
+//end nav
+
+
+
+
+
+
+
+
+
+
+
+//start Members
+
+//start Members/Mange 
+
+thead {
+    background-color: $col2;
+    color:  $col4;
+    border-radius:8px;
+}
+
+.mange .btn {
+    margin: 20px;
+    line-height: 27px;
+} 
+
+.mange{
+    margin-top: 10vh;
+}
+  @media #{$medium-and-down} {
+    // styles for medium screens and larger
+    table.responsive-table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    position: relative;
+      }
+}
+//end Members/Mange
+
+
+ @media #{$small-and-down} {
+    // styles for small screens and down
+  }
+  @media #{$medium-and-up} {
+    // styles for medium screens and larger
+  }
+  @media #{$medium-and-down} {
+    // styles for medium screens and down
+  }
+  @media #{$large-and-up} {
+    // styles for large screens and up
+  }
+  @media #{$extra-large-and-up} {
+    // styles for extra large screens and up
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
