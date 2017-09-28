@@ -1,3 +1,8 @@
+/*
+=======================
+** START STYLE/SCSS
+=======================
+*/
 .materialize-red {
   background-color: #e51c23 !important; }
 
@@ -6858,7 +6863,7 @@ h1 {
   color: #467885; }
 
 .input-field .prefix {
-  color: #C4BF9B; }
+  color: #cfcbab; }
 
 .contactForm {
   margin-top: 22vh; }
@@ -6873,9 +6878,9 @@ input[type=email]:not(.browser-default):focus:not([readonly]) {
 input[type=password]:not(.browser-default),
 input[type=text]:not(.browser-default),
 input[type=email]:not(.browser-default) {
-  color: #C4BF9B;
-  border-bottom-color: #C4BF9B;
-  box-shadow: 0 1px 0 0 #C4BF9B; }
+  color: #cfcbab;
+  border-bottom-color: #cfcbab;
+  box-shadow: 0 1px 0 0 #cfcbab; }
 
 input[type=password]:not(.browser-default):focus:not([readonly]) + label,
 input[type="text"]:not(.browser-default):focus:not([readonly]) + label,
@@ -6885,11 +6890,11 @@ input[type="email"]:not(.browser-default):focus:not([readonly]) + label {
 input[type=password].valid:not(.browser-default),
 input[type=text].valid:not(.browser-default),
 input[type=email].valid:not(.browser-default) {
-  border-bottom: 1px solid #333333;
-  box-shadow: 0 1px 0 0 #333333; }
+  border-bottom: 1px solid #333;
+  box-shadow: 0 1px 0 0 #333; }
 
 .btn, .btn-large {
-  color: #C4BF9B;
+  color: #cfcbab;
   background-color: #467885; }
   .btn:hover, .btn-large:hover {
     background-color: #B86E9A; }
@@ -6906,42 +6911,46 @@ input[type=email].valid:not(.browser-default) {
   right: 20px;
   display: none; }
 
-.EditForm .input-field {
+.form .input-field {
   height: 120px; }
-
-.errmsg .msg, .succmsg .msg {
-  text-align: center;
-  line-height: 50px;
-  padding: 2px;
-  margin-top: 20vh; }
-
-.hm {
-  margin-top: 20vh; }
-
-.succmsg, .RecErrMsg, .errmsg {
-  border-radius: 15px;
-  margin-top: -20px; }
-
-.succmsg {
-  background-color: #6499b5; }
-
-.RecErrMsg {
-  background-color: #b10000; }
-
-.errmsg {
-  background-color: indianred;
-  display: none; }
 
 @media only screen and (max-width: 600px) {
   .container .input-field .errmsg .msg {
     line-height: 26px; }
 
-  .EditForm .input-field {
+  .form .input-field {
     height: 110px; } }
 /*end form*/
+.succmsg_php .msg,
+.errmsg_php .msg {
+  text-align: center;
+  line-height: 50px;
+  line-height: 50pX;
+  margin-top: 20vh; }
+
+.errmsg .msg {
+  text-align: center;
+  padding: 2px; }
+
+.succmsg, .RecErrMsg, .errmsg {
+  border-radius: 15px;
+  margin-top: -20px; }
+
+.succmsg,
+.succmsg_php {
+  background-color: #6499b5; }
+
+.RecErrMsg {
+  background-color: #b10000; }
+
+.errmsg,
+.errmsg_php {
+  background-color: indianred;
+  display: none; }
+
 /*end main rules*/
 nav {
-  background-color: #C4BF9B; }
+  background-color: #cfcbab; }
 
 nav .brand-logo, nav .button-collapse i, nav ul a, .dropdown-content li > a {
   color: #467885;
@@ -6955,28 +6964,32 @@ nav .brand-logo, nav .button-collapse i, nav ul a, .dropdown-content li > a {
   margin-top: 50px; }
 
 .dropdown-content {
-  background-color: #C4BF9B; }
+  background-color: #cfcbab; }
 
 nav i, nav i.material-icons {
   margin-left: 1px; }
 
 .dropdown-content li:hover, .dropdown-content li.active, .dropdown-content li.selected {
-  background-color: #333333; }
+  background-color: #333; }
 
 @media only screen and (min-width: 601px) {
   .dropdown-button {
     width: 115px; } }
-thead {
+thead tr {
   background-color: #B86E9A;
-  color: #333333;
+  color: #333;
   border-radius: 8px; }
+
+.mange {
+  margin-top: 10vh; }
 
 .mange .btn, .mange .btn-large {
   margin: 20px;
   line-height: 27px; }
 
-.mange {
-  margin-top: 10vh; }
+.table tbody td .accent-3 {
+  cursor: default;
+  pointer-events: none; }
 
 @media only screen and (max-width: 992px) {
   table.responsive-table {
@@ -6985,5 +6998,51 @@ thead {
     border-spacing: 0;
     display: block;
     position: relative; } }
+.home-stats .box > .stat {
+  padding: 20px;
+  background-color: #333;
+  margin-bottom: 15px;
+  font-size: 12px;
+  display: block;
+  height: 140px;
+  border-radius: 10px;
+  color: #B86E9A;
+  border: 4px solid #467885; }
+
+.home-stats .box .stat p {
+  margin: 0;
+  height: 50px;
+  font-size: 16px;
+  font-weight: bold; }
+
+.home-stats .box .stat span a {
+  font-size: 50px;
+  display: block;
+  height: 66px;
+  line-height: 44px;
+  color: #cfcbab; }
+
+.collection {
+  border: none;
+  border: 4px solid #467885 !important;
+  border-radius: 10px; }
+
+.collection .collection-header {
+  color: #B86E9A; }
+
+.collection li {
+  background-color: #333 !important;
+  border-bottom: 1px solid #B86E9A !important;
+  color: #cfcbab; }
+
+.collection-item a .material-icons {
+  margin-left: 10px;
+  color: #cfcbab; }
+
+.AddFormCate .radio {
+  margin: 25px auto; }
+
+.AddFormCate .order {
+  margin-bottom: 0; }
 
 /*# sourceMappingURL=css.css.map */

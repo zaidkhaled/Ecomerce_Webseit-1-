@@ -16,6 +16,8 @@ $css ="layout/css/"; // Css  Directory
 
 //Include the importent files
 
+ include $conn; // then connect Database 
+
  include $func."functions.php";
 
  include $lang."Eng.php";

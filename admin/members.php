@@ -7,44 +7,45 @@
 */
 
 session_start();
-
-
-
-include "init.php";
-$pageTitle = "Members";
-include $tpl. "header.php";
-
-if(!isset($nonav)){ //check if Navbar can show here 
-       
-    include $tpl. "nav.php"; 
-    
-  }
+  
     
 if(isset($_SESSION['username'])){
-     
-     
-     include $conn; // then connect Database 
        
      $do = isset($_GET['do']) ? $_GET['do'] : 'Mange';
         
      //  start mange the Page 
-        
-     if($do == "mange"){//Mange Page  
+    
+     include "init.php";
+    
+     $pageTitle = "Members";
+    
+     include $tpl. "header.php";
+    
+     include $tpl. "nav.php"; 
+    
+     if($do == "mange"){  
+                                                            
+         $query = isset($_GET['page']) && $_GET['page'] == 'pending'? "AND regStatus = 0" : " ";
          
-         // Select all users Excpect Admin
+         // select all users except admin
          
-        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1");
+        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query");
          
         $stmt->execute();
+         
+         //fetch all users with theire info from Datebase
          
         $rows =$stmt->fetchAll(); 
      ?>
         <div class= "mange">
 
-  <!-- Modal Structure -->
-  
+        <!-- Modal Structure -->
+            
+          <!--start table users-->
+            
           <div class="container">
-               <table  class="bordered responsive-table centered" >
+               <table  class="bordered responsive-table centered table" >
+                   <!--start the Table header-->
                 <thead>
                   <tr>
                       <th>#ID</th>
@@ -55,8 +56,9 @@ if(isset($_SESSION['username'])){
                       <th><?php echo lang("CONTROL")?></th>
                   </tr>
                 </thead>
-
+                  <!--End the Table header-->
                 <tbody>
+                <!--start table body-->    
                 <?php 
                  foreach ($rows as $row){
                      echo "<tr>";
@@ -64,35 +66,60 @@ if(isset($_SESSION['username'])){
                      echo "<td>". $row['username'] ."</td>";
                      echo "<td>". $row['Email'] ."</td>";
                      echo "<td>". $row['fullName'] ."</td>";
-                     echo "<td></td>"; 
+                     echo "<td>". $row['date'] ."</td>";
                      
-                     // Note =========> in "sure Msg" <to user deleting> from jave script <==> href will equal #modal + userID (#modal.$row['userID']) /without this, the fuction  will selet and delet just the first id  
+                   //start table body   
                      
-                     echo "<td>
-                         <a class='btn-floating teal' href='members.php?do=Edit&userID=".$row['userID']."'>
+                     // Note <=========> in "sure Msg" <to delete user> from jave script <==> href will equal #modal + userID (#modal.$row['userID']) /without this, the fuction  will selet and delet just the first id  
+                      ?>
+                     <td>
+                        <!--Activate Button--> 
+                      <?php 
+                   
+                        if ($row['regStatus'] == 0) { ?>
+                         <a class='btn-floating pink darken-4' href='members.php?do=activate&userID=<?php echo $row['userID']; ?>'>
+                           <i class="material-icons">thumb_down</i>-->
+                         </a>
+                            
+                        <?php }else {?>
+                         
+                          <a class='btn-floating light-green accent-3' href=''>
+                           <i class="material-icons">thumb_up</i>-->
+                         </a>
+                         
+                         <?php }?>
+                         <!--Activate  Button--> 
+                         
+                         <!--Edit Butten-->
+                         <a class='btn-floating teal' href='members.php?do=Edit&userID=<?php echo $row['userID']; ?>'>
                            <i class='large material-icons'>mode_edit</i>
                          </a>
-
-                         <a class='btn-floating red modal-trigger' href='#modal".$row['userID']."' >
+                         <!--Edit Butten-->
+                         
+                         <!--Delete Butten-->
+                         <a class='btn-floating red modal-trigger' href="#modal<?php echo $row['userID']; ?>">
                           <i class='large material-icons '>delete_forever</i>
                          </a>
-                       
-                         <div id='modal".$row['userID']."' class='modal'>
+                         <!--Delete Butten-->
+                         
+                         <div id="modal<?php echo $row['userID']; ?>" class='modal'>
                           <div class='modal-content'>
                             <h4>Are you sure </h4>
-                            <p>you will delet this user : ". $row['fullName']. "</p>
+                            <p>you will delet this user : <?php echo $row['fullName']?></p>
                           </div>
                         
                           <div class='modal-footer'> 
                             <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
-                            <a href='members.php?do=delet&userID=". $row['userID'] ."' class='modal-action modal-close waves-effect waves-green btn-  flat'>Agree</a>
+                            <a href='members.php?do=delet&userID= <?php echo $row['userID']; ?>' class='modal-action modal-close waves-effect waves-green btn-  flat'>Agree</a>
                          </div>
+                          <!--Delete Butten-->   
+                             
 
-                    </td>";
-                     echo "</tr>";
-                 }
-                 ?>
-                     
+                    </td>
+                    </tr>
+                   
+                  <?php  } ?>  
+                   
                     </div>
                 </tbody>
               </table>
@@ -100,7 +127,9 @@ if(isset($_SESSION['username'])){
                   <i class="material-icons">exposure_plus_1</i>
               </a>
             </div>
-        </div>    
+        </div>  
+
+     <!--End table users-->
      <?php   
          
        //start Add page
@@ -113,9 +142,10 @@ if(isset($_SESSION['username'])){
 
           <div class="container">
             <h1 class="center-align"><?php echo lang('ADD_MEMBERS')?></h1>
-            <form class="EditForm" action="?do=Insert" method="POST">
+            <form class="EditForm form " action="?do=Insert" method="POST">
                 
-              <div class="row">      
+              <div class="row"> 
+                  <!--End input "Add user Name" field--> 
                 <div class="input-field col s8 m5 push-m1 push-s2">
                   <i class="material-icons prefix">account_circle</i>
                   <input id="icon_prefix"
@@ -131,13 +161,12 @@ if(isset($_SESSION['username'])){
                   </div>
                 </div>
 
-
+                 <!--start input "Add Email" field--> 
                 <div class="input-field col s8 m5 push-m1 push-s2">
                   <i class="material-icons prefix">email</i>
                   <input id="icon_prefix input" 
                          limit ="6"
                          type="email"
-                         limit = "6"
                          class="validate input" 
                          name="AddNewEmail"
                          data-value ="1">
@@ -147,9 +176,11 @@ if(isset($_SESSION['username'])){
                      <p class='msg'> <?php echo lang("ERRMSG(6)_JS")?></p>
                   </div>
                 </div>
+                  <!--End input "Email" field--> 
                </div>
 
               <div class="row">
+                  <!--start input "Add password" field--> 
                 <div class="input-field col s8 m5 push-m1 push-s2">
                   <i class="material-icons prefix">lock_outline</i>
                   <input  type="password"
@@ -163,7 +194,8 @@ if(isset($_SESSION['username'])){
                      <p class='msg'> <?php echo lang("ERRMSG(6)_JS")?></p>
                   </div>
                 </div>
-
+                 <!--End input "Add password" field--> 
+                  <!--start input "Repeat password" field--> 
                 <div class="input-field col s8 m5 push-m1 push-s2">
                   <i class="material-icons prefix">lock_outline</i>
                   <input type="password"
@@ -177,9 +209,11 @@ if(isset($_SESSION['username'])){
                      <p class='msg'> <?php echo lang("ERRMSG(6)_JS")?></p>
                    </div>
                 </div>  
+                  <!--End input "Repeat password" field-->
               </div>
 
-              <div class="row">    
+              <div class="row">  
+                  <!--start input "Full Name" field-->
                 <div class="input-field col s8 m4 push-m4 push-s2">
                   <i class="material-icons prefix">account_box</i>
                   <input type="text"
@@ -193,12 +227,15 @@ if(isset($_SESSION['username'])){
                      <p class='msg'> <?php echo lang("ERRMSG(8)_JS")?></p>
                   </div>
                 </div>
+                  <!--End input "Full Name" field-->
               </div>     
 
               <div class="row"> 
+                  <!--start Register button-->
                  <button class="btn btnMebers waves-effect waves-light col s4 m2 push-s4 push-m5  "type="submit" name="action"><?php echo lang('REGISTER')?>
                    <i class="material-icons right">autorenew</i>     
                  </button> 
+                  <!--End Register button-->
                 </div>
             </form><!--End form-->
           </div> <!--End container-->
@@ -207,57 +244,74 @@ if(isset($_SESSION['username'])){
     
    <?php
            
+           
      }elseif($do == "Insert"){
          
-         if($_SERVER['REQUEST_METHOD'] == 'POST'){ //change the user info
+          //Insert new user info
+         
+         if($_SERVER['REQUEST_METHOD'] == 'POST'){
              
            $userName = $_POST['AddUserName'];
            $password = sha1($_POST['AddUserPassword']);
            $email    = $_POST['AddNewEmail'];
            $fullName = $_POST['AddNewFullName'];
          
-            //SHA1 password empty Value
+            //SHA1 password <=> empty value
              
             $emptyPass = "da39a3ee5e6b4b0d3255bfef95601890afd80709";  
-         
-          
-           
-           
-            // Make an Error Array for Add form 
+        
+            // Make an error array for add form 
          
             $addFormErr = [];
          
            if (empty($userName) or strlen($userName) > 20){
+               
                $addFormErr[] = lang("PHP_ERRMSG_NAME");
            }
          
            if(empty($email)){
+               
                $addFormErr[] = lang("PHP_ERRMSG_EMAIL");
            }
          
            if(empty($fullName) or ($fullName) > 25 ){
+               
                $addFormErr[] = lang("PHP_ERRMSG_FULLNAME"); 
            }
          
            if ($password == $emptyPass){
                
               $addFormErr[] = lang("PHP_EMPTY_PASS");
+           } 
+             
+             // function to check Email Adress if it's reapeted, if yes => 1; but if no => return 0
+             
+             $check = checkItem("Email", "users", $email); 
+             
+           if ($check == 1){
+               
+              $addFormErr[] = lang("PHP_REAPETED_EMPTY");
            }
-          // End  Error Array for Add form 
+             
           
-           if (!empty($addFormErr)){// check if the values are approved values
+              
+          // End  error array for add form 
+             
+            // check if the values are approved
+          
+           if (!empty($addFormErr)){
                
            ?>
 
           
 
-                 <div class = "container hm">
+                 <div class = "container">
                      
-                     <!-- print caught Errorrs-->
+                     <!-- print caught errorrs-->
                      
                      <?php foreach($addFormErr as $Err){ ?> 
                      <div class="row">
-                       <div class='errmsg' style='display:block'>
+                       <div class='errmsg_php' style='display:block'>
                            
                            <!--Err : Erorr msg -->
                          <p class='msg'><?php echo $Err; ?></p> 
@@ -267,47 +321,48 @@ if(isset($_SESSION['username'])){
                  </div>
 
          <?php
-            // when yes then insert the new user to Datebase
+               
+                redirectPage("","back");
+               
+            // if yes then insert the new user to database
                
            }else {
                
-               $stmt = $con->prepare("INSERT INTO users(userName, password, Email, fullName)
+               $stmt = $con->prepare("INSERT INTO
+                                                users
+                                                     (userName, password, Email, fullName, regStatus, date)
                                                 VALUES 
-                                                     (:zusername,:zpassword,:zEmail,:zfullName)");
+                                                     (:zusername, :zpassword, :zEmail, :zfullName, 1, now())");
                    
                 $stmt->execute(["zusername" => $userName,
                                 "zpassword"  => $password,
                                 "zEmail"     => $email,
                                 "zfullName"  => $fullName]);
                
-               if ($stmt->rowCount() == 1){ // check if this Record Inserted 
-              ?>
-
-                       <!--//Echo success Massege-->
-
-                       <div class='succmsg'>
-                           
-                           <p class='msg'><?php echo lang("PHP_SUCCMSG")." : ". $stmt->rowCount()?></p>
-                           
-                       </div>
-                   
-              <?php }else { ?>
-
-                       <!--Echo success Massege-->
-
-                       <div class='RecErrMsg'>
-
-                           <p class='msg'> <?php lang("PHP_Rec_Err_Msg"); echo $stmt->rowCount()?></p>
-
-                       </div>
-                   
-        <?php }
+               // check if record is inserted
                
-           }  }
+               if ($stmt->rowCount() == 1){  
+              
+
+                       //Echo success Massege
+
+                       redirectPage(lang("SUCCESS"),"back");
+                   
+               }else { 
+
+                       //Echo failed Massege
+
+                       redirectPage("","back");
+                       
+                   
+         }
+               
+           } 
+         }
          
      }elseif ($do == "Edit"){ //Edit Page 
          
-                 //check if Request userid is Numeric & Get the integer of value it 
+                 //check if request userid is numeric & get the integer value of it 
          
                  $userID = isset($_GET['userID']) && is_numeric($_GET['userID'])? intval($_GET['userID']) :0;
                   
@@ -315,17 +370,17 @@ if(isset($_SESSION['username'])){
                   
                   $stmt=$con->prepare("SELECT * FROM users  WHERE userID = ? LIMIT 1");
          
-                   //check if ID is allredy exist in Datebase
+                   //check if ID allredy exists in database
          
                   $stmt->execute([$userID]);
 
-                  // fetch all info(row) from Database
+                  // fetch all info(row) from database
          
                   $row = $stmt->fetch();
 
                   $rowcount= $stmt->rowCount(); 
                   
-                  // check if this id has info in Database, when yes then let user make his Update 
+                  // check if id info has been stored in database, if yes then allow user to update 
          
                   if ($rowcount > 0){
                       
@@ -335,9 +390,12 @@ if(isset($_SESSION['username'])){
 
                     <div class="container">
                         <h1 class="center-align"><?php echo lang('EDIT_MEMBERS')?></h1>
-                        <form class="EditForm" action="?do=update" method="POST">
+                        <form class="EditForm form " action="?do=update" method="POST">
                           <div class="row">
-                            <input type="hidden" name="id" value="<?php echo $userID;?>">      
+                              <!--start input hidden value, to print the old value of password-->
+                            <input type="hidden" name="id" value="<?php echo $userID;?>">     
+                              <!--start input hidden value-->
+                              <!--start input "user Name" field-->
                             <div class="input-field col s8 m5 push-m1 push-s2">
                               <i class="material-icons prefix">account_circle</i>
                               <input type="text" 
@@ -352,8 +410,8 @@ if(isset($_SESSION['username'])){
                                  <p class='msg'> <?php echo lang('ERRMSG(6)_JS')?></p>
                               </div>
                             </div>
-                              
-                              
+                             <!--End input "user Name" field--> 
+                             <!--End input "Email" field--> 
                             <div class="input-field col s8 m5 push-m1 push-s2">
                               <i class="material-icons prefix">email</i>
                               <input limit ="6"
@@ -369,9 +427,11 @@ if(isset($_SESSION['username'])){
                                  <p class='msg'> <?php echo lang('ERRMSG(6)_JS')?></p>
                               </div>
                             </div>
+                              <!--End input "Email" field--> 
                            </div>
 
                           <div class="row">
+                              <!--End input "password" field--> 
                             <div class="input-field col s8 m5 push-m1 push-s2">
                               <i class="material-icons prefix">lock_outline</i>
                               <input  type="password"
@@ -389,6 +449,8 @@ if(isset($_SESSION['username'])){
                                  <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
                               </div>
                             </div>
+                               <!--End input "password" field--> 
+                               <!--start input "repeat password" field--> 
                               
                             <div class="input-field col s8 m5 push-m1 push-s2">
                               <i class="material-icons prefix">lock_outline</i>
@@ -401,10 +463,12 @@ if(isset($_SESSION['username'])){
                                <div class="errmsg">
                                  <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
                                </div>
-                            </div>  
+                            </div> 
+                              <!--End input "repeat password" field-->
                           </div>
 
-                          <div class="row">    
+                          <div class="row"> 
+                              <!--start input "Full Name" field-->
                             <div class="input-field col s8 m4 push-m4 push-s2">
                               <i class="material-icons prefix">account_box</i>
                               <input id="icon_telephone"
@@ -419,6 +483,7 @@ if(isset($_SESSION['username'])){
                                  <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
                               </div>
                             </div>
+                              <!--End input "Full Name" field-->
                           </div>     
                             
                           <div class="row"> 
@@ -433,9 +498,14 @@ if(isset($_SESSION['username'])){
 <!--        Members/end Edit from (Update info)-->
 
       <?php 
-                 } else {//end  (check if this id has info in Datebase)=> when not then :
+                  //end  (check if id info has been stored in database)=> if not then :
+                  
+                 } else {
                       
-                      echo "There is no Info";
+                      
+                      
+                redirectPage("","back");
+
                   }
                       
            
@@ -447,9 +517,10 @@ if(isset($_SESSION['username'])){
          
            if($_SERVER['REQUEST_METHOD'] == 'POST'){ 
                 
-                // set new password when the user change his password
+                // set new password just if user changes it
                
                 $password = empty($_POST['NewPassword'])? $_POST['oldPassword']  : 
+               
                sha1($_POST['NewPassword']);//Set new password if  changed +++================+++
                
                 $NewUserName= $_POST['NewUserName'];
@@ -462,14 +533,17 @@ if(isset($_SESSION['username'])){
                
                 $emptyPass = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
                
+               //  anther way to show errors <====> check if all values are approved 
                
-               if(// check if all values are approved Values
+               if(
                    
                   strlen($NewUserName) < 3 or
                   strlen($NewEmail)    < 6 or  
                   strlen($NewFullName) < 6 or
                   !$password =  $emptyPass 
+                 
                    
+              // PHP error msg  in case that Jave script disables
                ){
                    
                    echo " <div class='errmsg' style='display:block'> 
@@ -478,7 +552,7 @@ if(isset($_SESSION['username'])){
                               <p class='msg'> ". lang("PHP_EMPTY_PASS")."</p> <br>
                               <p class='msg'>" . lang('PHP_ERRMSG_FULLNAME') ."</p>
                               
-                          </div>"; // PHP Error msg, in Case,that Jave script disabled
+                          </div>"; 
                    
                }else {
 //                   
@@ -489,50 +563,67 @@ if(isset($_SESSION['username'])){
                                        WHERE 
                                          userID = ? ");//Info Updating
 
-                    $stmt->execute(array($NewUserName, $NewEmail, $NewFullName, $password, $userID));//insert the new values
+                    $stmt->execute(array($NewUserName, $NewEmail, $NewFullName, $password, $userID));//insert new values
 
-                   echo  " <div class='succmsg'> <p class='msg'> ".lang('PHP_SUCCMSG') ." : ". $stmt->rowCount()."</p></div>";//Echo success Massege 
+                    redirectPage(lang("SUCCESS"),"back");   //Echo success Massege 
                    
                }
            }else {
                
-               echo "Sorry you can't browse this Page directly";
+              redirectPage("","back");
            }
            
-       //end (Edit Page )
+          //end (Edit Page )
+                      
+     } elseif($do == "activate") {
+         
+           $userID = isset($_GET['userID']) && is_numeric($_GET['userID'])? intval($_GET['userID']) :0;
+         
+                   //check if ID allredy exists in database
+         
+                  $check = checkItem("userID", "users", $userID)  ;
+                  
+                  // check if this id has info in database, when yes then delet the user
+         
+                  if ($check > 0){
+                     
+                      $stmt=$con->prepare("UPDATE users SET regStatus = 1 WHERE userID = :zuserID");
+                      
+                      $stmt->bindParam(":zuserID", $userID);
+                      
+                      $stmt->execute();
+                      
+                     
+                      redirectPage(lang("SUCCESS"),"back",1); 
+         
+     }    
          
      }elseif($do == "delet") {
          
            $userID = isset($_GET['userID']) && is_numeric($_GET['userID'])? intval($_GET['userID']) :0;
                   
-                  
-                  // SELECT all data depent of this ID
-         
-                  $stmt=$con->prepare("SELECT * FROM users  WHERE userID = ? LIMIT 1");
-         
                    //check if ID is allredy exist in Datebase
          
-                  $stmt->execute([$userID]);
-         
-                  $rowcount= $stmt->rowCount(); 
+                  $check = checkItem("userID", "users", $userID)  ;
                   
-                  // check if this id has info in Database, when yes then delet the user
+                  // check if id info has been stored in database, if yes then delete user
          
-                  if ($rowcount > 0){
+                  if ($check > 0){
                      
                       $stmt=$con->prepare("DELETE FROM users  WHERE userID = :zuserID");
                       
                       $stmt->bindParam(":zuserID", $userID);
-                     
-                    echo  " <div class= 'container'>
-                               <div class='succmsg'> 
-                                 <p class='msg'> ".lang("PHP_SUCCMSG_DEL_MSG") ." : ". $stmt->rowCount()."</p>
-                               </div>
-                           </div>";//Echo success Massege 
-                  }
                       
-              
-
+                      $stmt->execute();
+                      
+                     
+                      redirectPage(lang("SUCCESS"),"back"); 
+                      
+                  }else {
+         
+                  redirectPage();
+                      
+                  }
          
      }
 

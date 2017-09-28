@@ -1,18 +1,36 @@
+/*
+=======================
+** START STYLE/SCSS
+=======================
+*/
+
+//import materialize
+
 @import "sass/materialize.scss";
+
+
+
 /* start main rules*/
+
 body{
+    
     background-color:#f4f4f4;
+    
     font-size: 16px;
 }
 
-//colors
+// colors
 
-$col1:#C4BF9B;
+$col1:#cfcbab;
 $col2:#B86E9A;
 $col3:#467885;
-$col4:#333333;
+$col4:#333;
+$succCol:#6499b5;
+$rongCol:#b10000;
 
-//colors
+
+
+// End colors
 
 h1{
     font-weight: bold;
@@ -20,6 +38,7 @@ h1{
     margin: 50px;
 }
 @media #{$small-and-down} {
+    
     // styles for small screens and down
     
     h1{
@@ -102,46 +121,19 @@ input[type=password].valid:not(.browser-default),
     right: 20px;
     display: none;
 }
-.EditForm .input-field {
+.form .input-field {
    height: 120px;
 }
 
-.errmsg .msg, .succmsg .msg{
-    
-     text-align: center;
-     line-height: 50px;
-     padding: 2px;
-    margin-top:  20vh;
-    
-}
+//End success and Errorr masseges
 
-.hm {
-    margin-top:  20vh;
-}
-.succmsg,.RecErrMsg,.errmsg{
-    border-radius: 15px;
-    margin-top:-20px;
-}
-
-.succmsg{//success msg 
-     background-color: #6499b5;
-}
-
-.RecErrMsg{ //Record Erorr Msg 
-    background-color: #b10000;
-}
-
-.errmsg{
-    background-color: indianred;
-    display: none;
-    }
 
 @media #{$small-and-down} {
    .container .input-field .errmsg .msg {
     line-height: 26px;
 }
     
-    .EditForm .input-field {
+   .form .input-field {
     height: 110px;
 }
   }
@@ -149,6 +141,49 @@ input[type=password].valid:not(.browser-default),
     // styles for medium screens and larger
   }
 /*end form*/
+
+
+
+//success and Errorr Masseges
+
+ .succmsg_php .msg,
+ .errmsg_php .msg
+{
+    
+     text-align: center;
+     line-height: 50px;
+     line-height: 50pX;
+    margin-top:  20vh;
+    
+}
+
+.errmsg .msg{
+    text-align: center;
+     padding: 2px;
+}
+
+.succmsg,.RecErrMsg,.errmsg{
+    border-radius: 15px;
+    margin-top:-20px;
+}
+
+.succmsg,
+.succmsg_php{//success msg 
+     background-color: $succCol;
+}
+
+.RecErrMsg{ //Record Erorr Msg 
+    background-color: $rongCol;
+}
+
+.errmsg,
+.errmsg_php{
+    background-color: indianred;
+    display: none;
+    }
+
+//End success and Errorr Masseges
+
 
 /*end main rules*/
 
@@ -193,22 +228,21 @@ nav i,nav i.material-icons {
 
 
 
-
-
-
-
-
-
-
-
 //start Members
 
-//start Members/Mange 
+//start Members/Mange
 
-thead {
+
+//start Members table 
+
+thead tr{
     background-color: $col2;
-    color:  $col4;
+    color:$col4;
     border-radius:8px;
+}
+
+.mange{
+    margin-top: 10vh;
 }
 
 .mange .btn {
@@ -216,22 +250,98 @@ thead {
     line-height: 27px;
 } 
 
-.mange{
-    margin-top: 10vh;
+ .table tbody td .accent-3{
+    cursor: default;
+     pointer-events: none;
 }
+
   @media #{$medium-and-down} {
+      
     // styles for medium screens and larger
+      
     table.responsive-table{
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     display: block;
     position: relative;
+        
       }
 }
 //end Members/Mange
 
+//start Dachbord
 
+//start status
+
+.home-stats .box > .stat{
+    padding: 20px;
+    background-color: $col4;
+    margin-bottom: 15px;
+    font-size: 12px;
+    display: block;
+    height: 140px;
+    border-radius: 10px;
+    color: $col2;
+    border: 4px solid $col3;
+}
+
+
+.home-stats .box .stat p{
+    margin: 0;
+    height: 50px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.home-stats .box .stat span a{
+    font-size: 50px;
+    display: block;
+    height: 66px;
+    line-height: 44px;
+    color: $col1;
+}
+
+//End status
+
+//start get latest
+
+.collection {
+    border: none;
+    border: 4px solid #467885 !important;
+    border-radius: 10px;
+
+}
+.collection  .collection-header {
+    color: $col2;
+}
+.collection li {
+    background-color: $col4 !important;
+    border-bottom: 1px solid $col2 !important;
+    color: $col1;
+}
+
+.collection-item a .material-icons {
+    margin-left: 10px;
+    color: $col1;
+}
+
+
+//End get latest
+
+//start categories Page
+
+.AddFormCate .radio {
+    margin: 25px auto;
+}
+
+.AddFormCate .order{
+    margin-bottom: 0;
+}
+//End categories Page
+
+
+//End Dashbord
  @media #{$small-and-down} {
     // styles for small screens and down
   }

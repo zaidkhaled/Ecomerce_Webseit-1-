@@ -5,24 +5,25 @@ $(function () {
     "use strict";
      
     
-    $(".button-collapse").sideNav(); //triger sidenav for Phones
+    $(".button-collapse").sideNav(); //trigger sidenav for phones
     
-    $('.modal').modal(); //triger the warning Msg befor Deleting the User///////////
-    
-    
-     // start Edit Members Form controll
-    
-//    =========================================================================================================
-//    ===> in folgenes Code nutze ich das Attribute (data-value), um Edit Form und Add Form zu unterscheiden und 
-//    ===> die wiederholung von Code damit zu vermeiden 
-//    =========================================================================================================
+    $('.modal').modal(); //trigger the warning msg before deleting user///////////
     
     
-      //   define importent functions
+     // start controll forms 
+ /*   
+   ============================================================================================================
+    ===> Im Folgendem Code nutze ich das Attribute (data-value), um Edit Form und Add Form zu unterscheiden und 
+    ===> die Wiederholung des Codes zu vermeiden 
+   ============================================================================================================
+ */   
+    // note =>> if input (data-value) = 0, then no action is required. ex (edit form)
     
-    function showRong($rong) { // function to show the red circel when the values are not approved Values
+      //   define important functions
     
-        if ($rong.val().length < $rong.attr('limit')) { //check if the values is acceptable
+    function showRong($rong) { // function to show the red circel, if values are not approved
+    
+        if ($rong.val().length < $rong.attr('limit')) { //check if values are acceptable
 
             $rong.siblings('span').fadeIn(1000);
             
@@ -36,24 +37,24 @@ $(function () {
 
     $('.container .input').blur(function () {
         
-        if ($(this).attr("data-value") === "0") {//When this is the "Edit form" then :
+        if ($(this).attr("data-value") === "0") {//if this is the "edit form" then :
         
-            if ($(this).val().length > 0) {//this Condition just for Edit Form and to now which data, that user want to updating 
+            if ($(this).val().length > 0) {//this Condition is just for (edit members form) and to know which data the user wants to update
                 
                 showRong($(this));
             }
             
-        } else { //When this is the "Add Form" then do showRong  :
+        } else { //if this is the "Add Form" then do showRong  :
             
             showRong($(this));
         }
     });
     
     
-    $(".container .EditForm").submit(function (e) {
+    $(".container .form").submit(function (e) {
         
         
-        function msgSubmit($input) { // submit function => show the red massge on submit  just when the values are not acceptable 
+        function msgSubmit($input) { // submit function => show the red message on submit,  just when values are not acceptable 
         
             if ($input.val().length < $input.attr('limit')) {
 
@@ -69,12 +70,12 @@ $(function () {
             
             if ($(this).attr("date-value") === "0") {
                 
-                if ($(this).val().length > 0) { //When this is the Edit form then :
+                if ($(this).val().length > 0) { //if this is the Edit form then :
                     
                     msgSubmit($(this));
                 }
               
-            } else { //When this is the Add Form then:
+            } else { // if this is the Add Form then :
               
                 msgSubmit($(this));
             }
