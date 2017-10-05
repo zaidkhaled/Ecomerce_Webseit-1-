@@ -42,11 +42,20 @@
      
      $count= $stmt->rowCount();
      
-     if($count > 0){      //check if the user is admin.
-
+     if($count > 0){      //check if the user is admin, if yes then 
+         
+         
+         //fetch all user info, it should be helpful, in case that user want to edit his personal data "edit form".
+         
          $_SESSION['username'] = $userName; // Registering the sesstion name.
          
          $_SESSION['ID'] = $row['userID']; // Registering the sesstion ID.
+         
+         $_SESSION['pass'] = $row['password']; // Registering the sesstion ID pass.
+         
+         $_SESSION['Email'] = $row['Email']; // Registering the sesstion  Email.
+         
+         $_SESSION['fullname'] = $row['fullname']; // Registering the sesstion fullname.
         
          header("Location:dashbord.php");// redirect to dachbord.
          

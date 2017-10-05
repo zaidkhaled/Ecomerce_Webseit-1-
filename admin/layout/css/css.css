@@ -6899,7 +6899,7 @@ input[type=email].valid:not(.browser-default) {
   .btn:hover, .btn-large:hover {
     background-color: #B86E9A; }
 
-.container .input-field span {
+.input-field span {
   position: absolute;
   height: 20px;
   width: 20px;
