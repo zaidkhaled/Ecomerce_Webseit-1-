@@ -146,14 +146,10 @@ input[type=password].valid:not(.browser-default),
 
 //success and Errorr Masseges
 
- .succmsg_php .msg,
+ 
  .errmsg_php .msg
-{
-    
-     text-align: center;
-     line-height: 50px;
-     line-height: 50pX;
-    margin-top:  20vh;
+{    text-align: center;
+     margin-top:  0;
     
 }
 
@@ -162,24 +158,17 @@ input[type=password].valid:not(.browser-default),
      padding: 2px;
 }
 
-.succmsg,.RecErrMsg,.errmsg{
-    border-radius: 15px;
-    margin-top:-20px;
-}
 
-.succmsg,
-.succmsg_php{//success msg 
+
+.succmsg{//success msg 
      background-color: $succCol;
 }
 
-.RecErrMsg{ //Record Erorr Msg 
-    background-color: $rongCol;
-}
-
 .errmsg,
-.errmsg_php{
+.errmsg-php{
     background-color: indianred;
     display: none;
+    border-radius:10px;
     }
 
 //End success and Errorr Masseges
@@ -227,7 +216,23 @@ nav i,nav i.material-icons {
 //end nav
 
 
+//start serch field 
+.nav-wrapper form .input-field{
+    margin: 0;
+    background-color:$col3;
+    
+}
+.nav-wrapper .input-field input[type="search"]{
+    height: 60px;
+}
 
+.nav-wrapper form .material-icons{
+    font: 50px;
+}
+
+.nav-wrapper form .close{
+    top: 13px !important;
+}
 //start Members
 
 //start Members/Mange
@@ -304,7 +309,7 @@ thead tr{
 
 //End status
 
-//start get latest
+//start get latest dashboard page 
 
 .collection {
     border: none;
@@ -327,9 +332,80 @@ thead tr{
 }
 
 
-//End get latest
+//End get latest dashboard page 
 
 //start categories Page
+
+   // start Categories mange collection 
+    
+#mange-cate .secondary-content {
+    position: relative;
+    bottom: 43px;
+}
+
+#mange-cate li span{
+    padding: 5px;
+    display: inline-block;
+    border-radius: 10px;
+    margin: 2px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#mange-cate li .not-allowed{
+    
+    background-color: $rongCol;
+    
+} 
+
+#mange-cate li .allowed{
+background-color: $succCol;
+}
+
+//#mange-cate li{
+// cursor: pointer;
+//     -webkit-transition: all .4s ease-in-out;
+//    -moz-transition: all .4s ease-in-out;
+//    transition: all .4s ease-in-out;
+//    &:active{
+//        background-color: #6a6a6a !important;
+//    }
+//}
+
+#mange-cate  .collection-item  a{  
+position: relative;
+top: 10px;
+cursor: pointer;
+}
+
+#mange-cate  .collection-item  a:nth-child(2){
+right: 10px
+}
+
+
+//#mange-cate li .cate-controll{
+//    position: relative;
+//    right: -230px;
+//    -webkit-transition: all .4s ease-in-out;
+//    -moz-transition: all .4s ease-in-out;
+//    transition: all .4s ease-in-out;
+//}
+//
+//#mange-cate li .cate-details{
+//    display: none;
+//    -webkit-transition: all .4s ease-in-out;
+//    -moz-transition: all .4s ease-in-out;
+//    transition: all .4s ease-in-out;
+//}
+
+.cate-active{
+    display: block !important;
+    right: 0 !important;
+}
+
+   // end Categories mange collection 
+   
+   
 
 .AddFormCate .radio {
     margin: 25px auto;

@@ -6921,32 +6921,22 @@ input[type=email].valid:not(.browser-default) {
   .form .input-field {
     height: 110px; } }
 /*end form*/
-.succmsg_php .msg,
 .errmsg_php .msg {
   text-align: center;
-  line-height: 50px;
-  line-height: 50pX;
-  margin-top: 20vh; }
+  margin-top: 0; }
 
 .errmsg .msg {
   text-align: center;
   padding: 2px; }
 
-.succmsg, .RecErrMsg, .errmsg {
-  border-radius: 15px;
-  margin-top: -20px; }
-
-.succmsg,
-.succmsg_php {
+.succmsg {
   background-color: #6499b5; }
 
-.RecErrMsg {
-  background-color: #b10000; }
-
 .errmsg,
-.errmsg_php {
+.errmsg-php {
   background-color: indianred;
-  display: none; }
+  display: none;
+  border-radius: 10px; }
 
 /*end main rules*/
 nav {
@@ -6975,6 +6965,19 @@ nav i, nav i.material-icons {
 @media only screen and (min-width: 601px) {
   .dropdown-button {
     width: 115px; } }
+.nav-wrapper form .input-field {
+  margin: 0;
+  background-color: #467885; }
+
+.nav-wrapper .input-field input[type="search"] {
+  height: 60px; }
+
+.nav-wrapper form .material-icons {
+  font: 50px; }
+
+.nav-wrapper form .close {
+  top: 13px !important; }
+
 thead tr {
   background-color: #B86E9A;
   color: #333;
@@ -7038,6 +7041,36 @@ thead tr {
 .collection-item a .material-icons {
   margin-left: 10px;
   color: #cfcbab; }
+
+#mange-cate .secondary-content {
+  position: relative;
+  bottom: 43px; }
+
+#mange-cate li span {
+  padding: 5px;
+  display: inline-block;
+  border-radius: 10px;
+  margin: 2px;
+  font-weight: bold;
+  cursor: pointer; }
+
+#mange-cate li .not-allowed {
+  background-color: #b10000; }
+
+#mange-cate li .allowed {
+  background-color: #6499b5; }
+
+#mange-cate .collection-item a {
+  position: relative;
+  top: 10px;
+  cursor: pointer; }
+
+#mange-cate .collection-item a:nth-child(2) {
+  right: 10px; }
+
+.cate-active {
+  display: block !important;
+  right: 0 !important; }
 
 .AddFormCate .radio {
   margin: 25px auto; }

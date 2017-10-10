@@ -7,7 +7,7 @@
 
  if(isset($_SESSION['username'])){//check if Admin alrady logined
 
-    header("Location:dashbord.php");// redirect to dachbord.
+    header("Location:dashboard.php");// redirect to dachbord.
 
  }
  
@@ -25,7 +25,7 @@
      //check if user is alrady exist in Database.
 
      $stmt=$con->prepare("SELECT
-                            userID, username, password 
+                            userID, username, password, fullname, Email
                           FROM 
                              users 
                           WHERE 
@@ -45,7 +45,7 @@
      if($count > 0){      //check if the user is admin, if yes then 
          
          
-         //fetch all user info, it should be helpful, in case that user want to edit his personal data "edit form".
+         //fetch all user info, it should be helpful, in case that user want to edit his personal data "for edit form".
          
          $_SESSION['username'] = $userName; // Registering the sesstion name.
          
@@ -57,7 +57,8 @@
          
          $_SESSION['fullname'] = $row['fullname']; // Registering the sesstion fullname.
         
-         header("Location:dashbord.php");// redirect to dachbord.
+         header("Location:dashboard.php");// redirect to dachbord.
+         
          
          exit();
 

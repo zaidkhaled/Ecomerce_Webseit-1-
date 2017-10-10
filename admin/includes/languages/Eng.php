@@ -16,6 +16,7 @@ function lang($phrase){
     "LOGOUT"              => "Logout",
     "LOG_IN"              => 'Log in',
     "HOME_ADMIN"          => "Home",  
+    "DASHBOARD"           => "Dashboard",  
     "ERRMSG(3)_JS"        => "Please fill out this field with <strong> more then 3 </strong>Letters", // JS: Witch means the Error Msg will show form Javescript
     "ERRMSG(6)_JS"        => "Please fill out this field with<strong> more then 6 </strong>Letters",
     "ERRMSG(8)_JS"        => "Please fill out this field with <strong> more then 8 </strong>Letters",
@@ -28,11 +29,12 @@ function lang($phrase){
     "PHP_SUCCMSG"         => "Mission completed info updated",
     "PHP_SUCCMSG_DEL_MSG" => "Mission completed info deleted",
     "SURE_MSG"            => "Are you sure",
-    "SURE_FULLNAME_MSG"   => "you will delet this user : ",
+    "SURE_FULLNAME_MSG"   => "you will delete this user : ",
     "FIRST_NAME"          => "First name", 
     "EMAIL"               => "Email", 
     "PASSWORD"            => "Password", 
     "REPEAT_PASSWORD"     => "Reapet Password", 
+    "PHP_EMPTY_PASS"      => "password should not be empty", 
     "FULLNAME"            => "Full name",
     "SAVE"                => "save",
     "EDIT_MEMBERS"        => "Edit Members",
@@ -51,7 +53,9 @@ function lang($phrase){
 
     //Category Page 
         
+    "MANGE CATEGORIES"    => "Mange categories",    
     "ADD_NEW_CATEGORIES"  => "Add New Category",    
+    "EIDT_CATEGORIES"     => "Edit  Category",    
     "ADD_CATEGORIES"      => "Add Category",    
     "CATEGORY_NAME"       => "CATEGORY NAME",    
     "DESCRIPTION"         => "DESCRIPTION",    
@@ -61,6 +65,7 @@ function lang($phrase){
     "ADVERTISING"         => "Advertising",                  
     "ALLOW"               => "Allow",    
     "NOT_ALLOW"           => "prevent",    
+    "SURE_CATE_NAME_MSG"  => "you will delete this category : "    
                 
     ];
         

@@ -1,14 +1,11 @@
  <ul id="dropdownSM" class="dropdown-content">
-  <li><a href="#updata-form" class="nav-edit2" userID="<?php echo $_SESSION['ID']?>"><?php echo lang('EDIT')?>
-      </a></li>
+  <li><a class='edit-button'> <?php echo lang('EDIT')?>  </a></li>
   <li><a href="#!"><?php echo lang('SETTING')?></a></li>
   <li><a href="logout.php"><?php echo lang('LOGOUT')?></a></li>
 </ul>
 
  <ul id="dropdownMED" class="dropdown-content">
-    <li><a id="nav-edit1" userID="<?php echo $_SESSION['ID']?>"><?php echo lang('EDIT')?>
-<!--        <div id='edit-form-user-ssision'></div>-->
-        </a></li>
+    <li><a class= 'edit-button'><?php echo lang('EDIT')?></a></li>
     <li><a href="#!"><?php echo lang('SETTING')?></a></li>
     <li><a href="logout.php"><?php echo lang('LOGOUT')?></a></li>
 </ul>
@@ -26,7 +23,7 @@
         </ul>
           
         <ul class="left">
-           <li><a href="dashbord.php" class="left-align brand-logo"><?php echo lang('HOME_ADMIN')?></a></li> 
+           <li><a href="dashboard.php" class="left-align brand-logo"><?php echo lang('HOME_ADMIN')?></a></li> 
         </ul>
           <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -40,8 +37,122 @@
         </ul><bu
       </div>
    </div>
-       
+      
 </nav>
- <!--load modal edit form, if user click on Edit button to give user the ability to edit own data -->
-        <div class='edit-form-user-ssision'></div>
+
+ <!--modal "edit form" "confirm" , if user click on Edit button to give user the ability to edit own data from any page any time, and to edit any user info if user is in members.php page-->
+    
+            <div id="updata-form" class="modal modal-fixed-footer updata-form">
+                 <div class="modal-content">
+                        <h1 class="center-align"><?php echo lang('EDIT_MEMBERS')?></h1>
+                        <form class="form" method="POST">
+                          <div class="row">
+                               
+
+<!--                              user id will be saved in this hidden input-->
+                              <input type="hidden" id ='user-id' session-id="<?php echo $_SESSION['ID'];?>"> 
+                              <!--start input "user Name" field-->
+                            <div class="input-field col s8 m5 push-m1 push-s2">
+                              <i class="material-icons prefix">account_circle</i>
+                              <input type="text" 
+                                     data-required='free'
+                                     session-name='<?php echo $_SESSION['username'];?>'
+                                     class="validate input" 
+                                     limit ="3"
+                                     id = "NewuserName">
+                              <label for="icon_prefix"><?php echo lang('FIRST_NAME')?></label>
+                              <span></span>
+                              <div class="errmsg">
+                                 <p class='msg'> <?php echo lang('ERRMSG(6)_JS')?></p>
+                              </div>
+                            </div>
+                             <!--End input "user Name" field--> 
+                              
+                             <!--End input "Email" field--> 
+                            <div class="input-field col s8 m5 push-m1 push-s2">
+                              <i class="material-icons prefix">email</i>
+                              <input limit ="6"
+                                     data-required='free'
+                                     type="email" 
+                                     session-Email='<?php echo $_SESSION['Email'];?>'
+                                     class="validate input" 
+                                     id="NewEmail"
+                                     limit = "6">
+                              <label for="icon_prefix"><?php echo lang('EMAIL')?></label>
+                              <span></span>
+                              <div class="errmsg">
+                                 <p class='msg'> <?php echo lang('ERRMSG(6)_JS')?></p>
+                              </div>
+                            </div>
+                              <!--End input "Email" field--> 
+                           </div>
+
+                          <div class="row">
+                              <!--End input "password" field--> 
+                            <div class="input-field col s8 m5 push-m1 push-s2">
+                              <i class="material-icons prefix">lock_outline</i>
+                              <input  type="password"
+                                      data-required='free'
+                                      id = 'pass'
+                                      class="validate password1 input" >
+                                
+                              <input type="hidden"
+                                     class="validate "
+                                     id = "oldPassword"
+                                     value ='<?php echo $_SESSION['pass'];?>'
+                                     >
+                                
+                              <label for="icon_telephone"><?php echo lang('PASSWORD')?></label>
+                              <span></span>
+                              <div class="errmsg">
+                                 <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
+                              </div>
+                            </div>
+                               <!--End input "password" field--> 
+                               <!--start input "repeat password" field--> 
+                              
+                            <div class="input-field col s8 m5 push-m1 push-s2">
+                              <i class="material-icons prefix">lock_outline</i>
+                              <input type="password"
+                                     class="validate password2 input" 
+                                     data-required='free'
+                                     id="NewPassword">
+                              <label for="icon_telephone"><?php echo lang('REPEAT_PASSWORD')?></label>
+                               <span></span>
+                               <div class="errmsg">
+                                 <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
+                               </div>
+                            </div> 
+                              <!--End input "repeat password" field-->
+                          </div>
+
+                          <div class="row"> 
+                              <!--start input "Full Name" field-->
+                            <div class="input-field col s8 m4 push-m4 push-s2">
+                              <i class="material-icons prefix">account_box</i>
+                              <input type="text" 
+                                     class="validate input" 
+                                     limit ="8"
+                                     session-fullName='<?php echo $_SESSION['fullname'];?>'
+                                     data-required='free'
+                                     id="NewFullName">
+                              <label for="icon_telephone"><?php echo lang('FULLNAME')?></label>
+                              <span></span>
+                              <div class="errmsg">
+                                 <p class='msg'> <?php echo lang('ERRMSG(8)_JS')?></p>
+                              </div>
+                            </div>
+                              <!--End input "Full Name" field-->
+                          </div>   
+                        </form><!--End Edit form-->
+                    </div> <!--End content modal-->
+                  
+                    <div class="modal-footer">
+                        
+                       <a  class="modal-action modal-close waves-effect waves-green btn-flat" id="info-updata"><?php echo lang("SAVE");?></a>
+                        
+                       <a  class="modal-action modal-close waves-effect waves-green btn-flat "><?php echo lang("CLOSE");?></a>
+                     </div>
+                 </div>
+   
         
