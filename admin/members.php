@@ -30,13 +30,11 @@ if(isset($_SESSION['username'])){
      <!--start serch field-->
      
        <div class="nav-wrapper" >
-          <form>
             <div class="input-field">
               <input id="search-user-info" type="search" id="search" required >
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons close Large">close</i>
             </div>
-          </form>
         </div>
        
       <h1 class="center-align">Mange members</h1>
@@ -65,7 +63,7 @@ if(isset($_SESSION['username'])){
                    
                   <!--End Table header-->
                    
-                <tbody id="tabel-body">
+                <tbody id="users-table-body">
                     
                 <!--start table body-->    
             

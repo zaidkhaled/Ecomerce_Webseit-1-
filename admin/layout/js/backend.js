@@ -9,7 +9,12 @@ $(function () {
     
     $('.modal').modal(); //trigger  msg or show form before some actions in website "confirm"
     
-        
+    $('select').material_select(); //trigger  select field
+    
+    
+//    $('select').material_select('destroy');
+    
+        /* <=============define impotant functions ====================> */
      
     //ajax function it will send data from different pages to 'functionsdb.php', to processing the info , and to deal with database
         
@@ -20,20 +25,15 @@ $(function () {
             pass  = "",
             oldPass = "",
             fullname = "",
-            CateName = "",
             Description = "",
             Order = "",
             Visibilty = "",
             Comment = "",
             Ads = "",
-            VisbilityStatus = "",
-            CommentStatus = "",
-            AdsStatus = "",
-            cateNewName = "",
-            cateNewDescrp = "",
-            cateNewOrder = "";
-        
-
+            price = "",
+            madeIn = "",
+            userId = "",
+            cateId = "";
 
         
         if ($id === undefined) {
@@ -60,22 +60,28 @@ $(function () {
             oldPass  = $('#oldPassword').val();
             fullname = $('#NewFullName').val();
             
-        } else if ($do === "insert_cate") { 
+        } else if ($do === "insert_cate" || $do === "cate_updata") { 
            // get new values from "Catogory add form " and send them to 'functionsdb.php' and insert them into database
-            CateName    = $('#cate-name').val();
+            $id         = $('#cate-id').val(); 
+            name        = $('#cate-name').val();
             Description = $('#cate-descrp').val();
             Order       = $('#cate-order').val();
             Visibilty   = $("#visble").is(":checked") ? 1 : 0;
             Comment     = $("#comment").is(":checked") ? 1 : 0;
             Ads         = $("#adv").is(":checked") ? 1 : 0;
 
-        } else if ($do === "cate_updata") { 
-        // get new values from "Catogory updata form " and send them to 'functionsdb.php' and insert them into database
-            $id           = $('#cate-id').val();    
-            cateNewName   = $('#new-cate-name').val();
-            cateNewDescrp = $('#new-cate-descrp').val();
-            cateNewOrder  = $('#new-cate-order').val();
+        } else if ($do === "insert_item" || $do === "updata-item") {
+            // get new values from "item add form " and send them to 'functionsdb.php' and insert them into database
+            $id         = $('#item-id').val();
+            name        = $('#item-name').val();
+            Description = $('#item-descrp').val();
+            price       = $('#item-price').val();
+            madeIn      = $("#made-in").val();
+            $stus       = $('#select-status option:selected').val();
+            userId      = $('#select-user option:selected').val();
+            cateId      = $('#select-cate option:selected').val();
         }
+        
         
         $.ajax({
             url  : "dbfunctions.php",
@@ -91,24 +97,20 @@ $(function () {
                 ajxPass         : pass,
                 ajxOldPass      : oldPass,
                 ajxFullname     : fullname,
-                ajxpending      : $pending,
-                ajxCateName     : CateName,  
+                ajxpending      : $pending, 
                 ajxDescription  : Description,
                 ajxOrder        : Order,
                 ajxVisibilty    : Visibilty,
                 ajxAds          : Ads,
                 ajxCateColName  : $cateColNmae,
                 ajxStatus       : $stus,
+                ajxMadeIn       : madeIn,
                 ajxComment      : Comment,
-                ajxNewCateName  : cateNewName,
-                ajxNewDescrp    : cateNewDescrp,
-                ajxNewOrder     : cateNewOrder,
+                ajxPrice        : price,
+                ajxUserId       : userId,
+                ajxCateId       : cateId,
+                ajxPrice        : price,
             }
-
-
-
-
-
             
         }).done(function (e) { // return info from dbfunction
             
@@ -122,36 +124,107 @@ $(function () {
 
     }
     
+    
+    
+       /*
+               <======================================================================>
+     function to looking for a specific values in database, the function will recognize data by ($elm_class1, $elm_class2, $elm_class3)
+     admin have just to write one of them in search input, after that the function will filter INFO and return the best result
+               <=======================================================================>
+    */
+    
+    
+    
+    function search($search_field, $parent_elm) {
+        
+        var curr = $search_field.val(); // "search input" value
+        
+        $parent_elm.hide(); // first hide all data 
+        
+        // if user start to writing in "search input", then start data filtering and hide all useless data
+        
+        if (curr !== "") {
+            
+            $parent_elm.hide(); // first hide all data 
+            
+                
+            $parent_elm.find(".search-in").each(function () { //for each elment have "search-in" class in the table  
+    
+                var search_array  = [],  
+                    value =  $(this).html(), // get html value
+                    elm;
+                         
+                search_array.push(value);     
+                       
+                for (elm in search_array) { // make a loop inside all table rows
+                         
+                            // check if $search_field.val() exist in this row 
+                          
+                    if (search_array[elm].toUpperCase().indexOf(curr.toUpperCase()) > -1) {  
+                                
+                        //if yes then show all info it about it and change the background-color
+                                
+                        $(this).css("background-color", "red").parent($parent_elm).show();
+
+                    } else {
+                        //rest background color
+                        $(this).css("background-color", "");
+                    }
+                }   
+                        
+            });
+               
+        } else { //if there is no value in search field, then show all data in "tabel-body". and rest background color for all
+            
+            $parent_elm.show().find(".search-in").each(function () {$(this).css("background-color", ""); });
+            
+        } 
+          
+    }
+    
+    
+    /*
+    onload function : this function will send ajax request on page load 
+    $where : the tag id, where content shuold be placed
+    */
+    
+    function onload($where) {
+        
+        $(window).on("load", function () {
+
+            post($where);
+            
+        }); 
+    }
+    
+    
+     /* <============= End definition the impotant functions ====================> */
+    
  /* ===================== start ajax controll on page loading =========================== */ 
     
     
-    // At beginning i will target in which page should be ajax request sended on page loading
+    // At beginning i will target in which loading page should be ajax request sended 
     
+
     if (location.href.indexOf("members") > 1) { // if Current page is members then 
         
-        
-        $(window).on("load", function () {
+        onload("#users-table-body");
 
-            post("#tabel-body");
-            
-        });
-        
     } else if (location.href.indexOf("dashboard") > 1) { // if Current page is dashboard then 
         
-        $(window).on("load", function () {
+        onload("#last-user-list");
+        
+    } else if (location.href.indexOf("categories") > 1) { // if Current page is categoris page then 
+        
+        onload("#mange-cate"); 
+        
+    } else if (location.href.indexOf("items") > 1) { // if Current page is Items page then  
+        
+        onload("#item-table-body");
 
-            post("#last-user-list");
-        });
-        
-        
-    } else if (location.href.indexOf("categories") > 1) {
-        
-        $(window).on("load", function () {
-
-            post("#mange-cate");
-            
-        });
     }
+    
+
     
 /* ============================== end ajax controll on page loading ============================== */ 
     
@@ -170,19 +243,19 @@ $(function () {
     
     $('#info-send').on('click', function () {
         
-        post("#tabel-body", "insert");
+        post("#users-table-body", "insert");
         
     });
     
 //    delete user from database
     
-    $("#tabel-body").on("click", ".modal-trigger", function () {
-        
+    $("#users-table-body").on("click", ".modal-trigger", function () {
+       
         $('.modal').modal();  //trigger modal in dbfunctions.php before delete user
         
         $('.modal-footer .delete').on("click", function () { //send delete request to dbfunctions.php to delete user data
          
-            post("#tabel-body", 'delete', $(this).attr('data-id'));
+            post("#users-table-body", 'delete', $(this).attr('data-id'));
             
         });
         
@@ -199,8 +272,8 @@ $(function () {
      
     // the following function is for "edit btn" in dashboard page and members page because both of them have "edit btn"
     
-    $("#tabel-body, #last-user-list").on("click", ".updata-btn", function () {
-         
+    $("#users-table-body, #last-user-list").on("click", ".updata-btn", function () {
+        
         $('#updata-form').modal('open'); //triger edit form
         
          //edit form old info
@@ -236,7 +309,7 @@ $(function () {
     
     $('#info-updata').on('click', function () {
         
-        post("#tabel-body, #last-user-list", "updata");
+        post("#users-table-body, #last-user-list", "updata");
         
         // empty password field and other inputs will be automatically chenged
         
@@ -247,9 +320,9 @@ $(function () {
     
    // the following function is for "edit btn" in dashboard page and members page because both of them have "activate btn"
     
-    $("#tabel-body, #last-user-list").on("click", "#unactivated", function () { //send userId to activate user 
+    $("#users-table-body, #last-user-list").on("click", "#unactivated", function () { //send userId to activate user 
 
-        post("#tabel-body ,#last-user-list", 'activate', $(this).attr('data-id'));
+        post("#users-table-body ,#last-user-list", 'activate', $(this).attr('data-id'));
         
     });
      // start controll forms 
@@ -304,73 +377,16 @@ $(function () {
 //    });
     
     
-    /*
-               <======================================================================>
-     function to looking for a specific values in database, the function will recognize data by ($elm_class1, $elm_class2, $elm_class3)
-     admin have just to write one of them in search input, after that the function will filter INFO and return the best result
-               <=======================================================================>
-    */
-    
-    
-    
-    function search($search_field, $parent_elm, $elm_class1, $elm_class2, $elm_class3) {
-        
-        var curr = $search_field.val(); // "search input" value
-        
-        $parent_elm.hide(); // first hide all data 
-        
-        // if user start writing in "search input", then start data filtering and hide all useless data
-         
-        if (curr !== "") {
-            
-            $parent_elm.each(function () { // for each "$elm_class.html()" in database 
-                   
-                var search_array  = [],
-                    value1    = $(this).find($elm_class1).html(), // bring name value 
-                    value2    = $(this).find($elm_class2).html(), //  bring user email vlaue
-                    elem; 
-                
-                 //make an 'array' for eech #elm_class data
-                
-                search_array.push(value1, value2);
-                
-                if ($elm_class3 !== undefined) { // if there is a elm_class3 (third param), then insert into search_array
-                    
-                    var value3 = $(this).find($elm_class3).html();  // bring fullName value
-                    
-                    search_array.push(value3);  
-                }
-                
-                // make a loop in array each "$elm_class" data 
-                console.log(search_array);
-                for (elem in search_array) {   
-                    
-            //search in this array and find out if searched value is one of "$elm_class". search will be insenstive for Capital and small letters 
-                    
-                    if (search_array[elem].toUpperCase().indexOf(curr.toUpperCase()) > 0) {  
-                        
-                        //if yes then show all info it about it "show all row from databse"
-                           
-                        $(this).show();
-
-                    }
-                }
-            });
-               
-        } else { //if there is no value in search input, then show all data in "tabel-body".
-            
-            $parent_elm.show();
-            
-        }
-          
-    };
-    
+ 
+    //  use search function to looking for (.username .Email .fullName) in #tabel-body
     
     $('#search-user-info').on("keyup", function () {
         
-        //  use search function to looking for (.username .Email .fullName) in #tabel-body
+        search($(this), $('#users-table-body .table-row'));
         
-        search($(this), $('#tabel-body .table-row'), ".username", ".Email", ".fullName");
+        
+        // if user start to writing in "search input", then start data filtering and hide all useless data///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         
         
     });
     
@@ -386,25 +402,26 @@ $(function () {
     // if user click on plus btn, then open add "category form".
     
     $('#add-cate-btn').on("click", function () {
-        $('#new-cate-name').removeAttr("value");
-        $('#new-cate-descrp').removeAttr("value");
-        $('#new-cate-order').removeAttr("value");
-        $('#add-cate').modal('open');
+        
+        $('#updata-add-cate .input').each(function () { $(this).val(""); }); // rest input fields
+        
+        $('#updata-add-cate').modal('open'); 
+        
+        $('#updata-cate, #updata-add-cate .form-title-updata').hide(); // hide updata btn "#updata-item" and updata form title
+        
+        $('#add-cate, #updata-add-cate .form-title-add, #updata-add-cate .cate-status').show(); // show send btn "#add-new-item" and add form title category status comment and visbility and ads
     }); 
-    
     
     
     // if user ckick on OK in add "category form", then send new data by ajax to "dbfunctions.php".
     
-    $('#info-cate-send').on('click', function () {
+    $('#add-cate').on('click', function () {
     
         post("#mange-cate", "insert_cate");
         
-        // remove old values in "add catrgory form", after ajax request, to be ready for next time
-        
     }); 
        
-    // the fallowing function is for (Visbility, Allow_Comment, Allow_Ads) (0 or 1)? || to send (onClick) the opposite value by ajax to make fast edit on it 
+    // the fallowing function is for (Visbility, Allow_Comment, Allow_Ads) (0 or 1)? || to send (onClick) the opposite value by ajax to make fast edit on category 
     
     $('#mange-cate').on("click", "li span", function () {
         
@@ -415,30 +432,41 @@ $(function () {
         post("#mange-cate", "change_cate_status", cate_id, colName, newStaus);
     });    
      
+    // open modal "edit category form" and insert all old data to the input fields.
     
     $('#mange-cate').on("click", "li .updata-btn", function () {
         
-        $('#updata-cate').modal('open');
+        $('#updata-add-cate').modal('open');
+   
+        // get all old category infos and set them in the updata form
         
         $('#cate-id').val($(this).parent().parent("li").attr('cate-id'));
-        $('#new-cate-name').val($(this).parent().parent("li").attr('cate-name'));
-        $('#new-cate-descrp').val($(this).parent().parent("li").attr('cate-descrp'));
-        $('#new-cate-order').val($(this).parent().parent("li").attr('cate-order'));
+        $('#cate-name').val($(this).parent().parent("li").attr('cate-name'));
+        $('#cate-descrp').val($(this).parent().parent("li").attr('cate-descrp'));
+        $('#cate-order').val($(this).parent().parent("li").attr('cate-order'));
+        
+
+        $('#updata-cate, #updata-add-cate .form-title-updata').show(); // show updata btn "#updata-item" and updata form title
+        $('#add-cate, #updata-add-cate .form-title-add, #updata-add-cate .cate-status').hide(); // hide send btn "#add-new-item" and add form title category status comment and visbility and ads
         
     });  
     
+    // open "delete warning" on click of  ".delete-btn"
     
     $('#mange-cate').on("click", "li .delete-btn", function () {
         
         $('.modal').modal();
     });
     
-    $("#updata-cate-info").on('click', function () {
+    // send updata category request on click of "#updata-cate-info"
+    
+    $("#updata-cate").on('click', function () {
         
         post('#mange-cate', "cate_updata");
         
     });
     
+    // send delete category request on click of "#delete-cate"
     
     $('#mange-cate').on("click", "#delete-cate", function () {
       
@@ -451,26 +479,143 @@ $(function () {
     
     
     
-//    $('#mange-cate').on("click", "li", function () {
-//          
-//      $(this).children(".cate-controll, .cate-details").addClass("cate-active");
-//        
-//    });
-    
-//    $('#mange-cate').on("click", "li .close-btn", function () {
-//          console.log('yes');
-//      $(this).parent().siblings('.cate-details').removeClass("cate-active");
-//        
-//    });
+    // use search function to looking for (category name and description) in #mange-cate in categories page
     
     $('#search-cate-info').on("keyup", function () {
-        
-        //  use search function to looking for (.username .Email .fullName) in #tabel-body
-         
-        search($(this), $('#mange-cate li'), ".cate-name", ".descrp");
+
+        search($(this), $('#mange-cate li'));
         
     });
+    
     /* ==========================  End categories page =================================== */
+    
+    /* ==========================  start item page =================================== */ 
+    
+    // open "add item form" on click of  "add-item-btn" plus btn
+    
+    $('#add-item-btn').on("click", function () {
+      
+        $('#add-item').modal('open'); // open "add new item" form 
         
+        $('#add-new-item, #add-item .form-title-add').show(); // sohw send btn "#add-new-item" and add form title
+        
+        $('#updata-item, #add-item .form-title-updata').hide(); // hide updata btn "#updata-item" and updata form title
+        
+        // empty the input fields
+          
+        $('#add-item .input').each(function () { $(this).val(""); });
+        
+        // reset selectors 
+        
+        $('#select-cate, #select-user, #select-status').prop('selectedIndex', -1);
+        $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
+
+    }); 
+ 
+    // send ajax request to dbfunctions.php page to add new item in database
+    
+    $('#add-new-item').on('click', function () {
+    
+        post("#item-table-body", "insert_item");
+        
+    });
+    
+    // show warning msg on click of .delete-icon in item page
+    
+    $('#item-table-body').on('click', '.table-row .modal-trigger', function () {
+        
+        $('.modal').modal(); //trigger  msg or show form before some actions in website "confirm"
+        
+        $('.modal-footer .delete').on("click", function () { //send delete request to dbfunctions.php to delete user data
+         
+            post("#item-table-body", 'delete_item', $(this).attr('data-id'));
+           
+        });
+        
+    });
+    
+    // on click of edit item icon '.updata-item-btn' then do the following orders
+    
+    $('#item-table-body').on('click', '.updata-item-btn', function () {
+        
+        $('#add-item').modal('open'); // open add new item form 
+        
+        
+        //old selectors values
+        
+        var oldstus = $(this).parent().siblings(".Status").html(),
+            oldCate = $(this).parent().siblings(".cate-name").html(),
+            oldUserName = $(this).parent().siblings(".user-name").html();
+      
+        // get all old item infos to set them in updata form
+        
+        $('#item-id').val($(this).parent().siblings(".itemID").html());
+        $('#item-name').val($(this).parent().siblings(".ItemName").html());
+        $('#item-descrp').val($(this).parent().siblings(".Descrp").html());
+        $('#item-price').val($(this).parent().siblings(".Price").html());
+        $("#made-in").val($(this).parent().siblings(".MadeIn").html());
+      
+        $('#select-user').find('option:contains("' + oldUserName + '")').prop("selected", true);
+        $('#select-cate').find('option:contains("' + oldCate + '")').prop("selected", true);
+        $('#select-status').find('option[value="' + oldstus + '"]').prop("selected", true);
+
+        $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
+        
+        $('#updata-item, #add-item .form-title-updata').show(); // show updata btn "#updata-item" and updata form title
+        $('#add-new-item, #add-item .form-title-add').hide(); // hide send btn "#add-new-item" and add form title
+        
+    });
+    
+    
+    // send request by ajax on click of '#updata-item' to updata item info 
+    
+    $('#updata-item').on('click', function () {
+        
+        post("#item-table-body", 'updata-item');
+
+    });
+    
+    
+    //  use search function to looking for (item name, decription, category, user name ) in #tabel-body
+    
+    $('#search-item-info').on("keyup", function () {
+        
+        search($(this), $('#item-table-body .table-row'));
+        
+    });
+    
+    $("#item-table-body").on("click", "#unapproved", function () { //send userId to activate user 
+
+        post("#item-table-body", 'approve_item', $(this).attr('data-id'));
+        
+    });
+    
+    
+    /* ==========================  Edd item page =================================== */ 
+    
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

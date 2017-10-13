@@ -10,6 +10,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     
      $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : 'members.php';  
     
+//    <================== start mamber page ==================>
 
     if($do == "insert"){
          
@@ -169,7 +170,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
        }
         
-        
+
         
    }elseif($do == "activate") {
          
@@ -192,12 +193,19 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                    }    
          
         
+        //      <============= end members page ==============>  
+        
+        
+        
+        
+//      <============= start categories page ==============>  
+        
         
     }elseif($do == "insert_cate"){
         
                //prepare new Categorie info
 
-               $CateName     = $_GET['ajxCateName'];
+               $CateName     = $_GET['ajxName'];
                $description  = $_GET['ajxDescription'];
                $order        = $_GET['ajxOrder'];
                $vis          = $_GET['ajxVisibilty'];
@@ -278,11 +286,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
          
            //Update Categories info            
 
-        $NewCateName = $_GET['ajxNewCateName'];
+        $NewCateName = $_GET['ajxName'];
 
-        $NewDescrp = $_GET['ajxNewDescrp'];
+        $NewDescrp = $_GET['ajxDescription'];
 
-        $NewOrder = $_GET['ajxNewOrder'];
+        $NewOrder = $_GET['ajxOrder'];
 
         $ID = $_GET['ajxID'];
        
@@ -368,10 +376,210 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
       }else {
           echo "no";
       }
-    
-    }
+  
      
+    //      <============= end categories page ==============>  
     
+    
+        
+        
+    //      <============= start items page ================>  
+    
+    
+    } elseif($do == "insert_item"){
+         
+          //Insert new user info 
+             
+           $Name    = $_GET['ajxName'];
+           $descrp  = $_GET['ajxDescription'];
+           $price   = $_GET['ajxPrice'];
+           $made_in = $_GET['ajxMadeIn'];
+           $status  = $_GET['ajxStatus'];
+           $userId  = $_GET['ajxUserId'];
+           $cateId  = $_GET['ajxCateId'];
+         
+        
+            // Make an error array for add item form 
+         
+            $addFormErr = [];
+         
+           if (empty($Name)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_ITEM_NAME");
+           }
+         
+           if(empty($descrp)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_DSCRP");
+           }
+         
+           if(empty($price) ){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_PRICE"); 
+           }
+        
+           if(empty($made_in )){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_MADE_IN"); 
+           }
+          
+           if(empty($cateId)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_CATE"); 
+           }
+         
+
+              
+          // End  error array for add item form 
+             
+            // check if the values are approved
+          
+           if (!empty($addFormErr)){
+               
+           ?>
+                     <!-- print caught errorrs-->
+                     
+                     <?php foreach($addFormErr as $Err){ ?> 
+                           
+                           <!--Err : Erorr msg -->
+                         <p class='errmsg-php' style='display:block'><?php echo $Err; ?></p> 
+                       
+                     <?php } 
+        
+               
+                
+               
+            // if yes then insert the new user to database
+               
+           }else {
+               
+               $stmt = $con->prepare("INSERT INTO
+                                                items
+                                                     (Name, Description, Price, Made_in, Status, Add_Data, Cate_ID, Member_ID)
+                                                VALUES 
+                                                     (:zName, :zdescrp, :zPrice, :zMade_in, :zStatus, now(), :zcateID, :zmemberID)");
+               
+                $stmt->execute(["zName"    => $Name,
+                                "zdescrp"  => $descrp,
+                                "zPrice"   => $price,
+                                "zMade_in" => $made_in,
+                                "zStatus"  => $status,
+                                "zcateID"  => $cateId,
+                                "zmemberID"=> $userId]);
+               
+         
+         }
+         
+     // End inset new user 
+        
+    }elseif($do == "delete_item") {
+         
+      $itemID = isset($_GET['ajxID']) && is_numeric($_GET['ajxID'])? intval($_GET['ajxID']) :0;
+
+      //check if ID is allredy exist in item table
+
+      $check = checkItem("Item_ID", "items", $itemID)  ;
+
+      // check if id info has been stored in database, if yes then delete item
+
+      if ($check > 0){
+
+          $stmt=$con->prepare("DELETE FROM items  WHERE Item_ID = :zItemID");
+
+          $stmt->bindParam(":zItemID", $itemID);
+
+          $stmt->execute();
+
+      }
+    
+    }elseif($do == "updata-item"){
+         
+           //Update item info
+    
+           $itemID  = $_GET['ajxID'];
+           $Name    = $_GET['ajxName'];
+           $descrp  = $_GET['ajxDescription'];
+           $price   = $_GET['ajxPrice'];
+           $made_in = $_GET['ajxMadeIn'];
+           $status  = $_GET['ajxStatus'];
+           $userId  = $_GET['ajxUserId'];
+           $cateId  = $_GET['ajxCateId'];
+
+       // check if all values are approved 
+
+        
+          $addFormErr = [];
+         
+           if (empty($Name)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_ITEM_NAME");
+           }
+         
+           if(empty($descrp)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_DSCRP");
+           }
+         
+           if(empty($price) ){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_PRICE"); 
+           }
+        
+           if(empty($made_in )){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_MADE_IN"); 
+           }
+          
+           if(empty($cateId)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_CATE"); 
+           }
+         
+          if (!empty($addFormErr)){
+
+             foreach($addFormErr as $Err){ ?> 
+                           
+                           <!--Err : Erorr msg -->
+                         <td class='errmsg-php' style='display:block'><?php echo $Err; ?></td> 
+                       
+                     <?php } 
+
+           }else {
+                   
+           $stmt=$con->prepare("UPDATE 
+                                 items
+                               SET
+                                 Name =?, Description =?, Price =?, Made_in =?, Status =?, Cate_ID =?, Member_ID =?
+                               WHERE 
+                                 Item_ID = ? ");  //Info Updating
+
+            $stmt->execute([$Name, $descrp, $price, $made_in, $status, $cateId, $userId, $itemID]); //insert new values
+  
+       }
+        
+
+        
+   } elseif($do == "approve_item"){
+        
+            $itemID = isset($_GET['ajxID']) && is_numeric($_GET['ajxID'])? intval($_GET['ajxID']) :0;
+         
+                   //check if ID allredy exists in database
+         
+                  $check = checkItem("item_ID", "items", $itemID)  ;
+                  
+                  // check if this id has info in database, when yes then activate the user
+         
+                  if ($check > 0){
+                     
+                      $stmt=$con->prepare("UPDATE items SET approve = 1 WHERE item_Id = :zitemID");
+                      
+                      $stmt->bindParam(":zitemID", $itemID);
+                      
+                      $stmt->execute();
+         
+                   }    
+         
+    }
     
     
      // start controll this "php code" result. to which page this result should be sended back
@@ -379,8 +587,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     //http_referer have "members", then send this result just to "members page" 
     
     if(preg_match('/members/', $fromPage)) { 
-      
-      //start mange und control buttons
         
          //select pending members "not activated members", just if user click on pending members in dashboard page
         
@@ -403,18 +609,18 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 ?>
              <tr class="table-row"> 
                  
-             <td class = 'userID'>     <?php echo $row['userID']?>  </td>
-             <td class = 'username'>  <?php echo $row['username']?> </td>
-             <td class = 'Email'>      <?php echo $row['Email']?>   </td>
-             <td class = 'fullName'>   <?php echo $row['fullName']?></td>
-             <td class = 'date'>        <?php echo $row['date'] ?>  </td>
+             <td class = 'userID'><?php echo $row['userID']?></td>
+             <td class = 'username search-in'> <?php echo $row['username']?></td>
+             <td class = 'Email search-in'><?php echo $row['Email']?></td>
+             <td class = 'fullName search-in'><?php echo $row['fullName']?></td>
+             <td class = 'date'><?php echo $row['date'] ?></td>
 
 <!--           start table body   -->
 
 <!--              Note <=========> in "sure Msg" <to delete user> from jave script href will equal #modal + userID  
                   (#modal+$row['userID']) /without this, the fuction  will selet and delet just the first id       -->
               
-             <td>
+             <td class="control-user-table">
                 <!--Activate Button--> 
               <?php 
 
@@ -454,9 +660,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                  <!--Delete Butten-->
 
                  <div id="modal<?php echo $row['userID']; ?>" class='modal' >
-                  <div class='modal-content'>
-                    <h4><?php echo lang("SURE_MSG")?> </h4>
-                    <p><?php echo lang("SURE_FULLNAME_MSG")?> <?php echo $row['fullName']?></p>
+                   <div class='modal-content'>
+                     <h4><?php echo lang("SURE_MSG")?> </h4>
+                     <p><?php echo lang("SURE_FULLNAME_MSG")?> <?php echo $row['fullName']?></p>
                   </div>
 
                   <div class='modal-footer'>
@@ -537,7 +743,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 //          $Allow_Comment = $cate['Allow_Comment'] == 0 ? 'No' : 'Yes' ;  
 //          $Allow_Ads     = $cate['Allow_Ads']     == 0 ? 'No' : 'Yes' ;  
          
-          //check if visibltly and comment and advertising is allowed , if yes then chenge the background-color to peacefully color by class name, but if no then chenge it to danger color
+          //check if visibltly and comment and advertising is allowed , if yes then chenge the thier background-color to peacefully color by class name, but if no then chenge it to danger color
             
          if($cate['Visbility'] == 0){
              $cls_visibility = "not-allowed";
@@ -575,50 +781,43 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                   cate-order = "<?php echo $cate['Ordering'];?>"
                   >
                   <div class="cate-controll">
-<!--
-                    <a  class="secondary-content close-btn">
-                      <i class="material-icons ">close</i>
-                    </a>
--->
-                      <a  class="secondary-content updata-btn">
-                      <i class="material-icons ">border_color</i>
+                     <a  class="secondary-content updata-btn">
+                       <i class="material-icons ">border_color</i>
                     </a>
                     <a class="secondary-content modal-trigger delete-btn">
                       <i class="material-icons delete-btn modal-trigger" data-id="<?php echo $cate['ID'];?>"  href="#modal<?php echo $cate['ID'];?>">delete_forever</i>
                     </a>
                   </div>      
                   
-                  <h3 class= 'cate-name'> <?php echo $cate['Name'];?></h3>
-                  
-                  <div class="cate-details">
-                      Description : <span class= 'descrp'><?php echo $cate['Description'];?></span>
-                      <p>Ordering : <?php echo $cate['Ordering'];?></p>
+                  <h3 class= 'cate-name search-in'> <?php echo $cate['Name'];?></h3>
+                  Description : <span class= 'descrp search-in'><?php echo $cate['Description'];?></span>
+                  <p>Ordering : <?php echo $cate['Ordering'];?></p>
                       
-                        <span class="<?php echo $cls_visibility; ?>"
-                              data-status = "<?php echo $cate['Visbility'] ;?>"
-                              col-name = "Visbility">
-                              Visbility : <?php echo $allow_visibility;?>
-                        </span>
+                  <span class="<?php echo $cls_visibility; ?>"
+                        data-status = "<?php echo $cate['Visbility'] ;?>"
+                        col-name = "Visbility">
+                        Visbility : <?php echo $allow_visibility;?>
+                  </span>
                       
-                        <span class ='<?php echo $cls_comment;?>' 
-                              data-status = "<?php echo $cate['Allow_Comment'] ;?>"
-                              col-name = "Allow_Comment">
-                              Allow_Comment : <?php echo $allow_comment;?>
-                        </span>
+                   <span class ='<?php echo $cls_comment;?>' 
+                         data-status = "<?php echo $cate['Allow_Comment'] ;?>"
+                         col-name = "Allow_Comment">
+                         Allow_Comment : <?php echo $allow_comment;?>
+                   </span>
                       
-                        <span class="<?php echo $cls_ads;?>" 
-                              data-status = "<?php echo $cate['Allow_Ads'];?>"
-                              col-name = "Allow_Ads"> 
-                              Allow_Advertising : <?php echo $allow_ads;?>    
-                        </span>
+                   <span class="<?php echo $cls_ads;?>" 
+                         data-status = "<?php echo $cate['Allow_Ads'];?>"
+                         col-name = "Allow_Ads"> 
+                         Allow_Advertising : <?php echo $allow_ads;?>    
+                   </span>
                   </div>
              </li>
 
              <div id="modal<?php echo $cate['ID'];?>" class='modal'>
-              <div class='modal-content center-align'>
-                <h4><?php echo lang("SURE_MSG")?> </h4>
-                <p><?php echo lang("SURE_CATE_NAME_MSG")?> <?php echo $cate['Name']?></p>
-              </div>
+               <div class='modal-content center-align'>
+                 <h4><?php echo lang("SURE_MSG")?> </h4>
+                 <p><?php echo lang("SURE_CATE_NAME_MSG")?> <?php echo $cate['Name']?></p>
+               </div>
                <div class='modal-footer'>
                  <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
                  <a class='modal-action modal-close waves-effect waves-green btn-flat' data-id='<?php echo $cate['ID']; ?>' id = "delete-cate">Agree</a>
@@ -627,7 +826,105 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
             
         
     <?php }
+        
+        
+        
+    }elseif(preg_match('/items/', $fromPage)) { 
+        
+         //select pending members "not activated members", just if user click on pending members in dashboard page
+        
+//         $query = $_GET['ajxpending'] == 'pending'? "AND regStatus = 0" : " ";        //
+         
+         // select all items and make a two new column for category name and user Name, who posted the item 
+        
+         $stmt = $con->prepare(" SELECT 
+                                     items.* ,
+                                     categories.Name AS Cate_Name, 
+                                     users.username AS User_Name 
+                                 FROM
+                                     Items 
+                                 INNER JOIN
+                                     categories ON categories.ID = items.Cate_ID
+                                 INNER JOIN 
+                                     users ON userID = items.Member_ID ");
+ 
+         $stmt->execute();
+         
+         //fetch all items with their info from Datebase
+         
+         $rows =$stmt->fetchAll(); 
+    
+          //start table body
+                
+         foreach ($rows as $row){ 
+?>
+             <tr class="table-row"> 
+                 
+             <td class = 'itemID search-in'><?php echo $row['Item_ID']?></td>
+             <td class = 'ItemName search-in'><?php echo $row['Name']?> </td>
+             <td class = 'Descrp search-in'><?php echo $row['Description']?></td>
+             <td class = 'MadeIn search-in'><?php echo $row['Made_In']?></td>
+             <td class = 'Price search-in'><?php echo $row['Price'] ?></td>
+             <td class = 'Status search-in'><?php echo $row['Status'] ?></td>
+             <td class = 'cate-name search-in'><?php echo $row['Cate_Name'] ?></td>
+             <td class = 'user-name search-in'><?php echo $row['User_Name'] ?></td>
+             <td class = 'AddDate'><?php echo $row['Add_Data'] ?></td>
+
+<!--           start table body   -->
+
+<!--              Note <=========> in "sure Msg" <to delete user> from jave script href will equal #modal + userID  
+                  (#modal+$row['userID']) /without this, the fuction  will selet and delet just the first id       -->
+              
+             <td>
+                 
+           <?php if ($row['approve'] == null) { ?>
+                 <!--if item is not activated then show unactivated button-->
+                 <a class='btn-floating pink darken-4' id='unapproved' data-id ='<?php echo $row['Item_ID']; ?>'>
+                   <i class="material-icons">thumb_down</i>
+                 </a>
+
+           <?php }else { ?>
+                  <!--else if user is activated then show OK button-->
+                  <a class='btn-floating light-green accent-3'>
+                   <i class="material-icons">thumb_up</i>
+                 </a>
+
+                 <?php }?>
+                 <!--Edit Butten-->
+                 <a class='btn-floating teal updata-item-btn'>
+                   <i class='large material-icons'>mode_edit</i>
+                 </a><!-- end Edit Butten-->
+                 <!--Delete Butten-->
+                 <a class='btn-floating red modal-trigger' data-id="<?php echo $row['Item_ID'];?>"  href="#modal<?php echo $row['Item_ID'];?>">
+                   <i class='large material-icons '>delete_forever</i>
+                 </a><!--Delete Butten-->
+                 
+                  <!-- start modal delete butten-->
+                 <div id="modal<?php echo $row['Item_ID']; ?>" class='modal' >
+                   <div class='modal-content'>
+                     <h4><?php echo lang("SURE_MSG")?> </h4>
+                     <p><?php echo lang("SURE_FULLNAME_MSG")?> <?php echo $row['Name']?></p>
+                   </div>
+                   <div class='modal-footer'>
+                     <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
+                     <a class='modal-action delete modal-close waves-effect waves-green btn-flat' data-id='<?php echo $row['Item_ID']; ?>'>Delete</a>
+                  </div><!--end modal Delete Butten--> 
+                </div>
+              </td>
+            </tr>
+            
+
+          <?php  } 
+        
+       //chick if http_referer contains dashpoard, if yes then show this list just inside it
+        
     }
+    
+    
+    
+    
+    
+    
 }//end cindidtion Request
 
 ?>

@@ -106,7 +106,7 @@ function countItems($item, $table){
 
 /*
 ** function getLatest to print the last registerd users /////////
-** $select <=> depend of which Column
+** $select <=> depend of which table////////////////
 ** $from   <=> which Table
 ** $order  <=> Descending depend of which Column
 ** $limit  <=> how many rows do I want to show
@@ -125,6 +125,36 @@ function getLatest($select, $from, $order, $limit) {
 }
 
 
+/*
+** function getAll to bring all data from a specific table in database
+** $select <=> depend of which column
+** $from   <=> which Table
+** $id     <=> where id not equal $id
+*/
+
+
+function getAll($select, $from, $id = NULL) {
+    
+    global $con ;
+    
+    
+    
+    if(!empty($id)){
+        
+       $getAll = $con->prepare("SELECT $select FROM $from WHERE userID != $id "); 
+        
+    } else {
+        
+        $getAll = $con->prepare("SELECT $select FROM $from");
+        
+    }
+    
+    
+    
+    $getAll->execute();
+    
+    return $getAll->fetchAll();
+}
 
 
 

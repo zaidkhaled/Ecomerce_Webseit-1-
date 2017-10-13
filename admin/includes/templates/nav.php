@@ -15,11 +15,11 @@
       <div class="nav-wrapper">
         <ul class="right hide-on-med-and-down">
           <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
-          <li><a href=""><?php echo lang('ITEMS')?></a></li>
+          <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
           <li><a href="members.php?do=mange"><?php echo lang('MEMBERS')?></a></li>
           <li><a href=""><?php echo lang('STATISTICS')?></a></li>
           <li><a href=""><?php echo lang('LOGS')?></a></li>
-          <li><a class="dropdown-button" href="#!" data-activates="dropdownMED">Zeid<i class="material-icons right">arrow_drop_down</i></a></li>    
+          <li><a class="dropdown-button" href="#!" data-activates="dropdownMED">Zeid<i class="material-icons right">arrow_drop_down</i></a></li> 
         </ul>
           
         <ul class="left">
@@ -29,7 +29,7 @@
 
          <ul class="side-nav" id="mobile-demo">
            <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
-           <li><a href=""><?php echo lang('ITEMS')?></a></li>
+           <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
            <li><a href="members.php?do=mange"><?php echo lang('MEMBERS')?></a></li>
            <li><a href=""><?php echo lang('STATISTICS')?></a></li>
            <li><a href=""><?php echo lang('LOGS')?></a></li>

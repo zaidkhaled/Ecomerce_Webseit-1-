@@ -6,7 +6,7 @@ function lang($phrase){
     
     static $lang = [ 
   
-    "ITEMS"               => "Item",
+    "ITEMS"               => "Items",
     "CATEGORIES"          => "Categories",
     "MEMBERS"             => "Members",    
     "STATISTICS"          => "Statistics",   
@@ -55,7 +55,8 @@ function lang($phrase){
         
     "MANGE CATEGORIES"    => "Mange categories",    
     "ADD_NEW_CATEGORIES"  => "Add New Category",    
-    "EIDT_CATEGORIES"     => "Edit  Category",    
+    "EIDT_CATEGORIES"     => "Edit  Category",
+    "PHP_CATE_NAME"       => "Category name is empty",
     "ADD_CATEGORIES"      => "Add Category",    
     "CATEGORY_NAME"       => "CATEGORY NAME",    
     "DESCRIPTION"         => "DESCRIPTION",    
@@ -65,8 +66,37 @@ function lang($phrase){
     "ADVERTISING"         => "Advertising",                  
     "ALLOW"               => "Allow",    
     "NOT_ALLOW"           => "prevent",    
-    "SURE_CATE_NAME_MSG"  => "you will delete this category : "    
-                
+    "SURE_CATE_NAME_MSG"  => "you will delete this category : ",    
+       
+    //items page 
+      
+    "ITEMS_MANGER"        => "Items manger", 
+    "ADD_NEW_ITEMS"       => "Add New Item",    
+    "UPDATA_ITEM"         => "Updata item",    
+    "ITEM_NAME"           => "Name",  
+    "ITEMS_DESCRP"        => "Description",  
+    "ITEMS_PRICE"         => "Price",  
+    "ITEMS_MIND_IN"       => "Made-in", 
+    "NEW"                 => "New", 
+    "STATUS"              => "Status", 
+    "LIKE_NEW"            => "Like new", 
+    "USED"                => "Used", 
+    "OLD"                 => "old",  
+    "USER_NAME"           => "User name", 
+    "PHP_ERRMSG_ITEM_NAME"=> " Item name should be <strong> more then 6 </strong>Letters ",  
+    "PHP_ERRMSG_DSCRP"    => " Item Description should be <strong> more then 6 </strong>Letters ",  
+    "PHP_ERRMSG_MADE_IN"  => " Item 'made in country' selector should be <strong> more then 6 </strong>Letters ",  
+    "PHP_ERRMSG_CATE"     => " place choose category Name" ,  
+    "PHP_ERRMSG_PRICE"    => " Item price field should be <strong> more then 6 </strong>Letters ",  
+    "ITEM NAME"           => " Name",  
+    "DESCRIPTION"         => " Description ",  
+    "PRICE"               => "Price",  
+    "MADE_IN"             => "Made in ",  
+    "CATEGORY"            => "category",  
+    "MEMBER_NAME"         => "Mamber Name",  
+    "STATUS"              => "Status",  
+    "ADD_DATA"            => "Add_data",  
+    
     ];
         
     return $lang[$phrase];
