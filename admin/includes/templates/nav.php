@@ -16,7 +16,7 @@
         <ul class="right hide-on-med-and-down">
           <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
           <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
-          <li><a href="members.php?do=mange"><?php echo lang('MEMBERS')?></a></li>
+          <li><a href="members.php"><?php echo lang('MEMBERS')?></a></li>
           <li><a href=""><?php echo lang('STATISTICS')?></a></li>
           <li><a href=""><?php echo lang('LOGS')?></a></li>
           <li><a class="dropdown-button" href="#!" data-activates="dropdownMED">Zeid<i class="material-icons right">arrow_drop_down</i></a></li> 
@@ -30,7 +30,7 @@
          <ul class="side-nav" id="mobile-demo">
            <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
            <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
-           <li><a href="members.php?do=mange"><?php echo lang('MEMBERS')?></a></li>
+           <li><a href="members.php"><?php echo lang('MEMBERS')?></a></li>
            <li><a href=""><?php echo lang('STATISTICS')?></a></li>
            <li><a href=""><?php echo lang('LOGS')?></a></li>
            <li><a class="dropdown-button" href="#!" data-activates="dropdownSM">Zeid<i class="material-icons right">arrow_drop_down</i></a></li>
@@ -42,7 +42,7 @@
 
  <!--modal "edit form" "confirm" , if user click on Edit button to give user the ability to edit own data from any page any time, and to edit any user info if user is in members.php page-->
     
-            <div id="updata-form" class="modal modal-fixed-footer updata-form">
+            <div id="update-form" class="modal modal-fixed-footer update-form">
                  <div class="modal-content">
                         <h1 class="center-align"><?php echo lang('EDIT_MEMBERS')?></h1>
                         <form class="form" method="POST">
@@ -149,7 +149,7 @@
                   
                     <div class="modal-footer">
                         
-                       <a  class="modal-action modal-close waves-effect waves-green btn-flat" id="info-updata"><?php echo lang("SAVE");?></a>
+                       <a  class="modal-action modal-close waves-effect waves-green btn-flat" id="info-update"><?php echo lang("SAVE");?></a>
                         
                        <a  class="modal-action modal-close waves-effect waves-green btn-flat "><?php echo lang("CLOSE");?></a>
                      </div>

@@ -6966,17 +6966,25 @@ nav i, nav i.material-icons {
 .nav-wrapper form .close {
   top: 13px !important; }
 
+.container-grid {
+  position: relative;
+  height: 350px;
+  overflow: scroll; }
+
+.container-grid table {
+  position: absolute;
+  top: 0;
+  left: 0; }
+
+.container-grid table .table-row {
+  cursor: pointer; }
+  .container-grid table .table-row:active {
+    background-color: #467885; }
+
 thead tr {
   background-color: #B86E9A;
   color: #333;
   border-radius: 8px; }
-
-.mange {
-  margin-top: 10vh; }
-
-.mange .btn, .mange .btn-large {
-  margin: 20px;
-  line-height: 27px; }
 
 .table tbody td .accent-3 {
   cursor: default;
@@ -6989,6 +6997,13 @@ thead tr {
     border-spacing: 0;
     display: block;
     position: relative; } }
+.mange {
+  margin-top: 10vh; }
+
+.mange .btn, .mange .btn-large {
+  margin: 20px;
+  line-height: 27px; }
+
 .home-stats .box > .stat {
   padding: 20px;
   background-color: #333;
@@ -7065,5 +7080,23 @@ thead tr {
 
 .AddFormCate .order {
   margin-bottom: 0; }
+
+#comments-table-body .table-row .comment {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 10%; }
+
+.comment-item .row {
+  margin-top: 35px; }
+
+.comment-item .row .collection {
+  border: none !important; }
+
+.collection .collection-item.avatar .secondary-content {
+  cursor: pointer; }
+
+.collection .collection-item.avatar .update-btn-to-item {
+  right: 50px; }
 
 /*# sourceMappingURL=css.css.map */

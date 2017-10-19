@@ -13,7 +13,8 @@ $pageTitle = "Dashbord";
        include $tpl. "header.php";     
 
        include $tpl."nav.php"; 
-      
+       
+       include  "forms.php";
     
      //start Dashbord page
      
@@ -44,14 +45,14 @@ $pageTitle = "Dashbord";
             <div class="col s6  m3 box">
                 <div class="stat ">
                     <p>Total Items</p>
-                    <span><a href="mange.php"><?php echo countItems("userID","users")?></a></span>
+                    <span><a href="mange.php"><?php echo countItems("item_ID","items")?></a></span>
                 </div>
             </div>
        
             <div class="col s6  m3 box">
                 <div class="stat ">
-                    <p>Total coments</p>
-                    <span><a href="mange.php"><?php echo countItems("userID","users")?></a></span>
+                    <p>Total comments</p>
+                    <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
                 </div>
             </div>
             
@@ -65,7 +66,7 @@ $pageTitle = "Dashbord";
     <div class="container">
         <div class="row">
             <div class = "mm col s12 m6">
-               <ul class="collection with-header" id="last-user-list">
+               <ul class="collection with-header" id="last-users-list">
                
                  <!-- the collection content will be called by ajax-->
                 </ul>
@@ -73,14 +74,11 @@ $pageTitle = "Dashbord";
                <!--start Latest user collection-->
             
               <div class="col m6">
-              <ul class="collection with-header">
-
-                <li class="collection-header"><h4><?php echo lang("LATEST_USER")?></h4></li>
-
-               
+                <ul class="collection with-header" id="last-items-list">
+                    
     <!--         <li class='collection-item'><div><a href='#!' class='secondary-content'></a></div></li>-->
-              </ul>
-            </div> 
+               </ul>
+              </div> 
             </div>
         </div>
 

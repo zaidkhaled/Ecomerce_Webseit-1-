@@ -18,7 +18,7 @@ $(function () {
      
     //ajax function it will send data from different pages to 'functionsdb.php', to processing the info , and to deal with database
         
-    function post($where, $do, $id, $cateColNmae, $stus, $pending) {
+    function post($where, $do, $id, $cateColNmae, $stus, $data_required, $item_id) {
 
         var name  = "",
             email = "",
@@ -33,17 +33,21 @@ $(function () {
             price = "",
             madeIn = "",
             userId = "",
-            cateId = "";
+            cateId = "",
+            comment = "";
 
         
         if ($id === undefined) {
             $id = "";
         }
+        if ($item_id === undefined) {
+            $item_id = "";
+        }
         
         //if "pending members" request is exist then retuen just pending members in table body
-        
-        $pending = $('#query').html();
-        
+        if ($data_required === undefined) {
+            $data_required = $('#data_required').html();
+        }
         if ($do === 'insert') {
             // get new values from 'add form' and send them to 'functionsdb.php' and insert them into database
             name     = $('#add-name').val();  
@@ -51,7 +55,7 @@ $(function () {
             pass     = $('#add-pass').val();
             fullname = $('#add-fName').val();
             
-        } else if ($do === "updata") {
+        } else if ($do === "update") {
             // get new values from 'edit form' and send them to 'functionsdb.php' and insert them into database
             $id      = $('#user-id').val();
             name     = $('#NewuserName').val();
@@ -60,7 +64,7 @@ $(function () {
             oldPass  = $('#oldPassword').val();
             fullname = $('#NewFullName').val();
             
-        } else if ($do === "insert_cate" || $do === "cate_updata") { 
+        } else if ($do === "insert_cate" || $do === "cate_update") { 
            // get new values from "Catogory add form " and send them to 'functionsdb.php' and insert them into database
             $id         = $('#cate-id').val(); 
             name        = $('#cate-name').val();
@@ -70,7 +74,7 @@ $(function () {
             Comment     = $("#comment").is(":checked") ? 1 : 0;
             Ads         = $("#adv").is(":checked") ? 1 : 0;
 
-        } else if ($do === "insert_item" || $do === "updata-item") {
+        } else if ($do === "insert_item" || $do === "update-item") {
             // get new values from "item add form " and send them to 'functionsdb.php' and insert them into database
             $id         = $('#item-id').val();
             name        = $('#item-name').val();
@@ -80,6 +84,12 @@ $(function () {
             $stus       = $('#select-status option:selected').val();
             userId      = $('#select-user option:selected').val();
             cateId      = $('#select-cate option:selected').val();
+            
+        }else if ($do === "update_comment") {
+           $id          = $("#update-comments-form .comment-id").val(); 
+           comment      = $("#update-comments-form .comment-update-field").val(); 
+            
+            
         }
         
         
@@ -97,7 +107,8 @@ $(function () {
                 ajxPass         : pass,
                 ajxOldPass      : oldPass,
                 ajxFullname     : fullname,
-                ajxpending      : $pending, 
+                ajxdata_required: $data_required, 
+                ajxItem_ID      : $item_id, 
                 ajxDescription  : Description,
                 ajxOrder        : Order,
                 ajxVisibilty    : Visibilty,
@@ -110,12 +121,24 @@ $(function () {
                 ajxUserId       : userId,
                 ajxCateId       : cateId,
                 ajxPrice        : price,
+                ajxcomment      : comment,
             }
             
         }).done(function (e) { // return info from dbfunction
             
-            $($where).html(e);
+            // <||> : which means there is multiple results received
             
+            if (e.indexOf("<||>") > -1) { // dealing with multiple results 
+           
+                var res = e.split("<||>"), 
+                    palace = $where.split(",");
+                
+                $(palace[0]).html(res[0]);
+                $(palace[1]).html(res[1]);
+                 
+            } else {
+                $($where).html(e);
+            }
         }).fail(function () {
             
             alert('Error');
@@ -126,12 +149,12 @@ $(function () {
     
     
     
-       /*
+/*
                <======================================================================>
-     function to looking for a specific values in database, the function will recognize data by ($elm_class1, $elm_class2, $elm_class3)
-     admin have just to write one of them in search input, after that the function will filter INFO and return the best result
+     function to looking for a specific values in the table, the function will recognize data by class .search-in.
+     the function will filter table INFO and return the best result
                <=======================================================================>
-    */
+*/
     
     
     
@@ -141,36 +164,29 @@ $(function () {
         
         $parent_elm.hide(); // first hide all data 
         
-        // if user start to writing in "search input", then start data filtering and hide all useless data
+        // if user start to writing in "search field", then start data filtering and hide all useless data
         
         if (curr !== "") {
             
             $parent_elm.hide(); // first hide all data 
             
-                
             $parent_elm.find(".search-in").each(function () { //for each elment have "search-in" class in the table  
     
-                var search_array  = [],  
-                    value =  $(this).html(), // get html value
-                    elm;
-                         
-                search_array.push(value);     
-                       
-                for (elm in search_array) { // make a loop inside all table rows
-                         
-                            // check if $search_field.val() exist in this row 
+                var  value =  $(this).html(); // get html value  
+                
+                // check if $search_field.val() exist in this row 
                           
-                    if (search_array[elm].toUpperCase().indexOf(curr.toUpperCase()) > -1) {  
+                if (value.toUpperCase().indexOf(curr.toUpperCase()) > -1) {  
                                 
                         //if yes then show all info it about it and change the background-color
                                 
-                        $(this).css("background-color", "red").parent($parent_elm).show();
+                    $(this).css("background-color", "red").parent($parent_elm).show();
 
-                    } else {
+                } else {
                         //rest background color
-                        $(this).css("background-color", "");
-                    }
-                }   
+                    $(this).css("background-color", "");
+                }
+//                }   
                         
             });
                
@@ -188,11 +204,11 @@ $(function () {
     $where : the tag id, where content shuold be placed
     */
     
-    function onload($where) {
+    function onload($where, $do) {
         
         $(window).on("load", function () {
 
-            post($where);
+            post($where, $do);
             
         }); 
     }
@@ -212,7 +228,8 @@ $(function () {
 
     } else if (location.href.indexOf("dashboard") > 1) { // if Current page is dashboard then 
         
-        onload("#last-user-list");
+        onload("#last-users-list, #last-items-list");
+
         
     } else if (location.href.indexOf("categories") > 1) { // if Current page is categoris page then 
         
@@ -221,6 +238,10 @@ $(function () {
     } else if (location.href.indexOf("items") > 1) { // if Current page is Items page then  
         
         onload("#item-table-body");
+
+    } else if (location.href.indexOf("comments") > 1) { // if Current page is Items page then  
+        
+        onload("#comments-table-body");
 
     }
     
@@ -272,9 +293,9 @@ $(function () {
      
     // the following function is for "edit btn" in dashboard page and members page because both of them have "edit btn"
     
-    $("#users-table-body, #last-user-list").on("click", ".updata-btn", function () {
+    $("#users-table-body, #last-users-list").on("click", ".update-btn", function () {
         
-        $('#updata-form').modal('open'); //triger edit form
+        $('#update-form').modal('open'); //triger edit form
         
          //edit form old info
          
@@ -292,10 +313,12 @@ $(function () {
        
     });
  
-    // edit button from "Edit form"
+    
+    // edit button from "Edit form" in navbar
+    
     $('.edit-button').on('click', function () {
         
-        $('#updata-form').modal('open');
+        $('#update-form').modal('open');
         
         // set session info, to edit form ("in nav bar").on click of edit button in navbar."edit just personal data"
         $('#user-id').val($('#user-id').attr('session-id'));
@@ -307,9 +330,9 @@ $(function () {
     
        // send updated info to database
     
-    $('#info-updata').on('click', function () {
+    $('#info-update').on('click', function () {
         
-        post("#users-table-body, #last-user-list", "updata");
+        post("#users-table-body, #last-user-list", "update");
         
         // empty password field and other inputs will be automatically chenged
         
@@ -320,9 +343,9 @@ $(function () {
     
    // the following function is for "edit btn" in dashboard page and members page because both of them have "activate btn"
     
-    $("#users-table-body, #last-user-list").on("click", "#unactivated", function () { //send userId to activate user 
+    $("#users-table-body, #last-users-list").on("click", "#unactivated", function () { //send userId to activate user 
 
-        post("#users-table-body ,#last-user-list", 'activate', $(this).attr('data-id'));
+        post("#users-table-body ,#last-users-list", 'activate', $(this).attr('data-id'));
         
     });
      // start controll forms 
@@ -403,13 +426,13 @@ $(function () {
     
     $('#add-cate-btn').on("click", function () {
         
-        $('#updata-add-cate .input').each(function () { $(this).val(""); }); // rest input fields
+        $('#update-add-cate .input').each(function () { $(this).val(""); }); // rest input fields
         
-        $('#updata-add-cate').modal('open'); 
+        $('#update-add-cate').modal('open'); 
         
-        $('#updata-cate, #updata-add-cate .form-title-updata').hide(); // hide updata btn "#updata-item" and updata form title
+        $('#update-cate, #update-add-cate .form-title-update').hide(); // hide update btn "#update-item" and update form title
         
-        $('#add-cate, #updata-add-cate .form-title-add, #updata-add-cate .cate-status').show(); // show send btn "#add-new-item" and add form title category status comment and visbility and ads
+        $('#add-cate, #update-add-cate .form-title-add, #update-add-cate .cate-status').show(); // show send btn "#add-new-item" and add form title category status comment and visbility and ads
     }); 
     
     
@@ -427,18 +450,18 @@ $(function () {
         
         var newStaus = $(this).attr("data-status") === "1" ? 0 : 1,
             colName  = $(this).attr("col-name"),
-            cate_id  = $(this).parent().parent().attr("cate-id");
+            cate_id  = $(this).parent().attr("cate-id");
           
         post("#mange-cate", "change_cate_status", cate_id, colName, newStaus);
     });    
      
     // open modal "edit category form" and insert all old data to the input fields.
     
-    $('#mange-cate').on("click", "li .updata-btn", function () {
+    $('#mange-cate').on("click", "li .update-btn", function () {
         
-        $('#updata-add-cate').modal('open');
+        $('#update-add-cate').modal('open');
    
-        // get all old category infos and set them in the updata form
+        // get all old category infos and set them in the update form
         
         $('#cate-id').val($(this).parent().parent("li").attr('cate-id'));
         $('#cate-name').val($(this).parent().parent("li").attr('cate-name'));
@@ -446,8 +469,8 @@ $(function () {
         $('#cate-order').val($(this).parent().parent("li").attr('cate-order'));
         
 
-        $('#updata-cate, #updata-add-cate .form-title-updata').show(); // show updata btn "#updata-item" and updata form title
-        $('#add-cate, #updata-add-cate .form-title-add, #updata-add-cate .cate-status').hide(); // hide send btn "#add-new-item" and add form title category status comment and visbility and ads
+        $('#update-cate, #update-add-cate .form-title-update').show(); // show update btn "#update-item" and update form title
+        $('#add-cate, #update-add-cate .form-title-add, #update-add-cate .cate-status').hide(); // hide send btn "#add-new-item" and add form title category status comment and visbility and ads
         
     });  
     
@@ -458,11 +481,11 @@ $(function () {
         $('.modal').modal();
     });
     
-    // send updata category request on click of "#updata-cate-info"
+    // send update category request on click of "#update-cate-info"
     
-    $("#updata-cate").on('click', function () {
+    $("#update-cate").on('click', function () {
         
-        post('#mange-cate', "cate_updata");
+        post('#mange-cate', "cate_update");
         
     });
     
@@ -475,10 +498,7 @@ $(function () {
         post('#mange-cate', 'cate_delete', cateID);
     });
     
-    
-    
-    
-    
+  
     // use search function to looking for (category name and description) in #mange-cate in categories page
     
     $('#search-cate-info').on("keyup", function () {
@@ -487,23 +507,87 @@ $(function () {
         
     });
     
+
     /* ==========================  End categories page =================================== */
+    
+    
+    
+    
+    
     
     /* ==========================  start item page =================================== */ 
     
-    // open "add item form" on click of  "add-item-btn" plus btn
+  
+     // comment manger  will appeared when name of item in items.php page is  clicked 
+    
+    $('#item-table-body').on('click', '.table-row .ItemName', function () {
+     
+       var item_id = $(this).siblings('.itemID').html();
+        
+        $(this).css("background-color", "red").parent().siblings().children(".ItemName").css("background-color", "");
+        
+        post("#comments-item", "", "", "", "", "comments", item_id);
+        
+        
+    });
+    
+    // open modal "edit comments form" and insert all old data to the input field.
+    
+    $('#comments-item').on("click", ".collection-item .comment-controll .update-btn-to-item", function () {
+        
+        // open texteara to edit the comment 
+        
+        $('#update-comments-form').modal('open');
+        
+        // get all old comment infos and set them in the update form
+        
+        $("#update-comments-form .comment-update-field").val($(this).parent().siblings(".comment").html());
+        $("#update-comments-form .comment-id").val($(this).parent().parent("li").attr("data-id"));
+        $('#update-comments-to-item').attr("item-id", $(this).parent().parent("li").attr("item-id"));
+
+    }); 
+    
+    
+    $('#update-comments-to-item').on("click", function () {
+        
+        var  item_id = $(this).attr("item-id");
+        
+        post("#comments-item", "update_comment", "", "", "", "comments", item_id);
+        
+    });     
+    
+    
+    // show warning msg on click of .delete-icon in item page
+    
+    $('#comments-item').on('click', ".comment-controll .delete-btn-to-item", function () {
+        
+        $('.modal').modal(); //trigger  msg or show form before some actions in website "confirm"
+        
+        $('#delete-to-item').on("click", function () { //send delete request to dbfunctions.php to delete user data
+            
+            var comment_id = $(this).attr("data-id"),
+                item_id    = $(this).attr("item-id");
+            
+            post("#comments-item", 'delete_comment', comment_id, "", "", "comments", item_id);
+           
+        });
+        
+    });
+    
+    
+    // prepare update-add-item form to add new items, reset all inputs fields
     
     $('#add-item-btn').on("click", function () {
       
-        $('#add-item').modal('open'); // open "add new item" form 
+        $('#update-add-item').modal('open'); // open "add new item" form 
         
-        $('#add-new-item, #add-item .form-title-add').show(); // sohw send btn "#add-new-item" and add form title
+        $('#add-new-item, #update-add-item .form-title-add').show(); // sohw send btn "#add-new-item" and add form title
         
-        $('#updata-item, #add-item .form-title-updata').hide(); // hide updata btn "#updata-item" and updata form title
+        $('#update-item, #update-add-item .form-title-update').hide(); // hide update btn "#update-item" and update form title
         
         // empty the input fields
           
-        $('#add-item .input').each(function () { $(this).val(""); });
+        $('#update-add-item .input').each(function () { $(this).val(""); });
         
         // reset selectors 
         
@@ -534,11 +618,11 @@ $(function () {
         
     });
     
-    // on click of edit item icon '.updata-item-btn' then do the following orders
+    // on click of edit item icon '.update-item-btn' then do the following orders. in items page
     
-    $('#item-table-body').on('click', '.updata-item-btn', function () {
+    $('#item-table-body').on('click', '.update-item-btn', function () {
         
-        $('#add-item').modal('open'); // open add new item form 
+        $('#update-add-item').modal('open'); // open add new item form 
         
         
         //old selectors values
@@ -547,7 +631,7 @@ $(function () {
             oldCate = $(this).parent().siblings(".cate-name").html(),
             oldUserName = $(this).parent().siblings(".user-name").html();
       
-        // get all old item infos to set them in updata form
+        // get all old item infos to set them in update form
         
         $('#item-id').val($(this).parent().siblings(".itemID").html());
         $('#item-name').val($(this).parent().siblings(".ItemName").html());
@@ -561,17 +645,52 @@ $(function () {
 
         $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
         
-        $('#updata-item, #add-item .form-title-updata').show(); // show updata btn "#updata-item" and updata form title
+        $('#update-item, #add-item .form-title-update').show(); // show update btn "#update-item" and update form title
         $('#add-new-item, #add-item .form-title-add').hide(); // hide send btn "#add-new-item" and add form title
         
     });
     
     
-    // send request by ajax on click of '#updata-item' to updata item info 
+    // prepare "add edit item form" in dashboard page
     
-    $('#updata-item').on('click', function () {
+    $("#last-items-list").on("click", ".update-btn", function () {
         
-        post("#item-table-body", 'updata-item');
+        $('#update-add-item').modal('open'); //triger edit form
+        
+         //edit form old info
+        bring_item_data('#item-id', $(this), 'item-id'); //get item id
+         
+        bring_item_data('#item-name', $(this), 'item-Name'); //get old Name
+         
+        bring_item_data('#item-descrp', $(this), 'item-descrp'); //get old description
+         
+        bring_item_data('#item-price', $(this), 'price'); //get old price
+        
+        bring_item_data("#made-in", $(this), 'made-in'); //get old made in country
+        
+        var oldstus = $(this).attr("status"), //get old status 
+            oldCate = $(this).attr("cate-id"), //get old category
+            oldUserName = $(this).attr("members-id"); // get old user name 
+
+        // set values above into "update add item form" 
+        
+        $('#select-user').find('option[value="' + oldUserName + '"]').prop("selected", true); 
+        $('#select-cate').find('option[value="' + oldCate + '"]').prop("selected", true);
+        $('#select-status').find('option[value="' + oldstus + '"]').prop("selected", true);
+
+        $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
+        
+        $('#update-item, #update-add-item .form-title-update').show(); // show update btn "#update-item" and update form title
+        $('#add-new-item, #update-add-item .form-title-add').hide(); // hide send btn "#add-new-item" and add form title
+
+    });
+    
+    
+    // send request by ajax on click of '#update-item' to update item info 
+    
+    $('#update-item').on('click', function () {
+        
+        post("#item-table-body", 'update-item');
 
     });
     
@@ -583,39 +702,102 @@ $(function () {
         search($(this), $('#item-table-body .table-row'));
         
     });
-    
-    $("#item-table-body").on("click", "#unapproved", function () { //send userId to activate user 
 
-        post("#item-table-body", 'approve_item', $(this).attr('data-id'));
+    
+    // if user "adimin" click on "#unapproved" btn in items page or in dashboard, then the item will be approved
+    
+    $("#item-table-body, #last-items-list").on("click", "#unapproved", function () { //send Item_ID to activate user 
+
+        post("#item-table-body , #last-items-list", 'approve_item', $(this).attr('data-id'));
         
     });
     
     
+    
+        // The following functoin to bring old data to edit form
+//    
+//    function bring_item_data($id_input, $val, $target_info) {  
+//        
+//        $($id_input).val($val.attr($target_info)); // target old data in "functions.php" page
+//        
+//    }
+//    
+    
     /* ==========================  Edd item page =================================== */ 
     
+    
+    
+    
+    
+    
+    /* ==========================  Start Comments page =================================== */ 
+    
+    
+    // show warning msg on click of .delete-icon in item page
+    
+    $('#comments-table-body').on('click', '.table-row .modal-trigger', function () {
+        
+        $('.modal').modal(); //trigger  msg or show form before some actions in website "confirm"
+        
+        $('.modal-footer .delete').on("click", function () { //send delete request to dbfunctions.php to delete user data
+         
+            post("#comments-table-body", 'delete_comment', $(this).attr('data-id'));
+           
+        });
+        
+    });
+    
+    // approve a comment, change status from 0 to 1
+    $("#comments-table-body").on("click", "#unapproved", function () { //send Item_ID to activate user 
+
+        post("#comments-table-body", 'approve_comment', $(this).attr('data-id'));
+        
+    });
+    
+    
+    // open modal "edit comments form" and insert all old data to the input field.
+    
+    $('#comments-table-body').on("click", ".table-row td .update-comment-btn", function () {
+        
+        // open texteara to edit the comment 
+        
+        $('#update-comments-form').modal('open');
+        
+        // get all old comment infos and set them in the update form
+        
+        $("#update-comments-form .comment-update-field").val($(this).parent().siblings(".comment").html());
+        $("#update-comments-form .comment-id").val($(this).parent().siblings(".commenID").html());
+
+        
+    });  
+    
+    // make an edit on comment 
+    
+    $('#update-comments').on('click', function () {
+        
+        post("#comments-table-body", 'update_comment');
+        
+    });
+    
+  
+    
+    //  use search function to looking for (item name, decription, category, user name ) in #tabel-body
+    
+    $('#search-in-comments').on("keyup", function () {
+        
+        search($(this), $('#comments-table-body .table-row'));
+        
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

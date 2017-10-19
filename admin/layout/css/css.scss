@@ -233,12 +233,30 @@ nav i,nav i.material-icons {
 .nav-wrapper form .close{
     top: 13px !important;
 }
-//start Members
-
-//start Members/Mange
+//end serch field 
 
 
-//start Members table 
+
+//start global table ruls
+.container-grid{
+    position: relative;
+    height: 350px;
+    overflow: scroll;
+}
+
+.container-grid table{
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+}
+
+.container-grid table .table-row {
+    cursor: pointer;
+      &:active {
+        background-color: $col3;
+    }
+}
 
 thead tr{
     background-color: $col2;
@@ -246,21 +264,12 @@ thead tr{
     border-radius:8px;
 }
 
-.mange{
-    margin-top: 10vh;
-}
-
-.mange .btn {
-    margin: 20px;
-    line-height: 27px;
-} 
-
- .table tbody td .accent-3{
+.table tbody td .accent-3{
     cursor: default;
      pointer-events: none;
 }
 
-  @media #{$medium-and-down} {
+@media #{$medium-and-down} {
       
     // styles for medium screens and larger
       
@@ -273,7 +282,30 @@ thead tr{
         
       }
 }
+
+//end global table ruls
+
+
+
+
+
+//start Members table 
+
+.mange{
+    margin-top: 10vh;
+}
+
+.mange .btn {
+    margin: 20px;
+    line-height: 27px;
+} 
+
 //end Members/Mange
+
+
+
+
+
 
 //start Dachbord
 
@@ -359,7 +391,7 @@ thead tr{
 } 
 
 #mange-cate li .allowed{
-background-color: $succCol;
+    background-color: $succCol;
 }
 
 //#mange-cate li{
@@ -415,7 +447,43 @@ right: 10px
     margin-bottom: 0;
 }
 //End categories Page
+#comments-table-body .table-row .comment {
+overflow: hidden;
+white-space: nowrap; 
+text-overflow: ellipsis;
+width: 10%;
+}
 
+
+
+// start items page
+
+.comment-item  .row {
+    
+  margin-top: 35px;
+    
+}
+
+.comment-item  .row .collection {
+    border: none !important;
+}
+
+//.comment-item  .row .collection .chose-item{
+//   color: $rongCol !important;
+//}
+.collection .collection-item.avatar .secondary-content{
+    cursor: pointer;
+}
+.collection .collection-item.avatar .update-btn-to-item{
+   right: 50px;
+}
+.comment-item  .cate-controll .delete-btn-to-item {
+    
+}
+
+
+
+// end items page 
 
 //End Dashbord
  @media #{$small-and-down} {

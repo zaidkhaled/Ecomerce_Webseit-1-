@@ -84,7 +84,6 @@ function checkItem($select, $from, $value) {
     
 }
 
-
 /*
 ** Count Number of items Function v1.0
 ** function to count Numbers of rows
@@ -117,7 +116,7 @@ function getLatest($select, $from, $order, $limit) {
     
     global $con ;
     
-    $getStmt = $con->prepare("SELECT $select FROM $from WHERE GroupID != 1 ORDER BY $order DESC LIMIT $limit");
+    $getStmt = $con->prepare("SELECT $select FROM $from ORDER BY $order DESC LIMIT $limit");
     
     $getStmt->execute();
     

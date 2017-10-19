@@ -1,8 +1,8 @@
 <?php 
 /*
 =========================
-   Mange Members Page
-   Add | Delete | Edit
+   Mange comments Page
+     Delete | Edit
 =========================    
 */
 
@@ -15,7 +15,7 @@ if(isset($_SESSION['username'])){
     
      include "init.php";
     
-     $pageTitle = "Members";
+     $pageTitle = "Comments";
     
      include $tpl. "header.php";
     
@@ -23,31 +23,42 @@ if(isset($_SESSION['username'])){
     
      include  "forms.php"; 
     
-    //get "data_required" like (pending members or category > item) from URL if exist, then sent it by ajax to process data and return #required-info ///////////////////////////
+    //  get "data_required" like (id members or id categoriese) from URL if exist, then sent it by ajax to process data and return #required-info /////////////////////
     
-    $data_required = isset($_GET['page'])? $_GET['page'] : " "; 
+    if (isset($_GET['required']) && isset($_GET['ID'])){
+        
+    $required = $_GET['required'] ;//category or members
     
- 
+    $ID = isset($_GET['ID'])? $_GET['ID'] : " "; // id from category or member
+    
+    $data_required = "$required"."_ID=$ID";
+        
+    } else {
+        
+       $data_required = ""; 
+        
+    }
      ?>
+
+   <div class="required-info" style="display:none">
+     <span id ='data_required'><?php echo $data_required; ?></span>
+   </div>
      <!--start serch field-->
      
-       <div class="nav-wrapper" >
-            <div class="input-field">
-              <input id="search-user-info" type="search" id="search" required >
-              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-              <i class="material-icons close Large">close</i>
-            </div>
+   <div class="nav-wrapper" >
+      <form>
+        <div class="input-field">
+          <input id="search-in-comments" type="search" id="search" required >
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons close Large">close</i>
         </div>
+      </form>
+   </div><!-- end search btn-->
        
-      <h1 class="center-align">Mange members</h1>
+      <h1 class="center-align">Comments manger</h1>
    <!--end serch field-->
       <div class="container">
           <!--in this div "required-info" requests will be saved, to send as ajax request-->
-          <div class="required-info" style="display:none">
-             <span id ='data_required'><?php echo $data_required; ?></span>
-          </div>
-          <div class= "">
-          <!-- Modal Structure -->
              <!--start table users-->
            
                <table  class="bordered responsive-table centered " >
@@ -55,18 +66,17 @@ if(isset($_SESSION['username'])){
                 <thead>
                   <tr>
                       <th>#ID</th>
-                      <th id="in"><?php echo lang("FIRST_NAME" )?></th>
-                      <th><?php echo lang("EMAIL")?></th>
-                      <th><?php echo lang("FULLNAME")?></th>
-                      <th><?php echo lang("COMMENT_TIMES" )?></th>
-                      <th><?php echo lang("REGISTERED")?></th>
+                      <th id="in"><?php echo lang("USER_NAME" )?></th>
+                      <th><?php echo lang("COMMENS")?></th>
+                      <th><?php echo lang("ITEM_NAME")?></th>
+                      <th><?php echo lang("WRITTEN_IN")?></th>
                       <th><?php echo lang("CONTROL")?></th>
                   </tr>
                 </thead>
                    
                   <!--End Table header-->
                    
-                <tbody id="users-table-body">
+                <tbody id="comments-table-body">
                     
                 <!--start table body-->    
             
@@ -74,7 +84,6 @@ if(isset($_SESSION['username'])){
                     
                 </tbody><!-- End table Body-->
               </table>
-              <button type="button" id="add-btn" class="waves-effect waves-light btn">Add new Member</button>
             </div>
         </div>  
 
