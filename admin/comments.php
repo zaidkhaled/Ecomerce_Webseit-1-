@@ -5,7 +5,7 @@
      Delete | Edit
 =========================    
 */
-
+ob_start();
 session_start();
   
     
@@ -67,7 +67,7 @@ if(isset($_SESSION['username'])){
                   <tr>
                       <th>#ID</th>
                       <th id="in"><?php echo lang("USER_NAME" )?></th>
-                      <th><?php echo lang("COMMENS")?></th>
+                      <th><?php echo lang("COMMENTS")?></th>
                       <th><?php echo lang("ITEM_NAME")?></th>
                       <th><?php echo lang("WRITTEN_IN")?></th>
                       <th><?php echo lang("CONTROL")?></th>
@@ -105,3 +105,4 @@ if(isset($_SESSION['username'])){
 
  }
 
+ob_end_flush();

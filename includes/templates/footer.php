@@ -3,8 +3,8 @@
 		 <!-- footer -->
 
 		 </div>
-		 <script src="layout/js/jquery-1.12.1.min.js"></script>
-		 <script src="layout/js/bootstrap.min.js"></script>
-		 <script src="layout/js/js.js"></script>
+		 <script src="<?php echo $js;?>jquery-1.12.1.min.js"></script>
+		 <script src="<?php echo $js;?>materialize.min.js"></script>
+		 <script src="<?php echo $js;?>frontend.js"></script>
 	 </body>
  </html>

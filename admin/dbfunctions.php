@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     
     // to know from which page this request is ====> get the link "HTTP_REFERER" then send data back just to this page
     
-     $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : 'members.php';  
+     $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '';  
     
      $data_required = !empty($_GET['ajxdata_required']) ?  $_GET['ajxdata_required'] : 'no_required';  
  
@@ -125,41 +125,78 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
          
            //Update user info
         
-        // set new password just if user changes it
+
+        //Insert new user info 
+           $userID   = $_GET['ajxID'];     
+           $userName = $_GET['ajxName'];
+           $email    = $_GET['ajxEmail'];
+           $fullName = $_GET['ajxFullname'];
+        
+           // set new password just if user changes it
                                  
-        $password = empty($_GET['ajxPass'])? $_GET['ajxOldPass']: sha1($_GET['ajxPass']);
-
-        $NewUserName= $_GET['ajxName'];
-
-        $NewEmail= $_GET['ajxEmail'];
-
-        $NewFullName= $_GET['ajxFullname'];
-
-        $userID = $_GET['ajxID'];
-
-        $emptyPass = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
-
-       //  anther way to show errors <====> check if all values are approved 
-
-       if(
-
-          strlen($NewUserName) < 3 or
-          strlen($NewEmail)    < 6 or  
-          strlen($NewFullName) < 6 or
-          !$password =  $emptyPass 
-
-
-      // PHP error msg  in case that Jave script disables
-       ){?>
-
-           <div class='errmsg' style='display:block'> 
-              <p class='msg'> <?php echo lang('PHP_ERRMSG_NAME')?> </p> <br>
-              <p class='msg'> <?php echo lang('PHP_ERRMSG_EMAIL')?></p> <br>
-              <p class='msg'> <?php echo lang("PHP_EMPTY_PASS")?></p> <br>
-              <p class='msg'> <?php echo('PHP_ERRMSG_FULLNAME') ?></p>
-           </div>
-
-<?php }else {
+           $password = empty($_GET['ajxPass'])? $_GET['ajxOldPass']: sha1($_GET['ajxPass']);
+         
+            //SHA1 password <=> empty value
+             
+            $emptyPass = "da39a3ee5e6b4b0d3255bfef95601890afd80709";  
+        
+            // Make an error array for add form 
+         
+            $addFormErr = [];
+         
+           if (empty($userName) or strlen($userName) > 20){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_NAME");
+           }
+         
+           if(empty($email)){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_EMAIL");
+           }
+         
+           if(empty($fullName) or ($fullName) > 25 ){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_FULLNAME"); 
+           }
+         
+           if ($password == $emptyPass){
+               
+              $addFormErr[] = lang("PHP_EMPTY_PASS");
+           } 
+             
+             // function to check Email Adress if it's reapeted, if yes => 1; but if no => return 0
+             
+              $check = checkItem("Email", "users", $email); 
+             
+           if ($check > 1){
+               
+              $addFormErr[] = lang("PHP_REAPETED_EMPTY");
+           }
+             
+          
+              
+          // End  error array for add form 
+             
+            // check if the values are approved
+          
+           if (!empty($addFormErr)){
+               
+           ?>
+                     <!-- print caught errorrs-->
+                     
+                     <?php foreach($addFormErr as $Err){ ?> 
+                           
+                           <!--Err : Erorr msg -->
+                         <p class='errmsg-php' style='display:block'><?php echo $Err; ?></p> 
+                       
+                     <?php } 
+        
+               
+                
+               
+            // if yes then insert the new user to database
+               
+           }else {
                    
            $stmt=$con->prepare("UPDATE 
                                  users
@@ -168,7 +205,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                                WHERE 
                                  userID = ? ");  //Info Updating
 
-            $stmt->execute(array($NewUserName, $NewEmail, $NewFullName, $password, $userID)); //insert new values
+            $stmt->execute(array($userName, $email, $fullName, $password, $userID)); //insert new values
 
        }
         
@@ -691,10 +728,18 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
              <tr class="table-row"> 
                  
              <td class = 'userID'><?php echo $row['userID']?></td>
-             <td class = 'username search-in'><a href="items.php?required=Member&ID=<?php echo $row['userID'];?>"><?php echo $row['username']?></a></td>
+             <td class = 'username search-in'><?php echo $row['username']?></td>
              <td class = 'Email search-in'><?php echo $row['Email']?></td>
              <td class = 'fullName search-in'><?php echo $row['fullName']?></td>
-             <td class = 'comments-times'><a  href="comments.php?required=Member&ID=<?php echo $row['userID'];?>"><?php echo checkItem("Member_ID", "comments", $row['userID']);?></a></td>
+             <td>
+                <a href="items.php?required=Member&ID=<?php echo $row['userID'];?>">
+                    (<?php echo checkItem("Member_ID", "items", $row['userID']);?>)
+                 </a>
+             </td>     
+             <td class = 'comments-times'>
+                <a  href="comments.php?required=Member&ID=<?php echo $row['userID'];?>"><?php echo checkItem("Member_ID", "comments", $row['userID']);?>
+                </a>
+             </td>
              <td class = 'date'><?php echo $row['date'] ?></td>
 
 <!--           start table body   -->
@@ -1010,9 +1055,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 ?>
              <tr class="table-row"> 
              <td class = 'itemID search-in'><?php echo $row['Item_ID']?></td>
-             <td class = 'ItemName search-in'><?php echo $row['Name']?>
-               <span>(<?php echo checkItem("Item_ID", "comments", $row['Item_ID']);?>)</span>
-             </td>
+             <td class = 'ItemName search-in'><?php echo $row['Name']?></td>
+             <td><?php echo checkItem("Item_ID", "comments", $row['Item_ID']);?></td>     
              <td class = 'Descrp search-in'><?php echo $row['Description']?></td>
              <td class = 'MadeIn search-in'><?php echo $row['Made_In']?></td>
              <td class = 'Price search-in'><?php echo $row['Price'] ?></td>

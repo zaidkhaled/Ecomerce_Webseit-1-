@@ -128,7 +128,10 @@ $(function () {
             
             // <||> : which means there is multiple results received
             
-            if (e.indexOf("<||>") > -1) { // dealing with multiple results 
+            if (e.indexOf("<||>") > -1) { // dealing with multiple results
+                
+            // Note : This condition will only in one page (dashbaord),
+            // because it have two lists, which will receive two requests at the same time, for (#last-users-list, #last-items-list)    
            
                 var res = e.split("<||>"), 
                     palace = $where.split(",");
@@ -332,7 +335,7 @@ $(function () {
     
     $('#info-update').on('click', function () {
         
-        post("#users-table-body, #last-user-list", "update");
+        post("#last-users-list, #users-table-body", "update");
         
         // empty password field and other inputs will be automatically chenged
         
@@ -345,11 +348,11 @@ $(function () {
     
     $("#users-table-body, #last-users-list").on("click", "#unactivated", function () { //send userId to activate user 
 
-        post("#users-table-body ,#last-users-list", 'activate', $(this).attr('data-id'));
+        post(" #last-users-list" , 'activate', $(this).attr('data-id'));
         
     });
      // start controll forms 
-    
+   
     
     
  /*   
@@ -460,7 +463,7 @@ $(function () {
     $('#mange-cate').on("click", "li .update-btn", function () {
         
         $('#update-add-cate').modal('open');
-   
+        $('#update-add-cate .input').each(function () { $(this).focusin(); }); // rest input fields
         // get all old category infos and set them in the update form
         
         $('#cate-id').val($(this).parent().parent("li").attr('cate-id'));
@@ -690,7 +693,7 @@ $(function () {
     
     $('#update-item').on('click', function () {
         
-        post("#item-table-body", 'update-item');
+        post("#item-table-body, #last-items-list", 'update-item');
 
     });
     
@@ -714,14 +717,14 @@ $(function () {
     
     
     
-        // The following functoin to bring old data to edit form
-//    
-//    function bring_item_data($id_input, $val, $target_info) {  
-//        
-//        $($id_input).val($val.attr($target_info)); // target old data in "functions.php" page
-//        
-//    }
-//    
+//         The following functoin to bring old data to edit form
+    
+    function bring_item_data($id_input, $val, $target_info) {  
+        
+        $($id_input).val($val.attr($target_info)); // target old data in "functions.php" page
+        
+    }
+    
     
     /* ==========================  Edd item page =================================== */ 
     

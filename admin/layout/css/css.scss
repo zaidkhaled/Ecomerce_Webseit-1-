@@ -64,7 +64,7 @@ h1{
     color: $col1;
 }
 
-.contactForm{
+.login-form{
     margin-top: 22vh;
 }
 
@@ -361,6 +361,7 @@ thead tr{
 .collection-item a .material-icons {
     margin-left: 10px;
     color: $col1;
+    cursor: pointer;
 }
 
 

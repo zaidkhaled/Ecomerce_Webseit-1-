@@ -17,7 +17,6 @@
                                  type="text" 
                                  class="validate input" 
                                  limit ="3"
-                                 name="AddUserName"
                                  data-required ="required">
                           <label for="icon_prefix"><?php echo lang('FIRST_NAME')?></label>
                           <span></span>
@@ -33,7 +32,6 @@
                                  limit ="6"
                                  type="email"
                                  class="validate input" 
-                                 name="AddNewEmail"
                                  data-required ="required">
                           <label for="icon_prefix"><?php echo lang('EMAIL')?></label>
                           <span></span>
@@ -68,7 +66,6 @@
                                  type="password"
                                  class="validate password2 input" 
                                  limit ="6"
-                                 name="AddUserPassword"
                                  data-required ="required">
                           <label for="icon_telephone"><?php echo lang('REPEAT_PASSWORD')?></label>
                            <span></span>
@@ -86,9 +83,7 @@
                           <input id="add-fName" 
                                  type="text"
                                  class="validate input"
-                                 value = "zaid kaled"
                                  limit ="8" 
-                                 name="AddNewFullName"
                                  data-required ="required">
                           <label for="icon_telephone"><?php echo lang('FULLNAME')?></label>
                           <span></span>
@@ -186,7 +181,7 @@
 
                        <!--start radio btn for Comment-->
                         <div class="col s8 m2 push-m3 push-s2 radio">
-                            <span><?php echo lang("Comment")?></span>
+                            <span><?php echo lang("COMMENT")?></span>
                           <p>
                           <input type="checkbox" class="filled-in" id="comment" checked="checked" />
                           <label for="comment">Allow</label>
@@ -335,8 +330,8 @@
 
 
                   <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='add-new-item' value="submit"> send </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='update-item' value="submit"> send </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='add-new-item'> send </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='update-item'> send </a>
                     <a  class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                   </div>
               </div> <!-- start modal add new item form -->

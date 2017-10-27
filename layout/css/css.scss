@@ -1,0 +1,495 @@
+/*
+=======================
+** START STYLE/SCSS
+=======================
+*/
+
+//import materialize
+
+@import "sass/materialize.scss";
+
+
+
+
+// colors
+
+$col1:#203E38;
+$col2:#BD8D0D;
+$col3:#F0F7CE;
+$col4:#ECD51A;
+$col5:#945B02;
+$succCol:#F0F7CE;
+$rongCol:#E30627;
+
+
+// old color 3
+//$col1:#14080C;
+//$col2:#D1C57B;
+//$col3:#E30627;
+//$col4:#AE0114;
+//$col5:#F0F7CE;
+//$succCol:#F0F7CE;
+//$rongCol:#E30627;
+
+
+
+
+
+
+
+// old color 2
+//18473F
+//D2CF9A
+//C98F09
+//96C0B4
+//026292
+//18473F
+//026292
+//======== old color
+//cfcbab
+//B86E9A
+//467885
+//333
+//6499b5
+//b10000
+//======== new color
+//026292
+//D2CF9A
+//C98F09
+//96C0B4
+//18473F
+
+// End colors
+
+/* start main rules*/
+
+body{
+    background-color:$col2;
+    font-size: 16px;
+}
+
+h1{
+    font-weight: bold;
+    color: $col5;
+    margin: 50px;
+}
+
+.row{
+    margin: 0;
+}
+@media #{$small-and-down} {
+    
+    // styles for small screens and down
+    
+    h1{
+        font-size: 36px;
+    }
+  }
+
+
+/*start  global form*/
+
+.text-center{
+    color:#333;
+    font-weight: bolder;
+    margin-bottom: 15px;
+}
+
+
+.input-field .prefix.active{
+    
+    color: $col5;
+}.input-field .prefix{
+    
+    color: $col1;
+}
+
+.input-field label{
+    color: $col1;
+}
+
+.contactForm{
+    margin-top: 5vh;
+}
+
+
+input[type=text]:not(.browser-default):focus:not([readonly]),
+input[type=password]:not(.browser-default):focus:not([readonly]),
+input[type=email]:not(.browser-default):focus:not([readonly])
+{
+    
+    border-bottom-color:$col5;
+    box-shadow: 0 1px 0 0 $col5;
+    color: $col5;
+}
+input[type=password]:not(.browser-default),
+input[type=text]:not(.browser-default),
+input[type=email]:not(.browser-default)
+{
+    color: $col1;
+    border-bottom-color:$col1;
+    box-shadow: 0 1px 0 0 $col1;
+}
+input[type=password]:not(.browser-default):focus:not([readonly])+ label,
+input[type="text"]:not(.browser-default):focus:not([readonly])+ label,
+input[type="email"]:not(.browser-default):focus:not([readonly])+ label
+{
+    color: $col5;
+}
+
+input[type=password].valid:not(.browser-default),
+    input[type=text].valid:not(.browser-default),
+    input[type=email].valid:not(.browser-default)
+{
+    border-bottom: 1px solid $col5;
+    box-shadow: 0 1px 0 0 $col5;
+}
+
+.btn{
+    color: $col1;
+    background-color: $col5;
+    &:hover{
+     background-color: $col2;
+    }}
+
+
+//.input-field span{
+//    position: absolute;
+//    height: 20px;
+//    width: 20px;
+//    border-radius: 50%;
+//    background-color: firebrick;
+//    display: block;
+//    float: right;
+//    top: 10px;
+//    right: 20px;
+//    display: none;
+//}
+.form .input-field {
+   height: 120px;
+}
+
+//End success and Errorr masseges
+
+
+@media #{$small-and-down} {
+   .container .input-field .errmsg .msg {
+    line-height: 26px;
+}
+    
+   .form .input-field {
+    height: 110px;
+}
+  }
+  @media #{$medium-and-up} {
+    // styles for medium screens and larger
+  }
+/*end form*/
+
+
+
+//success and Errorr Masseges
+
+ 
+ .errmsg_php .msg
+{    text-align: center;
+     margin-top:  0;
+    
+}
+
+.errmsg .msg{
+    text-align: center;
+     padding: 2px;
+}
+
+
+
+.succmsg{//success msg 
+     background-color: $succCol;
+}
+
+.errmsg,
+.errmsg-php{
+    background-color: indianred;
+    display: none;
+    border-radius:10px;
+    }
+
+//End success and Errorr Masseges
+
+
+/*end main rules*/
+
+//start nav
+nav {
+    
+    background-color: $col1;
+}
+
+.nav-fixed{
+    position: fixed;
+    z-index: 2;
+}
+.dropdown-button{
+    width :150px !important;
+}
+nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li>a{
+    color:$col3;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.dropdown-content {
+    
+    margin-top: 65px;
+   
+}
+#dropdownSM{
+    margin-top: 50px;
+}  
+.dropdown-content{
+   background-color: $col1;   
+}
+
+nav i,nav i.material-icons {
+    margin-left: 1px;
+}
+.dropdown-content li:hover, .dropdown-content li.active, .dropdown-content li.selected{
+    background-color: $col4;
+}
+
+
+@media #{$medium-and-up} {
+ .dropdown-button{
+    width: 115px;
+}   
+}
+
+//end nav
+
+
+//start serch field 
+.nav-wrapper form .input-field{
+    margin: 0;
+    background-color:$col3;
+    
+}
+.nav-wrapper .input-field input[type="search"]{
+    height: 60px;
+}
+
+.nav-wrapper form .material-icons{
+    font: 50px;
+}
+
+.nav-wrapper form .close{
+    top: 13px !important;
+}
+//end serch field 
+
+
+.title{
+   margin-top: 5vh;
+    margin-bottom: 0;
+}
+ .login-title{
+ color: $col3;
+ display: inline-block;
+ font-weight: bold;
+ cursor: pointer;
+}
+ 
+.selected{
+    display: none;
+}
+
+.title-selected{
+    color: $col1;
+}
+
+//.register-form .row ,.login-form .row{
+//    margin-top: 20vh;
+//}
+
+
+
+
+
+//start profile
+
+.side-list{
+
+   
+    
+}
+
+.update-btn{
+     color: $col2;
+     cursor: pointer;
+}
+.info .info-title{
+   color: $col1;
+   font-weight: bold;
+}
+.info .user-info{
+    color: $col2;
+}
+.item-name{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.info .items-comment{
+    display: none;
+    position: relative;
+    color: $col2;
+    background-color: $col1;
+    border-radius: 3px;
+    padding: 7px;
+    font-size: 14.5px;
+    letter-spacing: .1px;
+    margin-top: 8px;
+    
+}
+.comment-data {
+    display: inline-block;
+    position: relative;
+    right: -60%;
+}
+.info-item-clm {
+    background-color : $col3;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 25%;
+    height: 91vh;
+    margin-top: -8vh;
+     overflow-y: scroll;   
+
+}
+
+
+.password-change{
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    &:hover{
+        color: $col5;
+    }
+    &:active{
+        color: darkorange;
+    }
+    
+}
+
+.password-fields{
+    display: none;
+}
+
+#errors{
+    margin-top: 50px;
+}
+
+.items {
+    margin-top:40px;
+}
+.price-num{
+    font-size: 27px;
+    position : absolute;
+    top: 56px;
+    left: 23px;
+    font-size: 18px;
+    
+}
+
+.card .card-content{
+    position: relative;
+}
+// end profile
+
+
+// start global table ruls
+
+.container-grid{
+    position: relative;
+    height: 350px;
+    overflow: scroll;
+}
+
+.container-grid table{
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+}
+
+.container-grid table .table-row {
+    cursor: pointer;
+      &:active {
+        background-color: $col3;
+    }
+}
+
+thead tr{
+    background-color: $col2;
+    color:$col4;
+    border-radius:8px;
+}
+
+.table tbody td .accent-3{
+    cursor: default;
+     pointer-events: none;
+}
+
+@media #{$medium-and-down} {
+      
+    // styles for medium screens and larger
+      
+    table.responsive-table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    position: relative;
+        
+      }
+}
+
+//end global table ruls
+
+
+
+
+
+
+ @media #{$small-and-down} {
+    // styles for small screens and down
+  }
+  @media #{$medium-and-up} {
+    // styles for medium screens and larger
+  }
+  @media #{$medium-and-down} {
+    // styles for medium screens and down
+  }
+  @media #{$large-and-up} {
+    // styles for large screens and up
+  }
+  @media #{$extra-large-and-up} {
+    // styles for extra large screens and up
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

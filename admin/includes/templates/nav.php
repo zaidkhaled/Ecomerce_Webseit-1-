@@ -14,6 +14,7 @@
    <div class="container">
       <div class="nav-wrapper">
         <ul class="right hide-on-med-and-down">
+          <li><a href="../index.php"><?php echo lang('SHOP')?></a></li>    
           <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
           <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
           <li><a href="members.php"><?php echo lang('MEMBERS')?></a></li>
@@ -28,6 +29,7 @@
           <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 
          <ul class="side-nav" id="mobile-demo">
+           <li><a href="../index.php">Shop</a></li>
            <li><a href="categories.php"><?php echo lang('CATEGORIES')?></a></li>
            <li><a href="items.php"><?php echo lang('ITEMS')?></a></li>
            <li><a href="members.php"><?php echo lang('MEMBERS')?></a></li>

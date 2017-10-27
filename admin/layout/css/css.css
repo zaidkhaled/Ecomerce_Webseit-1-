@@ -7043,7 +7043,8 @@ thead tr {
 
 .collection-item a .material-icons {
   margin-left: 10px;
-  color: #cfcbab; }
+  color: #cfcbab;
+  cursor: pointer; }
 
 #mange-cate .secondary-content {
   position: relative;

@@ -1,9 +1,10 @@
  <?php 
+ ob_start();
  session_start();
 
  $nonav = "";
 
- $pageTitle = "Login";
+ $pageTitle = "Admin Login";
 
  if(isset($_SESSION['username'])){//check if Admin alrady logined
 
@@ -12,20 +13,15 @@
  }
  
  include "init.php"; 
- include $conn;
 
  if ($_SERVER['REQUEST_METHOD']=='POST'){ //check if user coming from Http Request.
      
      $userName = $_POST['user'];
-
-     $password = $_POST['pass'];
-
-     $hashedpass = sha1($password);
      
-     //check if user is alrady exist in Database.
+     $hashedpass = sha1($_POST['pass']);
 
      $stmt=$con->prepare("SELECT
-                            userID, username, password, fullname, Email
+                             *
                           FROM 
                              users 
                           WHERE 
@@ -33,7 +29,7 @@
                           AND 
                              password = ? 
                           And 
-                             GroupID = 1
+                             GroupID != 0
                           LIMIT 1");
 
      $stmt->execute([$userName,$hashedpass]);
@@ -41,6 +37,8 @@
      $row = $stmt->fetch();
      
      $count= $stmt->rowCount();
+     
+      //check if user is alrady exist in Database.
      
      if($count > 0){      //check if the user is admin, if yes then 
          
@@ -72,7 +70,7 @@ if(!isset($nonav)){
    include $tpl. "header.php"; 
 ?> 
 
-     <form action="<?php $_SERVER['PHP_SELF']?>" method="post" class="col s12 contactForm">
+     <form action="<?php $_SERVER['PHP_SELF']?>" method="post" class="col s12 .login-form">
             
        <div class="row">
          <div class="input-field col s10 m4 push-s1  push-m4">
@@ -112,5 +110,6 @@ if(!isset($nonav)){
 <?php 
 
 include $tpl."footer.php";
-
+ob_end_flush();
 ?>
+
