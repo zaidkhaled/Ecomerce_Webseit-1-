@@ -1,5 +1,38 @@
 <?php
 
+/*
+** the main function globalGet to fetch info from database
+*/
+
+         
+function globalGet($column, $table, $where, $and = NULL, $orderfield = NULL, $ordering = "DESC", $limit = NULL) {
+    
+    global $con;
+    
+    $limitQuery = $limit != NULL ? " LIMIT " . $limit: ""; 
+    
+    $orderQuery = $orderfield != NULL ? "ORDER BY " . $orderfield . " " . $ordering : "";
+    
+    
+    $getAll = $con->prepare("SELECT $column FROM $table $where $and $orderQuery $limitQuery");
+    
+        
+      $getAll->execute();
+    
+    if ($limit == NULL or $limit > 1){
+        
+         $all = $getAll->fetchAll();   
+        
+        
+    } elseif ($limit == 1){
+        
+       $all = $getAll->fetch();  
+        
+    } 
+    
+    return $all;
+     
+}
 
 /*
 ** Title function, which Echo the page title in case the page 

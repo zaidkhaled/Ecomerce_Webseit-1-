@@ -6865,7 +6865,7 @@ h1 {
 .input-field .prefix {
   color: #cfcbab; }
 
-.contactForm {
+.login-form {
   margin-top: 22vh; }
 
 input[type=text]:not(.browser-default):focus:not([readonly]),
@@ -7081,6 +7081,20 @@ thead tr {
 
 .AddFormCate .order {
   margin-bottom: 0; }
+
+.collection li.cate-child {
+  background-color: #354f72 !important;
+  font-size: 15px; }
+
+.collection li.cate-child p {
+  margin: 0 2px; }
+
+.collection li.cate-child h3 {
+  margin-top: -12px; }
+
+.collection li.cate-child > span {
+  height: 26px;
+  line-height: 13px; }
 
 #comments-table-body .table-row .comment {
   overflow: hidden;

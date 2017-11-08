@@ -14,7 +14,7 @@
  
  include "init.php"; 
 
- if ($_SERVER['REQUEST_METHOD']=='POST'){ //check if user coming from Http Request.
+ if ($_SERVER['REQUEST_METHOD'] == 'POST'){ //check if user coming from Http Request.
      
      $userName = $_POST['user'];
      

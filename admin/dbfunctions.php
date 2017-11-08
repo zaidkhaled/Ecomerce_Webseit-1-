@@ -87,7 +87,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                
                $stmt = $con->prepare("INSERT INTO
                                                 users
-                                                     (userName, password, Email, fullName, regStatus, date)
+                                                     (userName, password, Email, fullName, regStatus, data)
                                                 VALUES 
                                                      (:zusername, :zpassword, :zEmail, :zfullName, 1, now())");
                    
@@ -229,7 +229,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                       
                       $stmt->execute();
          
-                   }    
+                   }
          
         
         //      <============= end members page ==============>  
@@ -245,6 +245,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                //prepare new Categorie info
 
                $CateName     = $_GET['ajxName'];
+               $parent       = $_GET['ajxParent'];
                $description  = $_GET['ajxDescription'];
                $order        = $_GET['ajxOrder'];
                $vis          = $_GET['ajxVisibilty'];
@@ -304,11 +305,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
                    $stmt = $con->prepare("INSERT INTO
                                                     categories
-                                                         (Name, Description, ordering, 	Visbility, Allow_Comment, Allow_Ads)
+                                                         (Name, Parent, Description, ordering, 	Visbility, Allow_Comment, Allow_Ads)
                                                     VALUES 
-                                                         (:zName, :zDescription, :zordering, :zVisbility, :zAllow_Comment, :zAllow_Ads)");
+                                                         (:zName, :zParent, :zDescription, :zordering, :zVisbility, :zAllow_Comment, :zAllow_Ads)");
 
                     $stmt->execute([":zName"           => $CateName,
+                                    "zParent"          => $parent,
                                     "zDescription"     => $description,
                                     "zordering"        => $order,
                                     "zVisbility"       => $vis,
@@ -330,6 +332,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $NewDescrp = $_GET['ajxDescription'];
 
         $NewOrder = $_GET['ajxOrder'];
+        
+        $parent = $_GET['ajxParent'];
 
         $ID = $_GET['ajxID'];
        
@@ -349,11 +353,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            $stmt=$con->prepare("UPDATE 
                                  categories
                                SET
-                                 Name = ?, Description = ?, ordering= ? 
+                                 Name = ?, Parent =?, Description = ?, ordering= ? 
                                WHERE 
                                  ID = ? ");  //Info Updating
 
-            $stmt->execute([$NewCateName, $NewDescrp, $NewOrder, $ID]); //insert new values
+            $stmt->execute([$NewCateName, $parent, $NewDescrp, $NewOrder, $ID]); //insert new values
 
        }
         
@@ -435,6 +439,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            $made_in = $_GET['ajxMadeIn'];
            $status  = $_GET['ajxStatus'];
            $userId  = $_GET['ajxUserId'];
+           $tags    = $_GET['ajxTags'];
            $cateId  = $_GET['ajxCateId'];
          
         
@@ -455,6 +460,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            if(empty($price) ){
                
                $addFormErr[] = lang("PHP_ERRMSG_PRICE"); 
+           }
+       
+           if (strpos($tags, " ")){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_TAGS");
            }
         
            if(empty($made_in )){
@@ -494,24 +504,25 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                
                $stmt = $con->prepare("INSERT INTO
                                                 items
-                                                     (Name, Description, Price, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID)
+                                                     (Name, Description, Price, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID, tags)
                                                 VALUES 
-                                                     (:zName, :zdescrp, :zPrice, :zMade_in, :zStatus, now(), 1,:zcateID, :zmemberID)");
+                                                     (:zName, :zdescrp, :zPrice, :zMade_in, :zStatus, now(), 1,:zcateID, :zmemberID, :ztags)");
                
                 $stmt->execute(["zName"    => $Name,
                                 "zdescrp"  => $descrp,
                                 "zPrice"   => $price,
                                 "zMade_in" => $made_in,
                                 "zStatus"  => $status,
+                                "ztags"    => $tags,
                                 "zcateID"  => $cateId,
                                 "zmemberID"=> $userId]);
                
          
          }
          
-     // End inset new user 
+     // End inset new item 
         
-     // start item page
+    // Start delete item    
         
     }elseif($do == "delete_item") {
          
@@ -545,6 +556,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            $status  = $_GET['ajxStatus'];
            $userId  = $_GET['ajxUserId'];
            $cateId  = $_GET['ajxCateId'];
+           $tags    = $_GET['ajxTags'];
 
        // check if all values are approved 
 
@@ -570,7 +582,12 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                
                $addFormErr[] = lang("PHP_ERRMSG_MADE_IN"); 
            }
-          
+        
+           if (strpos($tags, " ")){
+               
+               $addFormErr[] = lang("PHP_ERRMSG_TAGS");
+           }
+        
            if(empty($cateId)){
                
                $addFormErr[] = lang("PHP_ERRMSG_CATE"); 
@@ -590,11 +607,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
            $stmt=$con->prepare("UPDATE 
                                  items
                                SET
-                                 Name =?, Description =?, Price =?, Made_in =?, Status =?, Cate_ID =?, Member_ID =?
+                                 Name = ?, Description = ?, Price = ?, Made_in = ?, Status = ?, Cate_ID = ?, Member_ID = ?, tags = ?
                                WHERE 
                                  Item_ID = ? ");  //Info Updating
 
-            $stmt->execute([$Name, $descrp, $price, $made_in, $status, $cateId, $userId, $itemID]); //insert new values
+            $stmt->execute([$Name, $descrp, $price, $made_in, $status, $cateId, $userId, $tags, $itemID]); //insert new values
   
        }
         
@@ -729,6 +746,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                  
              <td class = 'userID'><?php echo $row['userID']?></td>
              <td class = 'username search-in'><?php echo $row['username']?></td>
+             <td class = 'foto'><img height="50px" width="50px" src="../uplaodedFiles/userFotos/<?php echo $row['Foto']?>"></td>
              <td class = 'Email search-in'><?php echo $row['Email']?></td>
              <td class = 'fullName search-in'><?php echo $row['fullName']?></td>
              <td>
@@ -740,7 +758,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                 <a  href="comments.php?required=Member&ID=<?php echo $row['userID'];?>"><?php echo checkItem("Member_ID", "comments", $row['userID']);?>
                 </a>
              </td>
-             <td class = 'date'><?php echo $row['date'] ?></td>
+             <td class = 'date'><?php echo $row['data'] ?></td>
 
 <!--           start table body   -->
 
@@ -905,7 +923,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         
    } elseif(preg_match('/categories/', $fromPage)){
         
-        $stmt = $con->prepare("SELECT * FROM categories ORDER BY ID DESC");
+        $stmt = $con->prepare("SELECT * FROM categories WHERE parent = 0 ORDER BY ID DESC");
         
         $stmt->execute();
         
@@ -914,10 +932,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $cates = $stmt ->fetchAll();
        
         foreach ($cates as $cate){
-            
-//          $Visbility     = $cate['Visbility']     == 0 ? 'No' : 'Yes' ;  
-//          $Allow_Comment = $cate['Allow_Comment'] == 0 ? 'No' : 'Yes' ;  
-//          $Allow_Ads     = $cate['Allow_Ads']     == 0 ? 'No' : 'Yes' ;  
          
           //check if visibltly and comment and advertising is allowed , if yes then chenge the thier background-color to peacefully color by class name, but if no then chenge it to danger color
             
@@ -955,6 +969,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                   cate-name = "<?php echo $cate['Name'];?>"
                   cate-descrp = "<?php echo $cate['Description'];?>"
                   cate-order = "<?php echo $cate['Ordering'];?>"
+                  cate-parent = "<?php echo $cate['Parent'];?>"
                   >
                   <div class="cate-controll">
                      <a  class="secondary-content update-btn">
@@ -1002,14 +1017,113 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                  <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
                  <a class='modal-action modal-close waves-effect waves-green btn-flat' data-id='<?php echo $cate['ID']; ?>' id = "delete-cate">Agree</a>
                </div> 
+             </div> 
+        <?php     
+            
+        $stmt = $con->prepare("SELECT * FROM categories WHERE parent = {$cate['ID']} ORDER BY ID DESC");
+        
+        $stmt->execute();
+        
+        //fetch all data
+        
+        $cates = $stmt ->fetchAll();
+       
+        foreach ($cates as $cate){
+         
+          //check if visibltly and comment and advertising is allowed , if yes then chenge the thier background-color to peacefully color by class name, but if no then chenge it to danger color
+            
+         if($cate['Visbility'] == 0){
+             $cls_visibility = "not-allowed";
+             $allow_visibility = "Not allowed";
+         }else {
+             $cls_visibility = "allowed";
+             $allow_visibility = "allowed";
+         }    
+        
+        
+        if($cate['Allow_Comment'] == 0){
+             $cls_comment = "not-allowed";
+             $allow_comment = "Not allowed";
+         }else {
+             $cls_comment = "allowed";
+             $allow_comment = "allowed";
+         }   
+            
+            
+        if($cate['Allow_Ads'] == 0){
+             $cls_ads = "not-allowed";
+             $allow_ads = "Not allowed";
+         }else {
+             $cls_ads = "allowed";
+             $allow_ads = "allowed";
+         }   
+           
+        //data-status :- which means the status for (Visbility, Allow_Comment, Allow_Ads) 0 or 1? || to send (onClick) on (li span) the opposite value to database by ajax to make edit on it   
+        //col-name : which means name of column in database  
+         ?>
+              <li class="collection-item cate-child" 
+                  cate-id = "<?php echo $cate['ID'];?>"
+                  cate-name = "<?php echo $cate['Name'];?>"
+                  cate-descrp = "<?php echo $cate['Description'];?>"
+                  cate-order = "<?php echo $cate['Ordering'];?>"
+                  cate-parent = "<?php echo $cate['Parent'];?>"
+                  >
+                  <div class="cate-controll">
+                     <a  class="secondary-content update-btn">
+                       <i class="material-icons ">border_color</i>
+                    </a>
+                    <a class="secondary-content modal-trigger delete-btn">
+                      <i class="material-icons delete-btn modal-trigger" data-id="<?php echo $cate['ID'];?>"  href="#modal<?php echo $cate['ID'];?>">delete_forever</i>
+                    </a>
+                  </div>      
+                  
+                  <h3 class= 'cate-name search-in child-decrp'>
+                      <a href="items.php?required=Cate&ID=<?php echo $cate['ID'];?>">
+                          <?php echo $cate['Name'];?></a>
+                  </h3>
+                  <p class="child-decrp">items Nember : <span> <?php echo checkItem("Cate_ID", "items", $cate['ID']);?></span></p>
+                  <p class="child-decrp"> Description : <span class= 'descrp search-in'><?php echo $cate['Description'];?></span></p>
+                  <p class="child-decrp">Ordering : <?php echo $cate['Ordering'];?></p>
+                      
+                  <span class="<?php echo $cls_visibility; ?>"
+                        data-status = "<?php echo $cate['Visbility'] ;?>"
+                        col-name = "Visbility">
+                        Visbility : <?php echo $allow_visibility;?>
+                  </span>
+                      
+                   <span class ='<?php echo $cls_comment;?>' 
+                         data-status = "<?php echo $cate['Allow_Comment'] ;?>"
+                         col-name = "Allow_Comment">
+                         Allow_Comment : <?php echo $allow_comment;?>
+                   </span>
+                      
+                   <span class="<?php echo $cls_ads;?>" 
+                         data-status = "<?php echo $cate['Allow_Ads'];?>"
+                         col-name = "Allow_Ads"> 
+                         Allow_Advertising : <?php echo $allow_ads;?>    
+                   </span>
+                  </div>
+             </li>
+
+             <div id="modal<?php echo $cate['ID'];?>" class='modal'>
+               <div class='modal-content center-align'>
+                 <h4><?php echo lang("SURE_MSG")?> </h4>
+                 <p><?php echo lang("SURE_CATE_NAME_MSG")?> <?php echo $cate['Name']?></p>
+               </div>
+               <div class='modal-footer'>
+                 <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
+                 <a class='modal-action modal-close waves-effect waves-green btn-flat' data-id='<?php echo $cate['ID']; ?>' id = "delete-cate">Agree</a>
+               </div> 
              </div>
             
         
     <?php }
+            
+      }
         
      //chick if http_referer contains comments, if yes then show this list just inside it    
         
-    }elseif(preg_match('/items/', $fromPage) && $data_required != "comments" ) { 
+    } elseif (preg_match('/items/', $fromPage) && $data_required != "comments" ) { 
          
         // check if there is special query 
         
@@ -1023,9 +1137,8 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
             
         }
 
-        
-        
          // select all items and make a two new column for category name and user Name, who posted the item 
+        
          $stmt = $con->prepare(" SELECT 
                                      items.* ,
                                      categories.Name AS Cate_Name, 
@@ -1041,7 +1154,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                                  ON 
                                      users.userID = items.Member_ID 
                                      
-                                     $query");
+                                     $query ORDER BY Item_ID DESC");
  
          $stmt->execute();
          
@@ -1064,6 +1177,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
              <td class = 'cate-name search-in'><?php echo $row['Cate_Name'] ?></td>
              <td class = 'user-name search-in'><?php echo $row['User_Name'] ?></td>
              <td class = 'AddDate'><?php echo $row['Add_Data'] ?></td>
+             <td class = 'tags search-in'><?php echo $row['tags'] ?></td>
 
 <!--           start table body   -->
 
@@ -1072,7 +1186,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
               
              <td>
                  
-           <?php if ($row['approve'] == null) { ?>
+           <?php if ($row['approve'] == "0") { ?>
                  <!--if item is not activated then show unactivated button-->
                  <a class='btn-floating pink darken-4' id='unapproved' data-id ='<?php echo $row['Item_ID']; ?>'>
                    <i class="material-icons">thumb_down</i>
@@ -1094,7 +1208,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
                    <i class='large material-icons '>delete_forever</i>
                  </a><!--Delete Butten-->
                  
-                  <!-- start modal delete butten-->
+                 <!-- start modal delete butten-->
                  <div id="modal<?php echo $row['Item_ID']; ?>" class='modal' >
                    <div class='modal-content'>
                      <h4><?php echo lang("SURE_MSG")?> </h4>

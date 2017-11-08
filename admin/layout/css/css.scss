@@ -109,18 +109,6 @@ input[type=password].valid:not(.browser-default),
     }}
 
 
-//.input-field span{
-//    position: absolute;
-//    height: 20px;
-//    width: 20px;
-//    border-radius: 50%;
-//    background-color: firebrick;
-//    display: block;
-//    float: right;
-//    top: 10px;
-//    right: 20px;
-//    display: none;
-//}
 .form .input-field {
    height: 120px;
 }
@@ -369,7 +357,7 @@ thead tr{
 
 //start categories Page
 
-   // start Categories mange collection 
+// start Categories mange collection 
     
 #mange-cate .secondary-content {
     position: relative;
@@ -395,15 +383,7 @@ thead tr{
     background-color: $succCol;
 }
 
-//#mange-cate li{
-// cursor: pointer;
-//     -webkit-transition: all .4s ease-in-out;
-//    -moz-transition: all .4s ease-in-out;
-//    transition: all .4s ease-in-out;
-//    &:active{
-//        background-color: #6a6a6a !important;
-//    }
-//}
+
 
 #mange-cate  .collection-item  a{  
 position: relative;
@@ -416,21 +396,6 @@ right: 10px
 }
 
 
-//#mange-cate li .cate-controll{
-//    position: relative;
-//    right: -230px;
-//    -webkit-transition: all .4s ease-in-out;
-//    -moz-transition: all .4s ease-in-out;
-//    transition: all .4s ease-in-out;
-//}
-//
-//#mange-cate li .cate-details{
-//    display: none;
-//    -webkit-transition: all .4s ease-in-out;
-//    -moz-transition: all .4s ease-in-out;
-//    transition: all .4s ease-in-out;
-//}
-
 .cate-active{
     display: block !important;
     right: 0 !important;
@@ -438,8 +403,6 @@ right: 10px
 
    // end Categories mange collection 
    
-   
-
 .AddFormCate .radio {
     margin: 25px auto;
 }
@@ -447,18 +410,36 @@ right: 10px
 .AddFormCate .order{
     margin-bottom: 0;
 }
-//End categories Page
+
+
+.collection li.cate-child {
+    background-color: #354f72 !important;
+    font-size: 15px;
+}
+
+.collection li.cate-child p{
+    margin: 0 2px;
+}
+
+.collection li.cate-child  h3{
+    margin-top: -12px;
+}
+
+.collection li.cate-child > span {
+    height: 26px;
+    line-height: 13px;
+}
+
+// end cate page 
+
+// start items page
+
 #comments-table-body .table-row .comment {
 overflow: hidden;
 white-space: nowrap; 
 text-overflow: ellipsis;
 width: 10%;
 }
-
-
-
-// start items page
-
 .comment-item  .row {
     
   margin-top: 35px;

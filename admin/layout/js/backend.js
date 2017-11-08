@@ -25,6 +25,7 @@ $(function () {
             pass  = "",
             oldPass = "",
             fullname = "",
+            parent = "",
             Description = "",
             Order = "",
             Visibilty = "",
@@ -34,6 +35,7 @@ $(function () {
             madeIn = "",
             userId = "",
             cateId = "",
+            tags = "",
             comment = "";
 
         
@@ -70,6 +72,7 @@ $(function () {
             name        = $('#cate-name').val();
             Description = $('#cate-descrp').val();
             Order       = $('#cate-order').val();
+            parent      = $('#select-parent option:selected').val();
             Visibilty   = $("#visble").is(":checked") ? 1 : 0;
             Comment     = $("#comment").is(":checked") ? 1 : 0;
             Ads         = $("#adv").is(":checked") ? 1 : 0;
@@ -81,15 +84,14 @@ $(function () {
             Description = $('#item-descrp').val();
             price       = $('#item-price').val();
             madeIn      = $("#made-in").val();
+            tags        = $("#tags").val();
             $stus       = $('#select-status option:selected').val();
             userId      = $('#select-user option:selected').val();
             cateId      = $('#select-cate option:selected').val();
             
         }else if ($do === "update_comment") {
            $id          = $("#update-comments-form .comment-id").val(); 
-           comment      = $("#update-comments-form .comment-update-field").val(); 
-            
-            
+           comment      = $("#update-comments-form .comment-update-field").val();
         }
         
         
@@ -109,7 +111,9 @@ $(function () {
                 ajxFullname     : fullname,
                 ajxdata_required: $data_required, 
                 ajxItem_ID      : $item_id, 
+                ajxParent       : parent, 
                 ajxDescription  : Description,
+                ajxTags         : tags,
                 ajxOrder        : Order,
                 ajxVisibilty    : Visibilty,
                 ajxAds          : Ads,
@@ -186,14 +190,14 @@ $(function () {
                     $(this).css("background-color", "red").parent($parent_elm).show();
 
                 } else {
-                        //rest background color
+                        //reset background color
                     $(this).css("background-color", "");
                 }
 //                }   
                         
             });
                
-        } else { //if there is no value in search field, then show all data in "tabel-body". and rest background color for all
+        } else { //if there is no value in search field, then show all data in "tabel-body". and reset background color for all
             
             $parent_elm.show().find(".search-in").each(function () {$(this).css("background-color", ""); });
             
@@ -348,75 +352,14 @@ $(function () {
     
     $("#users-table-body, #last-users-list").on("click", "#unactivated", function () { //send userId to activate user 
 
-        post(" #last-users-list" , 'activate', $(this).attr('data-id'));
+        post(" #last-users-list, #users-table-body" , 'activate', $(this).attr('data-id'));
         
     });
      // start controll forms 
    
     
     
- /*   
-   ============================================================================================================
-    ===> Im Folgendem Code nutze ich das Attribute (data-value), um Edit Form und Add Form zu unterscheiden und 
-    ===> die Wiederholung des Codes zu vermeiden 
-   ============================================================================================================
- */
-    
-    // note =>> if input (data-required) = free, then no action is required. example for (edit form)
-    
-      //   define important functions
-    
-    function msgSubmit($input) { // submit function => show the red message on submit,  just when values are not acceptable 
-        
-        if ($input.val().length < $input.attr('limit')) {
-                
-            $input.siblings('.errmsg').fadeIn(1000);
-
-        }
-    }
-    
-
-    $('.modal form input').blur(function () {
-        
-        if ($(this).attr("data-required") === "free") {//if this is the "edit form" then :
-        
-            if ($(this).val().length > 0) {//this Condition is just for (edit members form) and to know which data the user wants to update
-                
-                msgSubmit($(this));
-            }
-            
-        } else if ($(this).attr("data-required") === "required") { //if this is the "Add Form" then do showRong()  :
-            
-            msgSubmit($(this));
-        }
-    });
-    
-//    $('.modal form input').each(function () {
-//        
-//        if ($(this).val().length < $(this).attr('limit')) {
-//            
-////            console.log('yes');
-//            
-////              $('#info-send').fadeOut(6000);////////////////////////
-//            
-//        }
-//    });
-    
-    
  
-    //  use search function to looking for (.username .Email .fullName) in #tabel-body
-    
-    $('#search-user-info').on("keyup", function () {
-        
-        search($(this), $('#users-table-body .table-row'));
-        
-        
-        // if user start to writing in "search input", then start data filtering and hide all useless data///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-         
-        
-    });
-    
-    
     /* =============================     end members and dashboard pages  =======================*/
     
     
@@ -429,13 +372,17 @@ $(function () {
     
     $('#add-cate-btn').on("click", function () {
         
-        $('#update-add-cate .input').each(function () { $(this).val(""); }); // rest input fields
+        $('#update-add-cate .input').each(function () { $(this).val(""); }); // reset input fields
         
         $('#update-add-cate').modal('open'); 
         
         $('#update-cate, #update-add-cate .form-title-update').hide(); // hide update btn "#update-item" and update form title
         
         $('#add-cate, #update-add-cate .form-title-add, #update-add-cate .cate-status').show(); // show send btn "#add-new-item" and add form title category status comment and visbility and ads
+        
+        // reset selectors inputs
+        $('select').prop('selectedIndex', -1);
+        $('select').material_select(); // materialze requirement
     }); 
     
     
@@ -462,15 +409,18 @@ $(function () {
     
     $('#mange-cate').on("click", "li .update-btn", function () {
         
+        var parent = $(this).parent().parent("li").attr('cate-parent');
+        
         $('#update-add-cate').modal('open');
-        $('#update-add-cate .input').each(function () { $(this).focusin(); }); // rest input fields
+        $('#update-add-cate .input').each(function () { $(this).focusin(); }); // reset input fields
         // get all old category infos and set them in the update form
         
         $('#cate-id').val($(this).parent().parent("li").attr('cate-id'));
         $('#cate-name').val($(this).parent().parent("li").attr('cate-name'));
         $('#cate-descrp').val($(this).parent().parent("li").attr('cate-descrp'));
         $('#cate-order').val($(this).parent().parent("li").attr('cate-order'));
-        
+        $("#select-parent").find("option[value ='" + parent +"']").prop("selected", true);
+        $('select').material_select(); // materialze requirement
 
         $('#update-cate, #update-add-cate .form-title-update').show(); // show update btn "#update-item" and update form title
         $('#add-cate, #update-add-cate .form-title-add, #update-add-cate .cate-status').hide(); // hide send btn "#add-new-item" and add form title category status comment and visbility and ads
@@ -553,7 +503,7 @@ $(function () {
     
     $('#update-comments-to-item').on("click", function () {
         
-        var  item_id = $(this).attr("item-id");
+        var item_id = $(this).attr("item-id");
         
         post("#comments-item", "update_comment", "", "", "", "comments", item_id);
         
@@ -592,10 +542,9 @@ $(function () {
           
         $('#update-add-item .input').each(function () { $(this).val(""); });
         
-        // reset selectors 
-        
-        $('#select-cate, #select-user, #select-status').prop('selectedIndex', -1);
-        $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
+        // reset selectors inputs
+        $('select').prop('selectedIndex', -1);
+        $('select').material_select(); // materialze requirement
 
     }); 
  
@@ -641,12 +590,13 @@ $(function () {
         $('#item-descrp').val($(this).parent().siblings(".Descrp").html());
         $('#item-price').val($(this).parent().siblings(".Price").html());
         $("#made-in").val($(this).parent().siblings(".MadeIn").html());
+        $("#tags").val($(this).parent().siblings(".tags").html());
       
         $('#select-user').find('option:contains("' + oldUserName + '")').prop("selected", true);
         $('#select-cate').find('option:contains("' + oldCate + '")').prop("selected", true);
         $('#select-status').find('option[value="' + oldstus + '"]').prop("selected", true);
 
-        $('#select-cate, #select-user, #select-status').material_select(); // materialze requirement
+        $('select').material_select(); // materialze requirement
         
         $('#update-item, #add-item .form-title-update').show(); // show update btn "#update-item" and update form title
         $('#add-new-item, #add-item .form-title-add').hide(); // hide send btn "#add-new-item" and add form title
@@ -660,7 +610,7 @@ $(function () {
         
         $('#update-add-item').modal('open'); //triger edit form
         
-         //edit form old info
+        //edit form old info
         bring_item_data('#item-id', $(this), 'item-id'); //get item id
          
         bring_item_data('#item-name', $(this), 'item-Name'); //get old Name
@@ -675,7 +625,7 @@ $(function () {
             oldCate = $(this).attr("cate-id"), //get old category
             oldUserName = $(this).attr("members-id"); // get old user name 
 
-        // set values above into "update add item form" 
+        // set values above into "update add item form" to edit the item 
         
         $('#select-user').find('option[value="' + oldUserName + '"]').prop("selected", true); 
         $('#select-cate').find('option[value="' + oldCate + '"]').prop("selected", true);

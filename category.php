@@ -33,7 +33,7 @@ if(checkItem("ID", "categories", $Cate_ID) > 0){ // at first chick if this categ
                       <i class="material-icons right">more_vert</i>
                   </span>
                   <span class="right"><?php echo $item['Price'];?></span>        
-                  <p><a href="#"><?php echo lang('VIST');?></a></p>   
+                  <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>"><?php echo lang('VIST');?></a></p>   
                 </div>
                 <div class="card-reveal">
                   <span class="card-title"><?php echo $item['Name'];?><i class="material-icons right">close</i></span>

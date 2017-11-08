@@ -49,8 +49,8 @@ if(isset($_SESSION['username'])){
       </form>
    </div><!-- end search btn-->
     <h1 class="center-align">Items Manger</h1>
-  <!-- start add btn-->
-   <div class="container">
+    <div class="container">
+       <!-- start add btn-->    
        <div class="row">
          <a id ='add-item-btn' class="btn-floating btn-large waves-effect waves-light red right"><i class="material-icons">add</i></a>
        </div>
@@ -71,6 +71,7 @@ if(isset($_SESSION['username'])){
              <th><?php echo lang("CATEGORY")?></th>
              <th><?php echo lang("MEMBER_NAME")?></th>
              <th><?php echo lang("ADD_DATA")?></th>
+             <th><?php echo lang("TAG_SHOW")?></th>
              <th><?php echo lang("CONTROL")?></th>
            </tr>
          </thead>

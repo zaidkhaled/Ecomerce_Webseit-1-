@@ -61,6 +61,18 @@ $rongCol:#E30627;
 
 // End colors
 
+@mixin bxshadw($x, $y, $s, $m, $col, $x2, $y2, $s2, $m2, $col3){
+    
+    -webkit-box-shadow:$x $y $y $m $col, $x2 $y2 $s2 $m2 $col;
+    
+    -moz-box-shadow:$x $y $y $m $col, $x2 $y2 $s2 $m2 $col;
+    
+    -o-box-shadow:$x $y $y $m $col, $x2 $y2 $s2 $m2 $col;
+    
+    box-shadow:$x $y $y $m $col, $x2 $y2 $s2 $m2 $col;
+        
+            
+}
 /* start main rules*/
 
 body{
@@ -115,7 +127,8 @@ h1{
 
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=password]:not(.browser-default):focus:not([readonly]),
-input[type=email]:not(.browser-default):focus:not([readonly])
+input[type=email]:not(.browser-default):focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly])
 {
     
     border-bottom-color:$col5;
@@ -124,7 +137,8 @@ input[type=email]:not(.browser-default):focus:not([readonly])
 }
 input[type=password]:not(.browser-default),
 input[type=text]:not(.browser-default),
-input[type=email]:not(.browser-default)
+input[type=email]:not(.browser-default),
+textarea.materialize-textarea
 {
     color: $col1;
     border-bottom-color:$col1;
@@ -132,18 +146,21 @@ input[type=email]:not(.browser-default)
 }
 input[type=password]:not(.browser-default):focus:not([readonly])+ label,
 input[type="text"]:not(.browser-default):focus:not([readonly])+ label,
-input[type="email"]:not(.browser-default):focus:not([readonly])+ label
+input[type="email"]:not(.browser-default):focus:not([readonly])+ label,
+textarea.materialize-textarea:focus:not([readonly]) + label
 {
     color: $col5;
 }
 
 input[type=password].valid:not(.browser-default),
-    input[type=text].valid:not(.browser-default),
-    input[type=email].valid:not(.browser-default)
+input[type=text].valid:not(.browser-default),
+input[type=email].valid:not(.browser-default)
 {
     border-bottom: 1px solid $col5;
     box-shadow: 0 1px 0 0 $col5;
 }
+
+
 
 .btn{
     color: $col1;
@@ -292,7 +309,9 @@ nav i,nav i.material-icons {
    margin-top: 5vh;
     margin-bottom: 0;
 }
+
  .login-title{
+     
  color: $col3;
  display: inline-block;
  font-weight: bold;
@@ -311,6 +330,17 @@ nav i,nav i.material-icons {
 //    margin-top: 20vh;
 //}
 
+
+
+
+//start home page
+
+
+.plus-btn {
+    margin-top: 5vh;
+}
+
+//end home page
 
 
 
@@ -391,6 +421,17 @@ nav i,nav i.material-icons {
     margin-top: 50px;
 }
 
+.addItemForm{
+    padding: 10px !important;
+    border: 4px $col1 dashed;
+    border-radius: 3%;
+    display: none;
+    margin-bottom: 50px;
+}
+
+.addItemForm .input-field{
+    height: 18vh;
+}
 .items {
     margin-top:40px;
 }
@@ -402,11 +443,149 @@ nav i,nav i.material-icons {
     font-size: 18px;
     
 }
+.user-name{
+    margin-top: 50px;
+    margin-bottom: 15px;
+}
 
+.addItemTitle{
+    font-weight: bold;
+    color: $col5;
+}
+.add-form-foto img {
+    width: 100%;
+}
+
+
+
+#add-item-btn{
+    background-color: $col5 !important;
+    margin-bottom: 20px;
+    right: 5vh;
+}
+
+#add-new-item-btn{
+    right: 8vh;
+}
 .card .card-content{
     position: relative;
+    padding: 10px;
+    color: $col1;
+}
+.card .card-content p a{
+    color:$col2;
+    &:hover{
+        text-decoration-line: underline;
+    }
+} 
+.profile-item-icons{
+   padding: 10px;  
+
+}
+.profile-item-icons i {
+    cursor: pointer;
+    color: $col1;
+   
 }
 // end profile
+
+
+
+
+
+
+
+
+
+
+//start item page
+
+.item{
+    margin-bottom: 5vh;
+    background-color: rgba(177, 201, 156, 0.22);
+    @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
+    border-radius: 31px;
+    padding: 10px;
+} 
+.item .foto{
+    display: flex;
+    justify-content: center;
+    height: 54vh;
+    position: relative;
+    top: 38px;
+    width: 100%;
+
+}
+.foto img {
+  width: 100%;
+}
+
+.tags{
+    color: aliceblue;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.details p { 
+    color: $col5;
+    font-size: 20px;
+    font-weight: bold;
+}
+.item-info-card{
+
+}
+.details .info{
+    
+   @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
+   border-radius: 5px;
+   padding: 2px 15px;
+   font-weight: normal;
+}
+
+.edit-form .input-field {
+    height: 70px;
+}
+.edit-form .input-field:nth-child(2) {
+    margin: 40px 0 ;
+}
+#edit-item-btn{
+    margin-top: 20px;
+}
+
+.add-comment {
+    @extend .items-comment;
+    display: flex;
+}
+
+.add-comment .area{
+    width: 100%
+}
+
+.items-comment{
+  background-color: $col4;
+  color: $col5;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
+    
+}
+.add-comment-icon{
+    margin: 10px 0;
+    
+}
+.items-comment span {
+    position: static;
+    
+}
+//End item page
+
+
+
+
+
+
 
 
 // start global table ruls

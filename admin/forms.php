@@ -149,23 +149,36 @@
                       <label for="icon_prefix"><?php echo lang('DESCRIPTION')?></label>
                     </div>
                        <!--End input "Description" field--> 
-                   </div>
-
-                <!--start input "Ordering" field--> 
-                  <div class="row order">
-                    <div class="input-field col s8 m4 push-m4 push-s2">
-                      <i class="material-icons prefix">event_note</i>
-                      <input  id = 'cate-order'
-                             type="text"
-                              class="validate password1 input" 
-                             name = 'order'
-                              limit ="4"
-                             data-required='free'>
-                      <label for="icon_telephone"><?php echo lang("ORDERING")?></label>
                     </div>
-                  </div>
+                    <div class="row">
+                      <!--start input "Ordering" field--> 
+                      <div class="input-field col s8 m5 push-m1 push-s2">
+                         <i class="material-icons prefix">event_note</i>
+                         <input  id = 'cate-order'
+                                 type="text"
+                                 class="validate password1 input" 
+                                 name = 'order'
+                                 limit ="4"
+                                 data-required='free'>
+                         <label for="icon_telephone"><?php echo lang("ORDERING")?></label>
+                       </div>
+                      <!--start category selector-->
+                      <div class="input-field col s8 m5 push-m1 push-s2">
+                           <select id="select-parent">
+                             <option value="0" selected>None</option>    
 
-                    <!--End input "ordring" field-->
+                             <?php  
+                             $cates = globalGet("*", "categories", "WHERE Parent = 0"); // fetch all categories from database and print them in this selector 
+                             foreach($cates as $cate){
+                               echo "<option value ='".$cate['ID'] ."'>".$cate['Name']."</option>" ;
+                             }
+                             ?>
+
+                           </select>
+                         <label><?php echo lang("PARENT")?></label>
+                      </div><!--end  category selector-->                    
+                  </div>
+              
 
                    <!--start radio buttons for visiblity and allow comment and advertising field--> 
 
@@ -294,7 +307,7 @@
 
                            </select>
                          <label><?php echo lang("USER_NAME")?></label>
-                       </div> <!--  end user <select> -->
+                      </div> <!--  end user <select> -->
                       <!--start category selector-->
                       <div class="input-field col s8 m5 push-m1 push-s2">
                            <select id="select-cate">
@@ -303,7 +316,11 @@
                              <?php  
                              $cates = getAll("*", "categories"); // fetch all categories from database and print them in this selector 
                              foreach($cates as $cate){
-                               echo "<option value ='".$cate['ID'] ."'>".$cate['Name']."</option>" ;
+                                echo "<option value ='".$cate['ID'] ."'>".$cate['Name']."</option>" ;
+                               $cate_child = globalGet("*", "categories", "WHERE Parent ={$cate['ID']}");     
+                               foreach($cate_child as $child){
+                                  echo "<option value ='".$cate['ID'] ."'> ---- ".$child['Name']."</option>" ;   
+                               }  
                              }
                              ?>
 
@@ -314,7 +331,7 @@
 
                     <!--start status selector "new, old"-->
                     <div class ='row'>
-                      <div class="input-field col s8 m4 push-m4 push-s2">
+                      <div class="input-field col s8 m5 push-m1 push-s2">
                         <select id="select-status"> 
                           <option value="new" selected><?php echo lang("NEW")?></option>
                           <option value="like-new"><?php echo lang("LIKE_NEW")?></option>
@@ -322,13 +339,21 @@
                           <option value="old"><?php echo lang("OLD")?></option>
                         </select>
                       <label><?php echo lang("STATUS")?></label>
-                     </div>
-                   </div>  <!--start status selector "new, old"-->
-
+                     </div><!--end status selector "new, old"-->
+                    
+                   
+                   <!-- start "tags" field -->
+                   <div class="input-field col s8 m5 push-m1 push-s2">
+                     <i class="material-icons prefix">texture</i>
+                     <input id ='tags'
+                            type="text"
+                            class="validate input">
+                     <label for="icon_telephone"><?php echo lang("TAGS")?></label>
+                   </div><!-- end "tags" field -->
+                 </div> 
                    </form><!--End form-->
                  </div><!--end modal contant-->
-
-
+               
                   <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='add-new-item'> send </a>
                     <a class="modal-action modal-close waves-effect waves-green btn-flat send-btn" id='update-item'> send </a>

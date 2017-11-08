@@ -9,13 +9,14 @@ function lang($phrase){
 //    category page
     
         
- "VIST"                   => "Vist",
- "PROFILE"                => "Profile",
- "LOGIN"                  => "Login",
-  "LOGIN/REGISETER"       => "Login/Register",
-  "PERSONAL_INFO"         => "Personal info",
-  "CHANGE_PASSWORD"       => "Change password",
-  "CHANGE"                => "Change",
+   "VIST"                 => "Vist",
+   "PROFILE"              => "Profile",
+   "LOGIN"                => "Login",
+   "LOGIN/REGISETER"      => "Login/Register",
+   "PERSONAL_INFO"        => "Personal info",
+   "CHANGE_PASSWORD"      => "Change password",
+   "CHANGE"               => "Change",
+   "FOTO_UPLOAD"          => "upload your foto",
         
         
         
@@ -39,13 +40,18 @@ function lang($phrase){
     "ERRMSG(8)_JS"        => "Please fill out this field with <strong> more then 8 </strong>Letters",
     "PHP_ERRMSG_NAME"     => "Your Name should be <strong> more then 3 </strong>Letters",// Php: Witch means Error rong Msg will show form PHP
     "PHP_ERRMSG_EMAIL"    => "Your Email should be <strong> more then 6 </strong>Letters  but not more then 20 letters",
+    "ERRMSG_VALIDATE_EMAIL"=> "This email is not valid",
     "PHP_ERRMSG_FULLNAME" => "You full Name shoud be <strong> more then 8 </strong>Letters but not more then 25 letters ",
     "PHP_ERR_EMPTY_PASS"  => "You Password shoud NOT be <strong> Empty </strong>",
     "PHP_ERR_DIFFERENT_PASS"=> "The passwords are different ",
+    "PHP_ERR_FOTO_EXTENTIONS"=> "Foto extension should be jpg or jpg or jpeg or gif",
+    "PHP_ERR_FOTO_EMPTY"  => "Foto field should not be empty",
+    "PHP_ERR_FOTO_SIZE"   => "Foto size should not be biger then 40MB",
     "PHP_REAPETED_EMPTY"  => "This Email is alrady exsit",
     "PHP_Rec_Err_Msg"     => "this order is not <strong> Accepted </strong> pleace try again" ,
     "PHP_SUCCMSG"         => "Mission completed info updated",
     "PHP_SUCCMSG_DEL_MSG" => "Mission completed info deleted",
+    "PHP_SUCCMSG_REGISTER"=> "Your data have been registerd",
     "SURE_MSG"            => "Are you sure",
     "SURE_FULLNAME_MSG"   => "you will delete this user : ",
     "FIRST_NAME"          => "First name", 
@@ -92,11 +98,17 @@ function lang($phrase){
       
     "ITEMS_MANGER"        => "Items manger", 
     "ADD_NEW_ITEMS"       => "Add New Item",    
+    "ADD_NEW_COMMENT"     => "Add New Comment",
+    "SENT_IT"             => "Sent it",
+    "WRITE_COMMENT"       => "Write your comment",
     "UPDATA_ITEM"         => "Updata item",    
-    "ITEM_NAME"           => "Name",  
+    "ITEM_NAME1"          => "Name",  
     "ITEMS_DESCRP"        => "Description",  
     "ITEMS_PRICE"         => "Price",  
     "ITEMS_MIND_IN"       => "Made-in", 
+    "TAGS"                => "Tags ( , )", 
+    "TAG_SHOW"            => "Tags", 
+    "RATING"              => "Rating", 
     "NEW"                 => "New", 
     "STATUS"              => "Status", 
     "LIKE_NEW"            => "Like new", 
@@ -107,7 +119,8 @@ function lang($phrase){
     "PHP_ERRMSG_DSCRP"    => "Item Description should be <strong> more then 6 </strong>Letters ",  
     "PHP_ERRMSG_MADE_IN"  => "Item 'made in country' selector should be <strong> more then 6 </strong>Letters ",  
     "PHP_ERRMSG_CATE"     => "place choose category Name" ,  
-    "PHP_ERRMSG_PRICE"    => "Item price field should be <strong> more then 6 </strong>Letters ",  
+    "PHP_ERRMSG_PRICE"    => "place write your item price ",  
+    "PHP_ERRMSG_TAGS"     => "Place fill the tag field without space",  
     "ITEM NAME"           => "Name",  
     "DESCRIPTION"         => "Description ",  
     "PRICE"               => "Price",  
@@ -119,6 +132,7 @@ function lang($phrase){
     "LATEST_ITEMS"        => "Latest uploaded items",
     "ITEM_COMMENT_MENGER" => "Item comment manger",
     "CHOSE_ITEM"          => "Chose Item",
+    "DELETE_ITEM_MSG"     => "Delete this item",
     
     //comments Page  
      

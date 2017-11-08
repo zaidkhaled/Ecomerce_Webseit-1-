@@ -1,37 +1,38 @@
 <?php
 
 /*
-** function getCategory to fetch categories rows from database
+** the main function globalGet to fetch info from database
 */
 
-
-function getCate(){
+         
+function globalGet($column, $table, $where, $and = NULL, $orderfield = NULL, $ordering = "DESC", $limit = NULL) {
     
     global $con;
     
-    $stmt = $con->prepare('SELECT * FROM categories ORDER BY ID ASC');
+    $limitQuery = $limit != NULL ? " LIMIT " . $limit: ""; 
     
-    $stmt->execute();
+    $orderQuery = $orderfield != NULL ? "ORDER BY " . $orderfield . " " . $ordering : "";
     
-    $cates = $stmt->fetchAll();
     
-    return $cates;
+    $getAll = $con->prepare("SELECT $column FROM $table $where $and $orderQuery $limitQuery");
     
+        
+      $getAll->execute();
+    
+    if ($limit == NULL or $limit > 1){
+        
+         $all = $getAll->fetchAll();   
+        
+        
+    } elseif ($limit == 1){
+        
+       $all = $getAll->fetch();  
+        
+    } 
+    
+    return $all;
+     
 }
-
-function getSpecialInfo($where, $col, $id) {
-    
-    global $con;
-    
-    $stmt = $con->prepare("SELECT * FROM $where WHERE $col = ? LIMIT 1");
-    
-    $stmt->execute([$id]);
-    
-    $info = $stmt->fetch();
-    
-    return $info;
-}
-
     
 /*
 ** get comments of items Function v1.0
@@ -55,7 +56,8 @@ function getSpecialComments($Item_ID) {
                                 ON
                                     users.userID = comments.Member_ID
                                 WHERE 
-                                    comments.Item_ID = :zitemID");
+                                    comments.Item_ID = :zitemID
+                                    ORDER BY `Comment_Data` DESC");
     
     $statement->bindParam(":zitemID", $Item_ID);
     $statement->execute();
@@ -63,8 +65,34 @@ function getSpecialComments($Item_ID) {
     $rows = $statement->fetchAll();
     
     return $rows;
+
+}
+/*
+// function to get special INFO depent on tow values 
+// it will be helpfull to give user ability to do something like ability to login and edit on item his own item
+*/
+
+function getSpecialInfo($table, $what, $what2 = NULL, $var1, $var2 = NULL){
+    
+    global $con;
+    
+    if ($what2 != NULL){
+        
+       $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? AND $what2 = ? LIMIT 1");
+        
+       $stmt->execute ([$var1, $var2]);
+     
+    }  else {
+        
+        $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? LIMIT 1");
+        
+        $stmt->execute ([$var1]);
+    }
+    
+    return $stmt->fetch();
     
 }
+
 /*
 ** function to fetch items from category depent on Item_ID
 */
@@ -72,14 +100,7 @@ function getSpecialComments($Item_ID) {
 function getItems($Where, $ID) {
     
     global $con;
-//    
-//    if (!empty($userID)){
-//        $query = "Member_ID";
-//        $id = $userID;
-//    } else {
-//        $query = "Cate_ID";
-//        $id = $Cate_ID;
-//    }
+
     $items = $con->prepare("SELECT * FROM items WHERE $Where = ? ORDER BY Item_ID");
     
     $items-> execute([$ID]);
@@ -90,6 +111,7 @@ function getItems($Where, $ID) {
 /*
 ** function to chek user status 
 */
+
 function user_status($ID){
     
     global $con;
@@ -155,33 +177,21 @@ function user_status($ID){
 ** $url = Page Address
 */
 
-function redirectPage($errmsg = "", $url = null, $seconds = 3){
+function redirectPage($msg, $url = null, $seconds = 3){
     
-    // this function will Echo success and faild Massege, faild Massege when there's an error Messege, but when there's success Messege then Echo success Messege.
-    
-    if (empty($errmsg)){ 
-        
-          echo "<div class= 'errmsg_php' style ='display:block'><p class= 'msg'>". lang("FAILED") ." ".lang("REDIRECTED" ) ." ". 
-               $seconds ." ". lang("SECONDS")."</p><div>";
-        
-    }else {
-        
-        echo "<div class= 'succmsg_php' style ='display:block' ><p class= 'msg'>"." ". lang("SUCCESS") ." ".lang("REDIRECTED") .
-             " ".$seconds ." ". lang("SECONDS")."</p><div>";
-        
-    }
+     echo "<div class= 'succmsg_php center-align' style ='display:block'> 
+     
+             <p class= 'msg'>" . " " . $msg . " " .lang("REDIRECTED") . " " .$seconds . " " . lang("SECONDS") . "</p>
+           <div>";
+ 
     
     if ($url === null){
         
         $url = "index.php";
         
-    } else {
-        
-        $url =isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] !== "" ? $_SERVER['HTTP_REFERER'] : "index.php";
-        
     }
     
-    header("refresh:$seconds;url=$url");
+    header("refresh:$seconds ; url=$url");
      
     exit();
 }
@@ -282,4 +292,162 @@ function getAll($select, $from, $id = NULL) {
 }
 
 
+function home_items() {
+    
+    foreach (globalGet("*", "items", "WHERE approve != 0", "", "Item_ID", "DESC", "") as $item){  ?>
 
+             <div class="col s12 m4">
+               <div class="card"> 
+                 <div class="card-image waves-effect waves-block waves-light">
+                  <img class="activator" src="layout/images/Lv.jpg">
+                 </div>
+                 <div class="card-content">
+                  <!-- check if user has ability to edit and delete this item -->     
+                  <?php if (isset($_SESSION["ID"]) && $item["Member_ID"] == $_SESSION["ID"]) { ?>    
+                   <div class="row profile-item-icons">   
+                   <!--Delete Butten-->
+                     <a class='modal-trigger' 
+                        href="#modal<?php echo $item['Item_ID'];?>"
+                        onclick= "$('.modal').modal();"
+                        >
+                       <i class='material-icons right'>delete_forever</i>
+                     </a><!--Delete Butten-->   
+                     <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item"> 
+                       <i class="material-icons right">edit</i> 
+                    </a>     
+                   </div>
+                   <?php } ?> 
+                   <span class="card-title activator"><?php echo $item['Name'];?></span>
+                   <span class="right"><?php echo $item['Price'];?></span>        
+                   <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
+                       <?php echo lang('VIST');?>
+                       </a>
+                     </p>                 
+                 </div>
+                 <div class="card-reveal">
+                   <span class="card-title"><?php echo $item['Name'];?><i class="material-icons right">close</i></span>
+                   <p><?php echo $item['Description'];?>.</p>
+                 </div>
+              </div><!-- start card item  -->                             
+            </div>
+             <!-- start modal delete butten-->
+             <div id="modal<?php echo $item['Item_ID']; ?>" class='modal' >
+               <div class='modal-content center-align'>
+                 <h4><?php echo lang("SURE_MSG")?> </h4>
+                 <p><?php echo lang("DELETE_ITEM_MSG")?> <?php echo $item['Name']?></p>
+               </div>
+               <div class='modal-footer'>
+                 <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>   
+
+                 <a class='modal-action delete modal-close waves-effect waves-green btn-flat ajax-click'
+                    data-do= "delete_item"
+                    data-place = "#profile-items" 
+                    data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" >Delete</a>
+              </div><!--end modal Delete Butten--> 
+            </div>                        
+
+              <?php } 
+    }
+
+/*
+//function to profile page: it will make loop for user items and print them in profile page
+*/
+function profile_Items(){
+    
+     foreach (getSpecialInfo("items", "Member_ID", "approve", $_SESSION["ID"], "1") as $item){?> 
+                 <!-- start card item  -->
+                 <div class="col s12 m4">
+                   <div class="card"> 
+                     <div class="card-image waves-effect waves-block waves-light">
+                      <img class="activator" src="layout/images/Lv.jpg">
+                     </div>
+                     <div class="card-content">
+                       <div class="row profile-item-icons">   
+                         <!--Delete Butten-->
+                         <a class='modal-trigger' 
+                            href="#modal<?php echo $item['Item_ID'];?>"
+                            onclick= "$('.modal').modal();"
+                            >
+                           <i class='material-icons right'>delete_forever</i>
+                         </a><!--Delete Butten-->   
+                         <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item"> 
+                           <i class="material-icons right">edit</i> 
+                        </a>     
+                       </div>   
+                       <span class="card-title activator"><?php echo $item['Name'];?></span>
+                       <span class="right"><?php echo $item['Price'];?></span>        
+                       <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
+                           <?php echo lang('VIST');?>
+                           </a>
+                         </p>                 
+                     </div>
+                     <div class="card-reveal">
+                       <span class="card-title"><?php echo $item['Name'];?><i class="material-icons right">close</i></span>
+                       <p><?php echo $item['Description'];?>.</p>
+                        
+                       <?php $tags = explode("," , $item['tags']);     
+                             foreach($tags as $tag){
+                                 echo "<a href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
+                             } ?> 
+                     </div>
+                  </div><!-- start card item  -->                             
+                </div>
+                 <!-- start modal delete butten-->
+                 <div id="modal<?php echo $item['Item_ID']; ?>" class='modal' >
+                   <div class='modal-content center-align'>
+                     <h4><?php echo lang("SURE_MSG")?> </h4>
+                     <p><?php echo lang("DELETE_ITEM_MSG")?> <?php echo $item['Name']?></p> 
+                   </div>
+                   <div class='modal-footer'>
+                     <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>   
+
+                     <a class='modal-action delete modal-close waves-effect waves-green btn-flat ajax-click'
+                        data-do= "delete_item"
+                        data-place = "#profile-items" 
+                        data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" >Delete</a>
+                  </div><!--end modal Delete Butten--> 
+                </div>                        
+
+              <?php } 
+}
+/*
+// function to print item info in item page before edit and after edit on item 
+*/
+
+ function showItemInfo($item_ID) { ?>
+
+          <?php $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?> 
+
+            <p class=" col s4"> <?php echo  lang("ITEM_NAME1") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Name"]; ?> </p>
+
+            <p class=" col s4 "> <?php echo  lang("DESCRIPTION") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Description"]; ?> </p>
+
+            <p class=" col s4"> <?php echo  lang("RATING") . "  : </p>" ."<p class = 'col m7 info'>" . $item_info["Rating"]; ?> </p>
+
+            <p class=" col s4"> <?php echo  lang("MADE_IN") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Made_In"]; ?> </p>
+
+            <p class=" col s4"> <?php echo  lang("PRICE") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Price"]; ?> </p>
+
+            <p class=" col s4"> <?php echo  lang("STATUS") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Status"]; ?> </p>
+
+            <p class=" col s4 "> <?php echo  lang("TAG_SHOW") . "  : </p>" ."<p class = 'col s7 info'>";
+     
+               $tags = explode("," , $item_info['tags']);     
+               foreach($tags as $tag){
+                 echo "<a class = 'tags' href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
+             } ?> </p>
+
+            <p class=" col s4"> <?php echo  lang("ADD_DATA") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Add_Data"]; ?> </p>
+ <?php } 
+
+function showComment($item_ID) {
+    
+         foreach(getSpecialComments($item_ID) as $comment) {?>
+
+           <div class="items-comment">
+             <h5 class="written_by"><?php echo $comment["written_by"];?></h5>   
+             <span class ="comment-data right"><?php echo $comment["Comment_Data"];?></span>   
+             <p class ="comments"><?php echo $comment["Comment"];?></p>
+           </div>
+         <?php } 
+}
