@@ -10,7 +10,7 @@
  include $tpl."nav.php";
 ?>
 
-<div class="container">
+<div class="container margin">
     <?php if  (isset($_SESSION["user"])) { ?>
     
               <div class="row plus-btn"> 
@@ -20,6 +20,7 @@
     <?php } ?>
     
   <!--staet add item form-->
+  <div class="margin"></div>    
   <form class="form addItemForm row">
     <h3 class="center-align addItemTitle"><?php echo lang("ADD_NEW_ITEMS") ?></h3>
     <h3 class="center-align editItemTitle" style="display:none;"><?php echo lang("ADD_NEW_ITEMS") ?></h3>

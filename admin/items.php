@@ -42,17 +42,19 @@ if(isset($_SESSION['username'])){
    <div class="nav-wrapper" >
       <form>
         <div class="input-field">
-          <input id="search-item-info" type="search" id="search" required >
+          <input id="search-item-info" type="search" class = 'search-in' data-search = '#item-table-body .table-row' required >
           <label class="label-icon" for="search"><i class="material-icons">search</i></label>
           <i class="material-icons close Large">close</i>
         </div>
       </form>
    </div><!-- end search btn-->
+<div id="rst">
+</div>
     <h1 class="center-align">Items Manger</h1>
     <div class="container">
        <!-- start add btn-->    
        <div class="row">
-         <a id ='add-item-btn' class="btn-floating btn-large waves-effect waves-light red right"><i class="material-icons">add</i></a>
+         <a id ='add-item-btn' onclick="reset($('#imgs'));" class="btn-floating btn-large waves-effect waves-light red right modal-trigger" href="#update-add-item"><i class="material-icons">add</i></a>
        </div>
      <!--in this div "required-info" requests will be saved, to send as ajax request-->
      <div class= 'container-grid'>
@@ -63,6 +65,7 @@ if(isset($_SESSION['username'])){
            <tr>
              <th>#ID</th>
              <th><?php echo lang("ITEM NAME" )?></th>
+             <th><?php echo lang("FOTOS")?></th>
              <th><?php echo lang("COMT")?></th>
              <th><?php echo lang("DESCRIPTION")?></th>
              <th><?php echo lang("MADE_IN")?></th>

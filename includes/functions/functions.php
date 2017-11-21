@@ -72,24 +72,36 @@ function getSpecialComments($Item_ID) {
 // it will be helpfull to give user ability to do something like ability to login and edit on item his own item
 */
 
-function getSpecialInfo($table, $what, $what2 = NULL, $var1, $var2 = NULL){
+function getSpecialInfo($table, $what, $what2 = NULL, $var1, $var2 = NULL, $value = NULL){
     
     global $con;
-    
+        
+    $query = empty($value) ? " " : $value ;
+        
     if ($what2 != NULL){
         
-       $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? AND $what2 = ? LIMIT 1");
+       $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? AND $what2 = ? $query ");
         
        $stmt->execute ([$var1, $var2]);
      
     }  else {
         
-        $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? LIMIT 1");
+        $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? ");
         
         $stmt->execute ([$var1]);
     }
     
-    return $stmt->fetch();
+       
+    if (checkItem($what, $table, $var1) > 1){
+        
+      $all = $stmt->fetchAll(); 
+        
+    } else {
+        
+      $all= $stmt->fetch();
+        
+    }
+    return $all;
     
 }
 
@@ -299,7 +311,10 @@ function home_items() {
              <div class="col s12 m4">
                <div class="card"> 
                  <div class="card-image waves-effect waves-block waves-light">
-                  <img class="activator" src="layout/images/Lv.jpg">
+                  <?php 
+                    $img = empty($item["Main_Foto"]) ? "foto1.jpg" : $item["Main_Foto"];
+                    ?>           
+                  <img class="activator" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                  </div>
                  <div class="card-content">
                   <!-- check if user has ability to edit and delete this item -->     
@@ -327,6 +342,10 @@ function home_items() {
                  <div class="card-reveal">
                    <span class="card-title"><?php echo $item['Name'];?><i class="material-icons right">close</i></span>
                    <p><?php echo $item['Description'];?>.</p>
+                   <?php $tags = explode("," , $item['tags']);     
+                         foreach($tags as $tag){
+                             echo "<a href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
+                         } ?> 
                  </div>
               </div><!-- start card item  -->                             
             </div>
@@ -354,12 +373,19 @@ function home_items() {
 */
 function profile_Items(){
     
-     foreach (getSpecialInfo("items", "Member_ID", "approve", $_SESSION["ID"], "1") as $item){?> 
+     $items = getSpecialInfo("items", "Member_ID", "", $_SESSION["ID"]);
+    
+     if (!empty($items)){
+         
+        foreach ($items as $item) { ?> 
                  <!-- start card item  -->
                  <div class="col s12 m4">
                    <div class="card"> 
                      <div class="card-image waves-effect waves-block waves-light">
-                      <img class="activator" src="layout/images/Lv.jpg">
+                      <?php 
+                        $img = empty($item["Main_Foto"]) ? "foto1.jpg" : $item["Main_Foto"];
+                        ?>           
+                      <img class="activator" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                      </div>
                      <div class="card-content">
                        <div class="row profile-item-icons">   
@@ -372,9 +398,16 @@ function profile_Items(){
                          </a><!--Delete Butten-->   
                          <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item"> 
                            <i class="material-icons right">edit</i> 
-                        </a>     
+                        </a> 
+                        <?php
+                         if($item["approve"] == 0){    ?>   
+                            <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item" title = "<?php echo lang("APPROVE_WAIT"); ?>"> 
+                                <i class='material-icons purple-text  text-accent-2'>hourglass_empty</i>
+                            </a>     
+                        <?php } ?>
+                                   
                        </div>   
-                       <span class="card-title activator"><?php echo $item['Name'];?></span>
+                       <span class="card-title activator"><?php echo $item['Name']; ?></span>
                        <span class="right"><?php echo $item['Price'];?></span>        
                        <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
                            <?php echo lang('VIST');?>
@@ -393,8 +426,8 @@ function profile_Items(){
                   </div><!-- start card item  -->                             
                 </div>
                  <!-- start modal delete butten-->
-                 <div id="modal<?php echo $item['Item_ID']; ?>" class='modal' >
-                   <div class='modal-content center-align'>
+                <div id="modal<?php echo $item['Item_ID']; ?>" class='modal' >
+                  <div class='modal-content center-align'>
                      <h4><?php echo lang("SURE_MSG")?> </h4>
                      <p><?php echo lang("DELETE_ITEM_MSG")?> <?php echo $item['Name']?></p> 
                    </div>
@@ -408,38 +441,95 @@ function profile_Items(){
                   </div><!--end modal Delete Butten--> 
                 </div>                        
 
-              <?php } 
+              <?php }
+     } else {
+         echo "<h3 class= 'center-align'>there is no items</h3>";
+     }
 }
+
+
+/*                 
+// faction to give alternative, if value is empty.
+*/
+
+function ifEmpty($value, $msg) {
+    $feedback = empty($value) || !isset($value) ? $msg : $value;
+    
+    return $feedback;
+}
+
+
+
+
 /*
 // function to print item info in item page before edit and after edit on item 
 */
 
- function showItemInfo($item_ID) { ?>
-
-          <?php $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?> 
-
-            <p class=" col s4"> <?php echo  lang("ITEM_NAME1") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Name"]; ?> </p>
-
-            <p class=" col s4 "> <?php echo  lang("DESCRIPTION") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Description"]; ?> </p>
-
-            <p class=" col s4"> <?php echo  lang("RATING") . "  : </p>" ."<p class = 'col m7 info'>" . $item_info["Rating"]; ?> </p>
-
-            <p class=" col s4"> <?php echo  lang("MADE_IN") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Made_In"]; ?> </p>
-
-            <p class=" col s4"> <?php echo  lang("PRICE") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Price"]; ?> </p>
-
-            <p class=" col s4"> <?php echo  lang("STATUS") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Status"]; ?> </p>
-
-            <p class=" col s4 "> <?php echo  lang("TAG_SHOW") . "  : </p>" ."<p class = 'col s7 info'>";
+ function showItemInfo($item_ID) {
      
+      $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?>
+      <table class="responsive-table">
+        <thead>
+          <tr style="">
+              <th><?php echo  lang("ITEM_NAME1"); ?></th>
+              <th><?php echo  lang("PRICE"); ?></th>
+              <th><?php echo  lang("STATUS"); ?></th>
+              <th><?php echo  lang("MADE_IN"); ?> </th>
+              <th><?php echo  lang("TAG_SHOW"); ?></th>
+              <th><?php echo lang("ADD_DATA"); ?></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><?php echo ifEmpty($item_info["Name"], lang("EMPTY")) ?></td>
+            <td><?php echo ifEmpty($item_info["Price"], lang("EMPTY")) ?></td>
+            <td><?php echo ifEmpty($item_info["Status"], lang("EMPTY")) ?></td>
+            <td><?php echo ifEmpty($item_info["Made_In"], lang("EMPTY")) ?></td>  
+            <td>
+              <?php $tags = explode("," , $item_info['tags']);     
+              foreach($tags as $tag){  ?>
+              <a class="tags" href="tags.php?tag=<?php echo str_replace(" ", "-", $tag); ?> "><?php echo $tag ?></a> <?php } ?>    
+             </td>
+             <td><?php echo ifEmpty($item_info["Add_Data"], lang("EMPTY")) ?></td>
+           </tr>
+         </tbody>
+      </table>
+
+
+
+         <div  class="row details">
+            <p class="col  s12 center-align">
+              <span class=""><?php echo ifEmpty($item_info["Description"], " ") ?></span>
+            </p>
+         </div>
+     
+<?php
+
+ }
+
+function jkjk(){
+                 $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?> 
+
+            <div class="row">
+              <p class=" col s4"> <?php echo  lang("ITEM_NAME1") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Name"]; ?> </p>
+              <p class=" col s4"> <?php echo  lang("PRICE") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Price"]; ?> </p>
+ 
+              <p class=" col s4 "> <?php echo  lang("DESCRIPTION") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Description"]; ?> </p>
+              <p class=" col s4"> <?php echo  lang("MADE_IN") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Made_In"]; ?> </p>
+            </div>
+            <div class="row">
+              <p class=" col s4"> <?php echo  lang("STATUS") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Status"]; ?> </p>
+              <p class=" col s4 "> <?php echo  lang("TAG_SHOW") . "  : </p>" ."<p class = 'col s7 info'>"; ?>
+            </div>
+            <?php
                $tags = explode("," , $item_info['tags']);     
                foreach($tags as $tag){
                  echo "<a class = 'tags' href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
              } ?> </p>
 
-            <p class=" col s4"> <?php echo  lang("ADD_DATA") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Add_Data"]; ?> </p>
- <?php } 
-
+            <p class=" col s4"> <?php echo  lang("ADD_DATA") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Add_Data"]; ?> </p><?php
+}
 function showComment($item_ID) {
     
          foreach(getSpecialComments($item_ID) as $comment) {?>
@@ -450,4 +540,23 @@ function showComment($item_ID) {
              <p class ="comments"><?php echo $comment["Comment"];?></p>
            </div>
          <?php } 
+
 }
+
+// to refrsh foto agter change 
+
+function refresh_foto($foto) { 
+    
+         $img = !empty($foto)? $foto :  "foto1.jpg" ; ?> 
+         <img class= "responsive-img" src="uplaodedFiles/usersFoto/<?php echo $img ?>">
+         <a href="#change-foto" class="modal-trigger"><?php echo lang("CHANGE"); ?> </a> 
+<?php
+}
+
+
+
+
+
+
+
+

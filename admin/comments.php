@@ -44,11 +44,11 @@ if(isset($_SESSION['username'])){
      <span id ='data_required'><?php echo $data_required; ?></span>
    </div>
      <!--start serch field-->
-     
+<div id="rst"></div>
    <div class="nav-wrapper" >
       <form>
         <div class="input-field">
-          <input id="search-in-comments" type="search" id="search" required >
+          <input id="search-in-comments" type="search" class = 'search-in' data-search = '#comments-table-body .table-row'>
           <label class="label-icon" for="search"><i class="material-icons">search</i></label>
           <i class="material-icons close Large">close</i>
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 ob_start();
+
 session_start();
 
 $pageTitle = str_replace("-", " ", $_GET['name']); 
@@ -14,14 +15,15 @@ include $tpl."nav.php";
 ?>
 <div class="container"> 
   <h1 class="center-align"><?php echo $pageTitle; ?></h1>
-  <div class="row item">  
+   <div id= "rst"></div>
+   <div class="row item">  
                            
   <?php
         
         $userID = isset($_SESSION['ID']) ? $_SESSION['ID'] : "0";   
       
         $check_info = getSpecialInfo("items", "Item_ID", "Member_ID", $item_ID, $userID);
-      
+        $row = getSpecialInfo("items", "Item_ID", "", $item_ID);
         // check if userID und itemID in same row in database in "items table", if yes give user the ability to edit his    own item
         
         if (!empty($check_info)){
@@ -34,21 +36,60 @@ include $tpl."nav.php";
         }
       
        ?>
-      <div class="details col m6 s12 "><!--fetch item info-->
-          
+      
+      <div class="details col s12 margin"  ><!--fetch item info-->
+        <div class="row">
+          <div class = "col m4 s8 push-m4 push-s2">
+            <!-- Modal Trigger -->
+            <a class="waves-effect waves-light btn modal-trigger by-btn" href="#modal1"><?php echo lang("BUY"); ?>
+              <i class="material-icons buy-icon">add_shopping_cart</i>
+            </a>
+
+             <!-- Modal Structure -->
+             <div id="modal1" class="modal">
+               <div class="modal-content">
+                 <h4>Modal Header</h4>
+                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+               </div>
+               <div class="modal-footer">
+                 <a class="modal-action modal-close waves-effect waves-green btn-flat"><?php echo lang("AGREE"); ?></a>
+                 <a class="modal-action modal-close waves-effect waves-green btn-flat"><?php echo lang("CLOSE"); ?></a>
+               </div>
+             </div>
+           </div>    
+        </div>   
+        <div class="row">
+           <div class = "col m4 s8 push-m4 push-s2 item-main-img-show">
+             <img class="responsiv-img materialboxed main-foto" data-caption ="<?php echo ifEmpty($row["Description"], '') ?>"  src="uplaodedFiles/itemsFotos/<?php echo ifEmpty($row["Main_Foto"], "foto1.jpg") ?>">
+           </div> 
+        </div> 
+        <div class="row"> 
+          <div class = "col s8 push-s2 items_imgs">
+             <?php 
+              if(empty($row["Fotos"])){
+                 echo " ";
+              } else {
+                  $items_imgs = unserialize($row["Fotos"]);
+                  foreach ($items_imgs as $src){
+                       echo   "
+                       <img class='responsiv-img materialboxed' data-caption ='" . ifEmpty($row['Description'], ' ') . "' style='height:140px;width:120px' data-caption = 'hihihi' src='uplaodedFiles/itemsFotos/" . $src . "'>
+                       " ;
+                      
+                  }
+              }
+             ?>
+           </div>
+         </div> 
          <div class="row">
              <?php echo $edit_passible; ?>
-         </div> 
-          
+         </div>  
           <!-- fetch item data-->
-          
-          <div id="item-details">
-              <?php showItemInfo($item_ID); ?>
-          </div>      
-       </div>
-      <div class = "foto col s12 m6 ">
-          <img class="" src="layout/images/Lv.jpg">
-      </div> <!--end fetch item info-->   
+          <div id="item-details" >
+          <?php
+          showItemInfo($item_ID); 
+           ?>
+          </div>  
+       </div>   
     </div>
     <div class = "comments col 12">
       <?php  if (isset($_SESSION['user'])){ ?>
@@ -57,22 +98,22 @@ include $tpl."nav.php";
               </div>
            <div class="add-comment" style="display:none">
                <div class="input-field area">
-                 <input type="hidden" id="item-id" value="<?php echo $item_ID; ?>">   
-                 <textarea id="item-comment"  class="materialize-textarea"></textarea>
-                 <label for="icon_prefix"><?php echo lang("WRITE_COMMENT")?></label>
-                 <button type="button"
-                         disabled 
-                         id="add-comment-btn" 
-                         class="waves-effect waves-light btn ajax-click"
-                         data-do = "add_comment"
-                         data-place = "#comment-call"><?php echo lang("SENT_IT")?>
-                 </button>
+                 <form class="ajax-form" data-do = "add_comment" data-place = "#comment-call" > 
+                   <input type="hidden" id="item-id" value="<?php echo $item_ID; ?>">   
+                   <textarea id="item-comment"  class="materialize-textarea"></textarea>
+                   <label for="icon_prefix"><?php echo lang("WRITE_COMMENT")?></label>
+                   <input type="submit"
+                           disabled 
+                           id="add-comment-btn" 
+                           class="waves-effect waves-light btn"
+                           value = <?php echo lang("SENT_IT")?>>
+                 </form>       
                </div>
-        </div>
+           </div>
         <?php } ?>
   
         <div id="comment-call">
-        <!-- get item comment.-->    
+          <!-- get item comment.-->    
           <?php showComment($item_ID)  ?> 
       </div>
     </div><!--end comment-->

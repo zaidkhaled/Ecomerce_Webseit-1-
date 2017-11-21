@@ -18,17 +18,19 @@ function lang($phrase){
     "LOG_IN"              => 'Log in',
     "HOME_ADMIN"          => "Home",  
     "DASHBOARD"           => "Dashboard",  
-    "ERRMSG(3)_JS"        => "Please fill out this field with <strong> more then 3 </strong>Letters", // JS: Witch means the Error Msg will show form Javescript
-    "ERRMSG(6)_JS"        => "Please fill out this field with<strong> more then 6 </strong>Letters",
-    "ERRMSG(8)_JS"        => "Please fill out this field with <strong> more then 8 </strong>Letters",
-    "PHP_ERRMSG_NAME"     => "Your Name should be <strong> more then 3 </strong>Letters",// Php: Witch means Error rong Msg will show form PHP
-    "PHP_ERRMSG_EMAIL"    => "Your Email should be <strong> more then 6 </strong>Letters  but not more then 20 letters",
-    "PHP_ERRMSG_FULLNAME" => "Your full Name shoud be <strong> more then 8 </strong>Letters but not more then 25 letters ",
-    "PHP_ERR_EMPTY_PASS"  => "Your Password shoud NOT be <strong> Empty </strong>",
+    "FOTOS"               => "Fotos",  
+    "PHP_ERRMSG_NAME"     => "Your Name should be  more then 3 Letters",// Php: Witch means Error rong Msg will show form PHP
+    "PHP_ERRMSG_ITEM_NAME"=> "Your item Name should be  more then 3 Letters",// Php: Witch means Error rong Msg will show form PHP
+    "PHP_ERRMSG_EMAIL"    => "Your Email should be more then 6 Letters  but not more then 20 letters",
+    "PHP_ERRMSG_FULLNAME" => "Your full Name shoud be more then 4 Letters",
+    "PHP_ERR_EMPTY_PASS"  => "Your Password shoud NOT be empty ",
     "PHP_REAPETED_EMPTY"  => "This Email is alrady exsit",
     "PHP_Rec_Err_Msg"     => "this order is not <strong> Accepted </strong> pleace try again" ,
     "PHP_SUCCMSG"         => "Mission completed info updated",
     "PHP_SUCCMSG_DEL_MSG" => "Mission completed info deleted",
+    "PHP_DEFFRENT_PASS"   => "The passwords are diffrent",
+    "PHP_ERR_FOTO_EXTENTIONS"=> "Foto extension should be jpg or jpg or jpeg or gif",
+    "ERRMSG_VALIDATE_EMAIL"=> "This email is not valid",   
     "SURE_MSG"            => "Are you sure",
     "SURE_FULLNAME_MSG"   => "you will delete this user : ",
     "FIRST_NAME"          => "First name", 
@@ -39,6 +41,7 @@ function lang($phrase){
     "ITEMS_NUM"           => "Items_num", 
     "PHP_EMPTY_PASS"      => "password should not be empty", 
     "FULLNAME"            => "Full name",
+    "FOTO_UPLOAD"         => "Uplaod your foto",
     "SAVE"                => "save",
     "EDIT_MEMBERS"        => "Edit Members",
     "ADD_MEMBERS"         => "Add members",
@@ -53,6 +56,7 @@ function lang($phrase){
     "SUCCESS"             => "Mission completed",
     "FAILED"              => "Mission failed",
     "LATEST_USER"         => "Latest Registerd Users",
+    "GRUOP"               => "Gruop",
 
     //Category Page 
         
@@ -71,7 +75,15 @@ function lang($phrase){
     "ALLOW"               => "Allow",    
     "NOT_ALLOW"           => "prevent",    
     "SURE_CATE_NAME_MSG"  => "you will delete this category : ",    
-       
+    //statistics
+        
+     "BUYER"              => "Buyer_Name",    
+     "SELLER"             => "seller_Name",    
+     "ITEMS_NAME"         => "Item_Name",    
+     "TIME_OF_PURCHASE"   => "Time of purchase",    
+     "SALES_STATISTICS"   => "Sales statistics",    
+         
+        
     //items page 
       
     "ITEMS_MANGER"        => "Items manger", 
@@ -88,6 +100,7 @@ function lang($phrase){
     "LIKE_NEW"            => "Like new", 
     "USED"                => "Used", 
     "OLD"                 => "old",  
+    "FOTO_ITEM_UPLOAD"    => "Uplaod item foto",  
     "TAGS"                => "Tags ( , )", 
     "TAG_SHOW"            => "Tags", 
     "PHP_ERRMSG_TAGS"     => "Place fill the tag field without space",    

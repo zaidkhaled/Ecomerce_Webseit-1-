@@ -6976,10 +6976,7 @@ nav i, nav i.material-icons {
   top: 0;
   left: 0; }
 
-.container-grid table .table-row {
-  cursor: pointer; }
-  .container-grid table .table-row:active {
-    background-color: #467885; }
+
 
 thead tr {
   background-color: #B86E9A;
@@ -7095,6 +7092,16 @@ thead tr {
 .collection li.cate-child > span {
   height: 26px;
   line-height: 13px; }
+
+.imgs-preview img {
+  transition: all 0.6 cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer; }
+  .imgs-preview img:hover {
+    padding: 15px; }
 
 #comments-table-body .table-row .comment {
   overflow: hidden;

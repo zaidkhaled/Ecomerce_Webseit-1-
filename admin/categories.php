@@ -17,17 +17,19 @@ if(isset($_SESSION['username'])){
     include  "forms.php";
     
     ?>
+
      <!-- start search field-->
+
      <div class="nav-wrapper" >
           <form>
             <div class="input-field">
-              <input id="search-cate-info" type="search" id="search" required >
+              <input id="search-cate-info" type="search" class = "search-in" data-search = '#mange-cate li' required >
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons close Large">close</i>
             </div>
           </form>
         </div><!-- end search btn-->
-
+<div id="rst"></div>
      <!-- start add btn-->
      <div class="container">
        <h1 class = 'center-align'><?php echo lang("MANGE CATEGORIES")?></h1>

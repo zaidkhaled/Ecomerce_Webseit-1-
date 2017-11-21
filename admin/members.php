@@ -26,59 +26,58 @@ if(isset($_SESSION['username'])){
     //get "data_required" like (pending members or category > item) from URL if exist, then sent it by ajax to process data and return #required-info ///////////////////////////
     
     $data_required = isset($_GET['page'])? $_GET['page'] : " "; 
-    
- 
      ?>
-     <!--start serch field-->
-     
-       <div class="nav-wrapper" >
-            <div class="input-field">
-              <input id="search-user-info" type="search" id="search" required >
-              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-              <i class="material-icons close Large">close</i>
-            </div>
+      <!--start serch field-->
+      <div class="nav-wrapper" >
+        <div class="input-field">
+          <input id="search-user-info" type="search" class= 'search-in' data-search = '#users-table-body .table-row' required >
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons close Large">close</i>
         </div>
-       
+      </div> <!--end serch field-->
       <h1 class="center-align">Mange members</h1>
-   <!--end serch field-->
       <div class="container">
-          <!--in this div "required-info" requests will be saved, to send as ajax request-->
-          <div class="required-info" style="display:none">
-             <span id ='data_required'><?php echo $data_required; ?></span>
-          </div>
-          <div class= "">
-          <!-- Modal Structure -->
-             <!--start table users-->
-           
-               <table  class="bordered responsive-table centered " >
-                   <!--start Table header-->
-                <thead>
-                  <tr>
-                      <th>#ID</th>
-                      <th id="in"><?php echo lang("FIRST_NAME" )?></th>
-                      <th>foto</th>
-                      <th><?php echo lang("EMAIL")?></th>
-                      <th><?php echo lang("FULLNAME")?></th>
-                      <th><?php echo lang("ITEMS_NUM")?></th>
-                      <th><?php echo lang("COMMENT_TIMES" )?></th>
-                      <th><?php echo lang("REGISTERED")?></th>
-                      <th><?php echo lang("CONTROL")?></th>
-                  </tr>
-                </thead>
-                   
-                  <!--End Table header-->
-                   
-                <tbody id="users-table-body">
-                    
-                <!--start table body-->    
-            
-             <!--   table content will be sended by ajax from dbfunctions -->
-                    
-                </tbody><!-- End table Body-->
-              </table>
-              <button type="button" id="add-btn" class="waves-effect waves-light btn">Add new Member</button>
-            </div>
-        </div>  
+        <div class="row">
+         <a id="add-btn"
+            title="Add new user"
+            class="btn-floating btn-large waves-effect waves-light red right" onclick="$('#add-user').modal('open');" ><i class="material-icons">add</i></a>
+       </div>
+      <!--in this div "required-info" requests will be saved, to send as ajax request-->
+      <div class="required-info" style="display:none">
+         <span id ='data_required'><?php echo $data_required; ?></span>
+      </div>
+      <div class= "">
+      <!-- Modal Structure -->
+      <!--start table users-->
+
+      <table  class="bordered responsive-table centered " >
+       <!--start Table header-->
+       <thead>
+          <tr>
+              <th>#ID</th>
+              <th id="in"><?php echo lang("FIRST_NAME" )?></th>
+              <th>foto</th>
+              <th><?php echo lang("EMAIL")?></th>
+              <th><?php echo lang("FULLNAME")?></th>
+              <th><?php echo lang("ITEMS_NUM")?></th>
+              <th><?php echo lang("COMMENT_TIMES" )?></th>
+              <th><?php echo lang("REGISTERED")?></th>
+              <th><?php echo lang("CONTROL")?></th>
+          </tr>
+        </thead>
+
+        <!--End Table header-->
+
+       <tbody id="users-table-body">
+
+       <!--start table body-->    
+
+       <!--table content will be sended by ajax from dbfunctions -->
+
+       </tbody><!-- End table Body-->
+      </table>
+    </div>
+</div>  
 
      <!--End table users-->
 

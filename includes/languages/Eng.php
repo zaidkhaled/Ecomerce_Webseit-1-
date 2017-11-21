@@ -9,18 +9,20 @@ function lang($phrase){
 //    category page
     
         
-   "VIST"                 => "Vist",
-   "PROFILE"              => "Profile",
-   "LOGIN"                => "Login",
-   "LOGIN/REGISETER"      => "Login/Register",
-   "PERSONAL_INFO"        => "Personal info",
-   "CHANGE_PASSWORD"      => "Change password",
-   "CHANGE"               => "Change",
-   "FOTO_UPLOAD"          => "upload your foto",
+    "VIST"                 => "Vist",
+    "PROFILE"              => "Profile",
+    "LOGIN"                => "Login",
+    "LOGIN/REGISETER"      => "Login/Register",
+    "PERSONAL_INFO"        => "Personal info",
+    "CHANGE_PASSWORD"      => "Change password",
+    "CHANGE"               => "Change",
+    "FOTO_UPLOAD"          => "Upload your foto...",
+    "FOTO_ITEM_UPLOAD"     => "Upload your item foto",
+    "APPROVE_WAIT"         => "Wait to be approved",
+    "MAIN_FOTO"            => "Main foto",
+    "ITEMS_FOTOS"          => "Item fotos",
         
         
-        
-
         
         
     "ITEMS"               => "Items",
@@ -76,6 +78,7 @@ function lang($phrase){
     "SUCCESS"             => "Mission completed",
     "FAILED"              => "Mission failed",
     "LATEST_USER"         => "Latest Registerd Users",
+    "GRUOP"               => "Gruop",
 
     //Category Page 
         
@@ -95,7 +98,10 @@ function lang($phrase){
     "SURE_CATE_NAME_MSG"  => "you will delete this category : ",    
        
     //items page 
-      
+    "BUY"                 => "Buy",    
+    "AGREE"               => "Agree",    
+    "CLOSE"               => "Close",    
+    "EMPTY"               => "Empty",
     "ITEMS_MANGER"        => "Items manger", 
     "ADD_NEW_ITEMS"       => "Add New Item",    
     "ADD_NEW_COMMENT"     => "Add New Comment",

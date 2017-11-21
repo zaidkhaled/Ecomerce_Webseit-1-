@@ -73,8 +73,9 @@ if(isset($_SESSION['user'])){//check if user alrady logined
          
           $fotoAllowedExtension = ["png", "jpg", "jpeg", "gif"];
          
-          $fotoextension = strtolower(end(explode(".", $fotoName)));
+          $value = explode(".", $fotoName);
 
+          $fotoextension = strtolower(end($value));
           // prepare erorr array 
         
           $ErrArray = [];
@@ -139,8 +140,11 @@ if(isset($_SESSION['user'])){//check if user alrady logined
            // insert the values into database if all values are approved 
         
             if (empty($ErrArray)){
+                
                 $foto = rand(0, 100000). "_" . $fotoName;
-                move_uploaded_file($fotoTmp, "uplaodedFiles/userFotos/" . $foto);
+                
+                move_uploaded_file($fotoTmp, "uplaodedFiles/usersFoto/" . $foto);
+                
                 $stmt = $con-> prepare("INSERT INTO users (username, Foto, Email, password, fullName, regStatus, data)
                                                           VALUES
                                                               (:zusername, :zfoto, :zEmail ,:zpassword, :zfullName, 0, now())");
@@ -280,21 +284,8 @@ if(isset($_SESSION['user'])){//check if user alrady logined
               </div>
 
               <div class="row">  
-                <div class="file-field input-field col s8 m5 push-m1 push-s2">
-                  <div class="btn">
-                    <span>File</span>
-                    <input type="file"
-                           type  = "file"
-                           name  = "foto">
-                  </div>
-                  <div class="file-path-wrapper">
-                    <input class = "file-path validate"
-                           placeholder = "<?php echo lang("FOTO_UPLOAD"); ?>">
-                        
-                  </div>
-                </div>  
                 <!--start input "Full Name" field-->
-                <div class="input-field col s8 m5 push-m1 push-s2">
+                <div class="input-field col s8 m6 push-m3 push-s2">
                   <i class="material-icons prefix">account_box</i>
                   <input pattern=".{6,}"
                          title = "pleace fill this field with more then 6 char"
@@ -306,8 +297,28 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                          name= "fName"
                          required>
                   <label for="icon_telephone"><?php echo lang('FULLNAME')?></label>
-                </div>
-                  <!--End input "Full Name" field-->
+                </div><!--End input "Full Name" field-->
+               </div>  
+               <div class="row">
+                  <div class="img-preview col s8 m4 push-m4 push-s2">
+                      <h5 class="center-align"><?php echo lang("FOTO_UPLOAD")?></h5>
+                  </div>     
+               </div>
+                <div class = 'row'>
+                  <div class="file-field input-field col s8 m6 push-m3 push-s2">
+                    <div class="btn">
+                      <span>File</span>
+                      <input type="file"
+                             class = 'user-img'
+                             name  = "foto">
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class = "file-path validate"
+                             placeholder = "<?php echo lang("FOTO_UPLOAD"); ?>">
+                        
+                    </div>
+                  </div>  
+                </div>   
               </div> 
               <div class="row">
                 <button class="btn waves-effect waves-light col s4 m2 push-s4 push-m5  " type="submit" name="register"><?php echo lang("REGISTER")?>

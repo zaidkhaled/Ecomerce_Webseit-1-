@@ -73,6 +73,28 @@ $rongCol:#E30627;
         
             
 }
+
+@mixin trans($elo) {
+    
+    $tim :.5s;
+    $fun:0;
+    @if $elo > $tim{
+        
+        $fun:linear;
+        
+    }@else {
+        
+        $fun:ease-in-out ;
+        
+    }
+   
+        
+    -webkit-transition: all $elo $fun;
+    -moz-transition: all $elo $fun;
+    -o-transition: all $elo $fun;
+    transition: all $elo $fun;
+     
+}
 /* start main rules*/
 
 body{
@@ -85,7 +107,9 @@ h1{
     color: $col5;
     margin: 50px;
 }
-
+.btn{
+    text-transform: none;
+}
 .row{
     margin: 0;
 }
@@ -97,7 +121,54 @@ h1{
         font-size: 36px;
     }
   }
+// start global table ruls
 
+.container-grid{
+    position: relative;
+    height: 350px;
+    overflow: scroll;
+}
+
+.container-grid table{
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+}
+
+.container-grid table .table-row {
+    cursor: pointer;
+      &:active {
+        background-color: $col3;
+    }
+}
+
+thead tr{
+    background-color: $col2;
+    color:$col4;
+    border-radius:8px;
+}
+
+.table tbody td .accent-3{
+    cursor: default;
+     pointer-events: none;
+}
+
+@media #{$medium-and-down} {
+      
+    // styles for medium screens and larger
+      
+    table.responsive-table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    position: relative;
+        
+      }
+}
+
+//end global table ruls
 
 /*start  global form*/
 
@@ -167,8 +238,12 @@ input[type=email].valid:not(.browser-default)
     background-color: $col5;
     &:hover{
      background-color: $col2;
-    }}
+    }
+}
 
+.margin{
+    margin-top: 60px;
+}
 
 //.input-field span{
 //    position: absolute;
@@ -238,27 +313,146 @@ input[type=email].valid:not(.browser-default)
 /*end main rules*/
 
 //start nav
+
 nav {
-    
     background-color: $col1;
+    height: 55px;
+    line-height: 55px;
+}
+.nav-fixed{
+    top: 0;
+}
+#nav-sm{
+    position: fixed;
+    bottom: 0;
+    background-color: $col1;
+    z-index: 88;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+#nav-sm > a{
+    cursor: pointer;
+    
+}
+#sidenav-overlay{
+    z-index: 1;
+}
+.search-nav{
+//    width: 0 !important;
+    margin-left: 15px;
+    display: none;
+   
+    
+}
+input[type="search"]:not(.browser-default){
+    width: 0;
+}
+#notification{
+    margin-left: 20px;
+    position: relative;
+    cursor: pointer;
+}
+#up {
+      position: relative;
+      left: 2px;
+      top :8px;
+      width: 0px;
+      height: 0px;
+      border-style: solid;
+      border-width: 0 10px 20px 10px;
+      border-color: transparent transparent $col1 transparent;
+     
+}
+
+#notification > span{
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    background-color: red;
+    border-radius: 50%;
+    top: 13px;
+    left: 13px;
+    line-height: 18px;
+    font-size: 11px;
+    text-align: center;
+    
+}
+#notification > .events{
+    display: none;
+}
+#notification > .events ul li{
+    float: none !important;
+    color: $col1;
+    
+   
+}
+
+#notification > .events ul{
+    overflow-y: auto;
+    left: -80px;
+    max-height: 340px;
+}
+
+nav .nav-wrapper i {
+    height: 55px;
+}
+
+.search-box-sm{
+    max-height: 250px;
+}
+.search-box-sm, #search-nav-sm, .search-box{
+    background-color: $succCol;
+    display: none;
+    padding: 0 10px !important;
+    overflow-y: auto;
+    
+
+}
+
+#search-nav-sm {
+    width: 100%;
+}
+.side-nav li > a {
+    min-width: 150px;
+}
+#search-nav-sm{
+    padding: 0 10px !important;
+    color: $col1;
+}
+
+
+.search-box-sm a, .search-box a{
+    color: $col1;
+    display: block;
 }
 
 .nav-fixed{
     position: fixed;
     z-index: 2;
 }
-.dropdown-button{
-    width :150px !important;
-}
-nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li>a{
-    color:$col3;
-    font-weight: bold;
-    font-size: 1em;
+.search-box{
+    max-width: 155px;
+    max-height: 300px;
+   
 }
 
+.dropdown-button{
+    width :100px !important;
+}
+
+nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li > a{
+    color:$col3;
+    font-weight: bold;
+    font-size: 14px !important;
+    padding: 0 10px !important;
+    
+}
 .dropdown-content {
     
-    margin-top: 65px;
+    margin-top: 56px;
+    min-width: 130px;
    
 }
 #dropdownSM{
@@ -274,13 +468,31 @@ nav i,nav i.material-icons {
 .dropdown-content li:hover, .dropdown-content li.active, .dropdown-content li.selected{
     background-color: $col4;
 }
-
+.dropdown-content li{
+    display: table;
+   
+}
+.dropdown-content li > a{
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px 3px !important;
+   
+}
 
 @media #{$medium-and-up} {
  .dropdown-button{
     width: 115px;
 }   
 }
+
+  @media #{$small-and-down} {
+    // styles for small screens and down
+      #notification > .events ul{
+       
+        left: 0px;
+}
+      
+  }
 
 //end nav
 
@@ -302,12 +514,18 @@ nav i,nav i.material-icons {
 .nav-wrapper form .close{
     top: 13px !important;
 }
+
+
 //end serch field 
 
 
+
+
+//start home page
+
 .title{
    margin-top: 5vh;
-    margin-bottom: 0;
+   margin-bottom: 0;
 }
 
  .login-title{
@@ -326,12 +544,61 @@ nav i,nav i.material-icons {
     color: $col1;
 }
 
-//.register-form .row ,.login-form .row{
-//    margin-top: 20vh;
-//}
+label {
+    font-size: 0.8rem;
+    color: #ddd !important;
+}
+
+.img-preview{
+    margin-top: 25px;
+    border-radius: 10px;
+    height: 200px;
+    @include bxshadw(0px,0px,0px,0px,rgba(0, 0, 0,.5),1px,0px,12px,8px,rgba(0, 0, 0,.5));
+    display: table;
+    text-align: center;
+    width: 100%;
+}
+
+form .items-foto-preview{
+    padding: 15px;
+}
+.preview-fotos{
+    overflow-y: scroll;
+    display: inline-block;
+}
 
 
+.img-preview h5 {
+    display: table-cell;
+    vertical-align :middle;
+}
 
+form .delete-img{
+    padding: 10px;
+    border-radius:5px;
+    @include trans(.5s);
+    cursor: pointer;
+    &:hover {
+        padding: 18px;
+    }
+}
+
+.progress .determinate{
+    
+    background-color: $col1;
+    
+}
+
+button[type = submit]{
+    margin-bottom: 400px;
+    margin-top: 100px;
+}
+
+.user-foto {
+    position: relative;
+    top: 18px;
+    border-radius: 10px;
+}
 
 //start home page
 
@@ -352,14 +619,39 @@ nav i,nav i.material-icons {
    
     
 }
+.img{
+    height: 100%;
+    width: 15% !important;
+    margin-bottom: 20px;
+}
 
+.img img {
+    @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
+    border-radius: 10%;
+    &:hover ~ a{
+        background-color: $col2;
+    }
+}
+.img a {
+    position: absolute;
+    left: 11px;
+    bottom: 12px;
+    background: rgba(104, 165, 66, 0.65);
+    width: 84%;
+    display: flex;
+    justify-content: center;
+    color: wheat;
+    &:hover {
+        background-color: $col2;
+    }
+}
 .update-btn{
      color: $col2;
      cursor: pointer;
 }
 .info .info-title{
-   color: $col1;
-   font-weight: bold;
+      color: $col1;
+      font-weight: bold;
 }
 .info .user-info{
     color: $col2;
@@ -392,9 +684,9 @@ nav i,nav i.material-icons {
     left: 0;
     bottom: 0;
     width: 25%;
-    height: 91vh;
+    height: 92vh;
     margin-top: -8vh;
-     overflow-y: scroll;   
+    overflow-y: scroll;   
 
 }
 
@@ -432,6 +724,18 @@ nav i,nav i.material-icons {
 .addItemForm .input-field{
     height: 18vh;
 }
+
+.addItemForm .btn-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+//.addItemForm .imgs-preview {
+//    padding: 15px;
+//    margin: 30px 0;
+//} 
+
 .items {
     margin-top:40px;
 }
@@ -444,7 +748,7 @@ nav i,nav i.material-icons {
     
 }
 .user-name{
-    margin-top: 50px;
+    margin-top: 80px;
     margin-bottom: 15px;
 }
 
@@ -507,18 +811,7 @@ nav i,nav i.material-icons {
     border-radius: 31px;
     padding: 10px;
 } 
-.item .foto{
-    display: flex;
-    justify-content: center;
-    height: 54vh;
-    position: relative;
-    top: 38px;
-    width: 100%;
 
-}
-.foto img {
-  width: 100%;
-}
 
 .tags{
     color: aliceblue;
@@ -526,7 +819,13 @@ nav i,nav i.material-icons {
         text-decoration: underline;
     }
 }
-
+.details .by-btn{
+    width: 100%;
+}
+.details .buy-icon {
+    float: left;
+    font-size: 33px;
+}
 .details p { 
     color: $col5;
     font-size: 20px;
@@ -535,20 +834,58 @@ nav i,nav i.material-icons {
 .item-info-card{
 
 }
-.details .info{
-    
-   @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
-   border-radius: 5px;
-   padding: 2px 15px;
-   font-weight: normal;
-}
+
 
 .edit-form .input-field {
     height: 70px;
+    margin: 30px 0;
 }
-.edit-form .input-field:nth-child(2) {
-    margin: 40px 0 ;
+
+.edit-form input[type='submit']{
+    margin: 30px;
 }
+.update-btn{
+    left: -55px;
+    position: relative;
+    top: 11px;
+    margin: 20px 0;
+}
+.details .item-main-img-show{
+    margin: 20px 0;
+   
+}
+.main-foto{
+    max-width: 100%;
+    
+}
+.items_imgs{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.items_imgs img{
+    padding: 8px;
+    border-radius: 10px;
+//    @include trans(.5s);
+    &:hover{
+        padding: 2px;
+        @include bxshadw(-2px,5px,5px,1px,rgba(0, 0, 0,.5),1px,3px,12px,8px,rgba(0, 0, 0,.5));
+    }
+}
+
+#item-details{
+    padding: 0 30px;
+}
+.details .item-main-img-show .main-foto{
+    border-radius: 10px;
+}
+.edit-form .submit-containter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #edit-item-btn{
     margin-top: 20px;
 }
@@ -581,61 +918,6 @@ nav i,nav i.material-icons {
 }
 //End item page
 
-
-
-
-
-
-
-
-// start global table ruls
-
-.container-grid{
-    position: relative;
-    height: 350px;
-    overflow: scroll;
-}
-
-.container-grid table{
-    position: absolute;
-    top: 0;
-    left: 0;
-  
-}
-
-.container-grid table .table-row {
-    cursor: pointer;
-      &:active {
-        background-color: $col3;
-    }
-}
-
-thead tr{
-    background-color: $col2;
-    color:$col4;
-    border-radius:8px;
-}
-
-.table tbody td .accent-3{
-    cursor: default;
-     pointer-events: none;
-}
-
-@media #{$medium-and-down} {
-      
-    // styles for medium screens and larger
-      
-    table.responsive-table{
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    display: block;
-    position: relative;
-        
-      }
-}
-
-//end global table ruls
 
 
 

@@ -28,7 +28,27 @@ $col4:#333;
 $succCol:#6499b5;
 $rongCol:#b10000;
 
-
+@mixin trans($elo) {
+    
+    $tim :.5s;
+    $fun:0;
+    @if $elo > $tim{
+        
+        $fun:linear;
+        
+    }@else {
+        
+        $fun:ease-in-out ;
+        
+    }
+   
+        
+    -webkit-transition: all $elo $fun;
+    -moz-transition: all $elo $fun;
+    -o-transition: all $elo $fun;
+    transition: all $elo $fun;
+     
+}
 
 // End colors
 
@@ -239,12 +259,7 @@ nav i,nav i.material-icons {
   
 }
 
-.container-grid table .table-row {
-    cursor: pointer;
-      &:active {
-        background-color: $col3;
-    }
-}
+
 
 thead tr{
     background-color: $col2;
@@ -434,6 +449,16 @@ right: 10px
 
 // start items page
 
+.imgs-preview img {
+    transition: all .6 cubic-bezier(.79,.14,.15,.86);
+    @include trans(0.5s);
+    cursor: pointer;
+    &:hover{
+        
+       padding: 15px;
+        
+    }
+}
 #comments-table-body .table-row .comment {
 overflow: hidden;
 white-space: nowrap; 

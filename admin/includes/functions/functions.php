@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 ** the main function globalGet to fetch info from database
 */
@@ -33,6 +34,44 @@ function globalGet($column, $table, $where, $and = NULL, $orderfield = NULL, $or
     return $all;
      
 }
+    
+/*
+// function to get special INFO depent on tow values 
+// it will be helpfull to give user ability to do something like ability to login and edit on item his own item
+*/
+
+function getSpecialInfo($table, $what, $what2 = NULL, $var1, $var2 = NULL){
+    
+    global $con;
+        
+    if ($what2 != NULL){
+        
+       $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? AND $what2 = ?");
+        
+       $stmt->execute ([$var1, $var2]);
+     
+    }  else {
+        
+        $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? ");
+        
+        $stmt->execute ([$var1]);
+    }
+    
+       
+    if (checkItem($what, $table, $var1) > 1){
+        
+      $all = $stmt->fetchAll(); 
+        
+    } else {
+        
+      $all= $stmt->fetch();
+        
+    }
+    
+    return $all;
+    
+}
+
 
 /*
 ** Title function, which Echo the page title in case the page 
@@ -188,5 +227,8 @@ function getAll($select, $from, $id = NULL) {
     return $getAll->fetchAll();
 }
 
-
+/*
+// html funtions 
+// functions for special department in the website 
+*/
 
