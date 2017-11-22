@@ -66,6 +66,7 @@ if(isset($_SESSION['username'])){
              <th>#ID</th>
              <th><?php echo lang("ITEM NAME" )?></th>
              <th><?php echo lang("FOTOS")?></th>
+             <th><?php echo lang("NUMS_ITEMS")?></th>
              <th><?php echo lang("COMT")?></th>
              <th><?php echo lang("DESCRIPTION")?></th>
              <th><?php echo lang("MADE_IN")?></th>

@@ -398,13 +398,15 @@ $(function () {
         
         onload("#comments-table-body");
 
-    } 
-    else if (location.href.indexOf("statistics") > 1) { // if Current page is Items page then  
+    }else if (location.href.indexOf("statistics") > 1) { // if Current page is Items page then  
         
         onload("#statistics-table-body");
 
+    }else if (location.href.indexOf("debit_deposit") > 1) { // if Current page is Items page then  
+        
+        onload("#depit-deposit-table-body");
+
     }
-    
     
     
  //         The following functoin to bring old data to edit form

@@ -60,8 +60,7 @@
                 <!--  the  where errors shuld be -->
                 <div id="errors"> 
                 </div> 
-                   
-               </div>
+              </div>
                
         
                 <p class = "divider"></p>
@@ -88,16 +87,43 @@
        </div>
            
        <div class="col s12 m9">
+           
          <!--  show all items and add item from -->
- 
+         
          <h1 class="center-align user-name col s12"><?php echo $pageTitle;?></h1>
+         <div class ="row" id="current-balance"> 
+           <a title="<?php echo lang("CURRENT_BALANCE"); ?>" 
+              class="btn-floating btn-large waves-effect waves-light deep-purple-text red darken-2 modal-trigger"
+              href="#add-money">
+              <span id="current-balance"><?php echo  ifEmpty($info["Amount"], "$0"); ?></span>
+           </a> 
+           <div id="add-money" class="modal modal-fixed-footer">
+             <form class = "ajax-form" data-do = "add_money" data-place = "#current-balance" data-id = "<?php echo $_SESSION['ID']; ?>">
+               <div class="modal-content center-align">
+                 <h4><?php echo lang("ADD_BALANCE"); ?></h4>  
+                 <div class="input-field col m6 s8 push-s2 push-m3">    
+                   <input type="number"
+                          value = "1" 
+                          min="1" 
+                          max="100"
+                          required>
+                   <label for="icon_prefix"><?php echo lang("HOW_MANY")?></label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <input type="submit"  class="modal-action  waves-effect waves-green btn-flat "  value = "<?php echo lang('AGREE');?>">
+                  <a class="modal-action modal-close waves-effect waves-green btn-flat "><?php echo lang("CLOSE"); ?></a>
+                </div>
+              </form>    
+           </div> 
+         </div>
          <div id="rst"></div>
          <div class="row">
            <!-- start personal img -->     
            <div class="img left col push-m1" id = "user-foto-place">
               <?php refresh_foto($info['Foto']) ?>
-            </div>  <!-- end personal img -->    
-           <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
+            </div>  <!-- end personal img -->   
+            <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
          </div> 
          
         <form class = "foto-uplaod modal ajax-form" 
@@ -247,7 +273,6 @@
                                  type="file"
                                  name= "foto"
                                  class = "items-fotos"
-                                
                                  multiple
                                  onchange="$(this).attr('len',this.files.length);"
                                  maxlength = "4"

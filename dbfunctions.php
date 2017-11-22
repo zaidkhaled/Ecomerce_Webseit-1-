@@ -560,27 +560,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                   </div>       
                 </form>
              </div>
-<!--
-              <div class="col m6 s12 add-form-foto">
-                  
-                <img class= "responsive-img" src="uplaodedFiles/userFotos/foto1.jpg">
-                
-                <div class="file-field input-field ">
-                   <div class="btn">
-                     <span>File</span>
-                     <input type="hidden" id="user-id" value="<?php //echo $_SESSION["ID"]; ?>">         
-                     <input id = "foto_file"
-                            type="file"
-                            name= "foto"
-                            required>
-                     </div>
-                     <div class="file-path-wrapper">
-                       <input class = "file-path validate"
-                             placeholder = "<?php echo lang("FOTO_ITEM_UPLOAD"); ?>">
-                     </div>
-                  </div>    
-            </div>
--->
+
 
 
    <?php 
@@ -657,7 +637,11 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         // sent Modified data to item page back 
         
         
-    
+    } elseif ($do == "buy_item"){
+        echo "yses";
+        
+    } elseif ($do == "add_money"){
+        echo "moneymoneymoneymoney";  
     
     } elseif ($do == "add_comment") {
         

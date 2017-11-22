@@ -58,6 +58,7 @@ if(isset($_SESSION['username'])){
               <th id="in"><?php echo lang("FIRST_NAME" )?></th>
               <th>foto</th>
               <th><?php echo lang("EMAIL")?></th>
+              <th><?php echo lang("AMOUNT")?></th>
               <th><?php echo lang("FULLNAME")?></th>
               <th><?php echo lang("ITEMS_NUM")?></th>
               <th><?php echo lang("COMMENT_TIMES" )?></th>

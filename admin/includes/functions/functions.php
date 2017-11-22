@@ -204,6 +204,23 @@ function getLatest($select, $from, $order, $limit) {
 */
 
 
+
+
+/*                 
+// faction to give alternative, if value is empty.
+*/
+
+function ifEmpty($value, $msg) {
+    
+    $feedback = empty($value) || !isset($value) ? $msg : $value;
+    
+    return $feedback;
+}
+
+
+
+
+
 function getAll($select, $from, $id = NULL) {
     
     global $con ;

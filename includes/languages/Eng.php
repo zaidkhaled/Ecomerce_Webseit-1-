@@ -21,6 +21,7 @@ function lang($phrase){
     "APPROVE_WAIT"         => "Wait to be approved",
     "MAIN_FOTO"            => "Main foto",
     "ITEMS_FOTOS"          => "Item fotos",
+    "ADD_BALANCE"          => "Add balance to your account",
         
         
         
@@ -79,6 +80,7 @@ function lang($phrase){
     "FAILED"              => "Mission failed",
     "LATEST_USER"         => "Latest Registerd Users",
     "GRUOP"               => "Gruop",
+    "CURRENT_BALANCE"     => "Current balance",
 
     //Category Page 
         
@@ -102,6 +104,7 @@ function lang($phrase){
     "AGREE"               => "Agree",    
     "CLOSE"               => "Close",    
     "EMPTY"               => "Empty",
+    "HOW_MANY"            => "How many",
     "ITEMS_MANGER"        => "Items manger", 
     "ADD_NEW_ITEMS"       => "Add New Item",    
     "ADD_NEW_COMMENT"     => "Add New Comment",
@@ -139,6 +142,7 @@ function lang($phrase){
     "ITEM_COMMENT_MENGER" => "Item comment manger",
     "CHOSE_ITEM"          => "Chose Item",
     "DELETE_ITEM_MSG"     => "Delete this item",
+    "NUMS_ITEM"           => "Nums_item",
     
     //comments Page  
      

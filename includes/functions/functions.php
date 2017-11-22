@@ -473,6 +473,7 @@ function ifEmpty($value, $msg) {
           <tr style="">
               <th><?php echo  lang("ITEM_NAME1"); ?></th>
               <th><?php echo  lang("PRICE"); ?></th>
+              <th><?php echo  lang("NUMS_ITEM"); ?></th>
               <th><?php echo  lang("STATUS"); ?></th>
               <th><?php echo  lang("MADE_IN"); ?> </th>
               <th><?php echo  lang("TAG_SHOW"); ?></th>
@@ -484,6 +485,7 @@ function ifEmpty($value, $msg) {
           <tr>
             <td><?php echo ifEmpty($item_info["Name"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Price"], lang("EMPTY")) ?></td>
+            <td><?php echo ifEmpty($item_info["nums_item"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Status"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Made_In"], lang("EMPTY")) ?></td>  
             <td>

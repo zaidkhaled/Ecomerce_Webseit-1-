@@ -912,6 +912,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                <?php  $img = empty($row['Foto']) ? "foto1.JPG" : $row['Foto']?>    
                <td class = 'foto'><img class="materialboxed" height="50px" width="50px" onclick="$('.materialboxed').materialbox();" src="../uplaodedFiles/usersFoto/<?php echo $img; ?>"></td>
                <td class = 'Email search-in'><?php echo $row['Email']?></td>
+               <td class = 'Email search-in'><?php echo ifEmpty($row['amount'], "$0") ?></td>
                <td class = 'fullName search-in'><?php echo $row['fullName']?></td>
                <td>
                   <a href="items.php?required=Member&ID=<?php echo $row['userID'];?>">
@@ -1374,6 +1375,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
               ?>     
              <td class = 'itemFoto'><?php echo $img; ?></td>
+             <td><?php echo checkItem("Item_ID", "comments", $row['nums_item']);?></td>     
              <td><?php echo checkItem("Item_ID", "comments", $row['Item_ID']);?></td>     
              <td class = 'Descrp search-in'><?php echo $row['Description']?></td>
              <td class = 'MadeIn search-in'><?php echo $row['Made_In']?></td>
@@ -1646,7 +1648,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                      users 
                                  ON 
                                      users.userID = buy_operations.Buyer_ID
-                                   
                                 INNER JOIN
                                      users u3
                                  ON 
@@ -1659,7 +1660,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                      items u2
                                  ON 
                                      u2.Item_ID = buy_operations.Item_ID
-                                     $query ORDER BY Item_ID DESC");
+                                     $query ORDER BY ID DESC");
         
         
         $stmt ->execute();
@@ -1679,9 +1680,50 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           <?php  } 
 
 
+    }elseif (preg_match('/debit_deposit/', $fromPage)){
+        
+        // check if there is special query 
+        $data_required = !empty($_post['ajxdata_required']) ?  $_post['ajxdata_required'] : 'no_required'; 
+        if ($data_required != "no_required"){
+            
+        $query ="WHERE items.$data_required"; 
+            
+        } else {
+            
+            $query =" "; 
+            
+        }
+
+         // select all items and make a two new column for category name and user Name, who posted the item 
+        
+         $stmt = $con->prepare("SELECT 
+                                    debit_deposit_operations.*,
+                                    users.username AS User_Name
+                                FROM 
+                                    debit_deposit_operations
+                                INNER JOIN 
+                                    users
+                                ON 
+                                users.userID = debit_deposit_operations.userID
+                                     $query ORDER BY ID DESC");
+        
+        
+        $stmt ->execute();
+        
+        $rows =$stmt->fetchAll(); 
+        
+         foreach ($rows as $row){ 
+?>    
+             <tr class="table-row"> 
+               <td class = 'commenID'><?php echo $row['ID']?></td>
+               <td class = 'UserName search-in'><?php echo $row['User_Name']?> </td>
+               <td class = 'itemName search-in'><?php echo $row['Currency_Type']?></td>     
+               <td class = 'UserName search-in'><?php echo $row['Amount_Deposited']?> </td>
+               <td class = 'comment search-in'><?php echo $row['Withdrawal']?> </td>
+               <td class = 'itemName search-in'><?php echo $row['Data']?></td>
+             </tr>
+          <?php  }
     }
- 
-    
 
     
 }//end cindidtion Request

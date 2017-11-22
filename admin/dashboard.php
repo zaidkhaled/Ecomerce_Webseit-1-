@@ -24,19 +24,17 @@ $pageTitle = "Dashbord";
         <div class = "row"> 
             <h1 ><?php echo lang("DASHBOARD")?></h1>
         </div>
-        
         <div class="row">
             <div class="col s6  m3 box">
-                
                 <div class="stat">
-                    <p>Total Members</p>
+                    <p><?php echo lang("TOTAL_MEMBERS"); ?></p>
                     <span><a href="members.php"><?php echo countItems("userID","users")?></a></span><!--count users-->
                 </div>
             </div>
             
             <div class="col s6  m3 box">
                 <div class="stat">
-                    <p>Pending Members</p>
+                    <p><?php echo lang( "PENDING_MEMBERS"); ?></p>
                     <!--count unactivate users-->
                     <span><a href="members.php?page=pending"><?php echo checkItem("regStatus", "users", 0)?></a></span>
                 </div>
@@ -44,19 +42,46 @@ $pageTitle = "Dashbord";
         
             <div class="col s6  m3 box">
                 <div class="stat ">
-                    <p>Total Items</p>
+                    <p><?php echo lang("TOTAL_ITEMS"); ?></p>
                     <span><a href="mange.php"><?php echo countItems("item_ID","items")?></a></span>
                 </div>
             </div>
        
             <div class="col s6  m3 box">
                 <div class="stat ">
+                    <p><?php echo lang( "TOTAL_COMMENTS"); ?></p>
+                    <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
+                </div>
+            </div>
+        </div> 
+         
+        <div class="row">
+            <div class="col s6  m3 box">
+                <div class="stat ">
+                    <p><?php echo lang( "BUY_OPERATIONS"); ?></p>
+                    <span><a href="statistics.php"><?php echo countItems("ID","buy_operations")?></a></span>
+                </div>
+            </div>
+            <div class="col s6  m3 box">
+                <div class="stat ">
+                    <p><?php echo lang( "DEPIT_DEPOSIT"); ?></p>
+                    <span><a href="debit_deposit.php"><?php echo countItems("ID","debit_deposit_operations")?></a></span>
+                </div>
+            </div>
+            <div class="col s6  m3 box">
+                <div class="stat ">
+                    <p><?php echo lang( "TOTAL_COMMENTS"); ?></p>
+                    <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
+                </div>
+            </div>
+            <div class="col s6  m3 box">
+                <div class="stat ">
                     <p>Total comments</p>
                     <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
                 </div>
             </div>
-            
         </div> 
+         
     </div>
 
 

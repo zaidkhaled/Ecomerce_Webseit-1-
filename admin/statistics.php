@@ -39,24 +39,24 @@ if(isset($_SESSION['username'])){
         <div class= "">
           <!--start table users-->
           <table  class="bordered responsive-table centered " >
-          <!--start Table header-->
-          <thead>
-            <tr>
-              <th>#ID</th>
-              <th><?php echo lang("BUYER")?></th>
-              <th><?php echo lang("SELLER")?></th>
-              <th><?php echo lang("ITEMS_NAME")?></th>
-              <th><?php echo lang("ITEMS_PRICE")?></th>
-              <th><?php echo lang( "TIME_OF_PURCHASE")?></th>
-            </tr>
-          </thead> <!--End Table header-->
-        <tbody id="statistics-table-body">
-        <!--start table body-->    
-        <!--table content will be sended by ajax from dbfunctions -->
-        </tbody><!-- End table Body-->
-      </table>
-    </div>
-</div>  
+            <!--start Table header-->
+            <thead>
+              <tr>
+                <th>#ID</th>
+                <th><?php echo lang("BUYER")?></th>
+                <th><?php echo lang("SELLER")?></th>
+                <th><?php echo lang("ITEMS_NAME")?></th>
+                <th><?php echo lang("ITEMS_PRICE")?></th>
+                <th><?php echo lang( "TIME_OF_PURCHASE")?></th>
+              </tr>
+            </thead> <!--End Table header-->
+           <tbody id="statistics-table-body">
+           <!--start table body-->    
+           <!--table content will be sended by ajax from dbfunctions -->
+           </tbody><!-- End table Body-->
+         </table>
+       </div>
+     </div>  
 
      <!--End table users-->
 

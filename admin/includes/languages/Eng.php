@@ -57,6 +57,14 @@ function lang($phrase){
     "FAILED"              => "Mission failed",
     "LATEST_USER"         => "Latest Registerd Users",
     "GRUOP"               => "Gruop",
+    "TOTAL_MEMBERS"       => "Total Members",
+    "PENDING_MEMBERS"     => "Pending Members",
+    "TOTAL_ITEMS"         => "Total Items",
+    "TOTAL_COMMENTS"      => "Total comments",
+    "BUY_OPERATIONS"      => "Buy operations",
+
+
+
 
     //Category Page 
         
@@ -74,7 +82,8 @@ function lang($phrase){
     "ADVERTISING"         => "Advertising",                  
     "ALLOW"               => "Allow",    
     "NOT_ALLOW"           => "prevent",    
-    "SURE_CATE_NAME_MSG"  => "you will delete this category : ",    
+    "SURE_CATE_NAME_MSG"  => "you will delete this category : ", 
+        
     //statistics
         
      "BUYER"              => "Buyer_Name",    
@@ -83,6 +92,16 @@ function lang($phrase){
      "TIME_OF_PURCHASE"   => "Time of purchase",    
      "SALES_STATISTICS"   => "Sales statistics",    
          
+    //depit deposit page
+        
+     "DEPIT_DEPOSIT"      => "Depit - Deposit",
+     "AMOUNT"             => "Amount",
+     "TIME_OF_OPERATION"  => "Time of operation",
+     "AMUONT_DEPOSITED"   => "Amount deposited",
+     "WITHDRAWAL"         => "Withdrawal",
+     "CURRENCY_TYPE"      => "Currency_Type",   
+        
+        
         
     //items page 
       
@@ -121,6 +140,7 @@ function lang($phrase){
     "LATEST_ITEMS"        => "Latest uploaded items",
     "ITEM_COMMENT_MENGER" => "Item comment manger",
     "CHOSE_ITEM"          => "Chose Item",
+    "NUMS_ITEMS"          => "Nums_item",
     
     //comments Page  
      

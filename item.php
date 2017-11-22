@@ -21,9 +21,15 @@ include $tpl."nav.php";
   <?php
         
         $userID = isset($_SESSION['ID']) ? $_SESSION['ID'] : "0";   
-      
+       
+        // check_info is variable to check out, if current user is user who post this item
+       
         $check_info = getSpecialInfo("items", "Item_ID", "Member_ID", $item_ID, $userID);
+       
+        // $row is variable to fetch item info 
+       
         $row = getSpecialInfo("items", "Item_ID", "", $item_ID);
+       
         // check if userID und itemID in same row in database in "items table", if yes give user the ability to edit his    own item
         
         if (!empty($check_info)){
@@ -38,23 +44,39 @@ include $tpl."nav.php";
        ?>
       
       <div class="details col s12 margin"  ><!--fetch item info-->
+        <div id = "buy-rst"> </div>  
         <div class="row">
           <div class = "col m4 s8 push-m4 push-s2">
             <!-- Modal Trigger -->
-            <a class="waves-effect waves-light btn modal-trigger by-btn" href="#modal1"><?php echo lang("BUY"); ?>
+            <a class="waves-effect waves-light btn modal-trigger buy-btn" href="#buy-form-modal" ><?php echo lang("BUY"); ?>
               <i class="material-icons buy-icon">add_shopping_cart</i>
             </a>
 
              <!-- Modal Structure -->
-             <div id="modal1" class="modal">
-               <div class="modal-content">
-                 <h4>Modal Header</h4>
-                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-               </div>
-               <div class="modal-footer">
-                 <a class="modal-action modal-close waves-effect waves-green btn-flat"><?php echo lang("AGREE"); ?></a>
-                 <a class="modal-action modal-close waves-effect waves-green btn-flat"><?php echo lang("CLOSE"); ?></a>
-               </div>
+             <div id="buy-form-modal" class="modal">
+               <form class = "ajax-form buy-form" data-do = "buy_item"   data-place = "#buy-rst" data-id ="<?php echo $item_ID; ?>">
+                 <div class="modal-content center-align">
+                   <h4><?php echo lang("BUY") . " : " . $pageTitle; ?></h4>
+                   <h4 ><?php echo $row["Price"]; ?></h4>
+                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip   ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu   fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt   mollit anim id est laborum</p>
+                   <div class="row"> 
+                     <div class="input-field col m6 s10 push-m3 push-s1">
+                       <input type="number" 
+                              class = "col s6 push-s3" 
+                              value = "1" 
+                              min="1" 
+                              max="<?php echo ifEmpty($row["nums_item"], '1'); ?>"
+                             required>
+                       <label for="icon_prefix"><?php echo lang("HOW_MANY")?></label>
+                     </div>   
+                   </div>   
+                 </div>
+
+                 <div class="modal-footer">
+                   <input type= "submit" class="modal-action  waves-effect waves-green btn-flat"  value = "<?php echo lang("AGREE"); ?>">
+                   <a class="modal-action modal-close waves-effect waves-green btn-flat"><?php echo lang("CLOSE"); ?></a>
+                 </div>
+               </form>  
              </div>
            </div>    
         </div>   
