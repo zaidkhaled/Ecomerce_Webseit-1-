@@ -2,21 +2,39 @@
  ob_start();
  session_start();
 
- $pageTitle = $_SESSION['user'];
+ if(isset($_GET["Member-name"], $_GET["id"])){
+ $member_name = $_GET["Member-name"];
+ $member_ID = $_GET["id"];
+
+
+ $pageTitle =  $member_name;
 
  include "init.php"; 
  include $tpl."header.php";
  include $tpl."nav.php";
 
+ $login_status =  isset($_SESSION['ID'] ,$_SESSION['user']) ? $_SESSION['ID'] : "0";
 
- if(isset($_SESSION['user'])){ //check if user alrady logined ?>
+ $container_width = $member_ID ==  $login_status ? "col s12 m9" :"";
+
+ $info =   globalGet("*", "users", " WHERE userID = " . $member_ID, "", "userID", "",$limit = 1);
+?>
+<div class="row">
+<?php
+
+ if($member_ID ==  $login_status ){ //check if this profile belong to current user if yes set  $profile_user
+     
+    $profile_user = "";
+ }
   
-       <div class="row">
+    if(isset($profile_user)){
+?>
+  
+       
          <div class="col m3 left hide-on-med-and-down"> <!-- Note that "m4 l3" was added -->
            <div class="info-item-clm ">
             <div class="container">
                <div class="info">
-                 <?php $info =   globalGet("*", "users", " WHERE userID = " . $_SESSION['ID'] , "", "userID", "",$limit = 1); ?>
                  <h4 class="info-title"><?php echo lang("PERSONAL_INFO");?></h4>
                  <!--Edit btn for prsonal info -->
                  <div class="row">
@@ -86,16 +104,28 @@
          </div>
        </div>
            
-       <div class="col s12 m9">
+           
+           
+         <?php }  ?>
+           
+           
+           
+       <div class="<?php echo $container_width; ?>">
            
          <!--  show all items and add item from -->
          
          <h1 class="center-align user-name col s12"><?php echo $pageTitle;?></h1>
-         <div class ="row" id="current-balance"> 
+    <?php
+      if(isset($profile_user)){
+//          
+//      }
+    ?>      
+         <div class ="row" > 
            <a title="<?php echo lang("CURRENT_BALANCE"); ?>" 
-              class="btn-floating btn-large waves-effect waves-light deep-purple-text red darken-2 modal-trigger"
+              class="btn-floating btn-large waves-effect waves-light modal-trigger"
+              id = "Amount-btn"
               href="#add-money">
-              <span id="current-balance"><?php echo  ifEmpty($info["Amount"], "$0"); ?></span>
+              <span id="current-balance"><?php echo  "$" .ifEmpty($info["Amount"], "0"); ?></span>
            </a> 
            <div id="add-money" class="modal modal-fixed-footer">
              <form class = "ajax-form" data-do = "add_money" data-place = "#current-balance" data-id = "<?php echo $_SESSION['ID']; ?>">
@@ -106,6 +136,7 @@
                           value = "1" 
                           min="1" 
                           max="100"
+                          id = "added-money"
                           required>
                    <label for="icon_prefix"><?php echo lang("HOW_MANY")?></label>
                   </div>
@@ -117,15 +148,34 @@
               </form>    
            </div> 
          </div>
-         <div id="rst"></div>
+        
+           
+        <?php } ?>
+           
          <div class="row">
            <!-- start personal img -->     
+            <div id="rst"></div> 
            <div class="img left col push-m1" id = "user-foto-place">
-              <?php refresh_foto($info['Foto']) ?>
-            </div>  <!-- end personal img -->   
+             
+             <?php 
+              if(isset($profile_user)){
+                  
+                  refresh_foto($info['Foto']);
+                  
+              } else {
+                 $img = !empty($foto)? $foto :  "foto1.jpg" ; ?> 
+               
+                 <img class= "responsive-img" src="uplaodedFiles/usersFoto/<?php echo $img ?>">
+            <?php  } ?>  
+           </div>  <!-- end personal img -->   
+             
+    <?php    if(isset($profile_user)){ ?>      
+             
             <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
+           <?php } ?>    
          </div> 
-         
+         <?php
+        if(isset($profile_user)){  ?> 
         <form class = "foto-uplaod modal ajax-form" 
               enctype="multipart/form-data" 
               id="change-foto" 
@@ -318,17 +368,20 @@
                 <input type="submit" id="add-new-item-btn" class="waves-effect waves-light btn right " value ="<?php echo lang("ADD_NEW_ITEMS")?>">
                </div>
            </form><!--End form-->  
+           <?php } ?>
 
 
         <div id = "profile-items">  
            <!--profile_Items to print the user items in profile page-->
-          <?php  profile_Items(); ?>
+          <?php  profile_Items($member_ID); ?>
         </div>  
       </div><!--end items-->
     </div> <!--end the main row-->
              
 
- <?php } else {
+ <?php 
+                                                                
+    } else {
      
       header("Location:logReg.php");// redirect to index.php.
  }

@@ -912,7 +912,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                <?php  $img = empty($row['Foto']) ? "foto1.JPG" : $row['Foto']?>    
                <td class = 'foto'><img class="materialboxed" height="50px" width="50px" onclick="$('.materialboxed').materialbox();" src="../uplaodedFiles/usersFoto/<?php echo $img; ?>"></td>
                <td class = 'Email search-in'><?php echo $row['Email']?></td>
-               <td class = 'Email search-in'><?php echo ifEmpty($row['amount'], "$0") ?></td>
+               <td class = 'Email search-in'><?php echo ifEmpty($row['Amount'], "$0") ?></td>
                <td class = 'fullName search-in'><?php echo $row['fullName']?></td>
                <td>
                   <a href="items.php?required=Member&ID=<?php echo $row['userID'];?>">
@@ -1674,7 +1674,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                <td class = 'UserName search-in'><?php echo $row['Buyer_Name']?> </td>
                <td class = 'comment search-in'><?php echo $row['Seller_Name']?> </td>
                <td class = 'itemName search-in'><?php echo $row['Bought_Item']?></td>
-               <td class = 'itemName search-in'>$<?php echo $row['Total_Amount']?></td>
+               <td class = 'itemName search-in'>$<?php echo $row['Total_Price']?></td>
                <td class = 'writtenIn search-in'><?php echo $row['Time_Of_Purchase']?></td>
              </tr>
           <?php  } 

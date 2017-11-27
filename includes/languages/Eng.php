@@ -22,6 +22,8 @@ function lang($phrase){
     "MAIN_FOTO"            => "Main foto",
     "ITEMS_FOTOS"          => "Item fotos",
     "ADD_BALANCE"          => "Add balance to your account",
+    "COMMENT"              => "Comment",
+    "COMMENT_ON"           => "commented on",
         
         
         
@@ -137,18 +139,24 @@ function lang($phrase){
     "CATEGORY"            => "category",  
     "MEMBER_NAME"         => "Mamber Name",  
     "STATUS"              => "Status",  
+    "OWNER"               => "Owner",  
     "ADD_DATA"            => "Add_data",
     "LATEST_ITEMS"        => "Latest uploaded items",
     "ITEM_COMMENT_MENGER" => "Item comment manger",
     "CHOSE_ITEM"          => "Chose Item",
     "DELETE_ITEM_MSG"     => "Delete this item",
     "NUMS_ITEM"           => "Nums_item",
+    "ADD_COMMENT"         => "Add comment",
+    "UPDATE_COMMENT"      => "Update comment",
+    "SOLD"                => "Sold",
+    "BOUGHT YOUR"         => "bought your",
+    "NO_RESULT_FUOND"     => "No result found",
     
     //comments Page  
      
     "ITEM_NAME"           => "Item_name",
     "WRITTEN_IN"          => "Written in",
-    "SURE_MSG_COMMENTS"   => "Delete comments from : ",
+    "NO_NOTIF"            => "No notification found ",
     
     ];
         

@@ -14,8 +14,135 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
 
     // show this fields, when user want to update his info (profile page)
     
-    
-    if ($do == "show_inputs_field"){ ?>
+    if ($do == "check_notif"){
+        
+        $id = isset($_SESSION['ID'])? $_SESSION['ID'] : "0";
+        
+        $stmt1 = $con->prepare("SELECT 
+                                     nontifications.*,
+                                     users.username AS Actor_Name,
+                                     users.Foto AS Actor_foto,
+                                     items.Name AS Item_Name,
+                                     items.Item_ID AS Item_ID
+                                 FROM
+                                     nontifications
+                                 INNER JOIN
+                                     users 
+                                 ON 
+                                     users.userID = nontifications.Actor_ID
+                                 INNER JOIN 
+                                     items
+                                 ON 
+                                     items.Item_ID = nontifications.source_id
+                                    WHERE user_ID = $id ORDER BY ID DESC;");
+     
+       
+        $stmt1->execute();
+        
+        $rows = $stmt1->fetchAll();
+
+        $output_all = "";
+        
+        if(!empty($rows)) {
+ 
+                foreach($rows as $row){
+                    
+                    if ($row["activity_type"] === "comment"){
+                       $activite_type = lang("COMMENT");
+                       $varb = lang("COMMENT_ON");                       
+                           
+                    } elseif ($row["activity_type"] === "Sold") {      
+                       $activite_type = lang("SOLD");
+                       $varb = lang("BOUGHT YOUR");
+
+                    }
+                    $src = isset($row["Actor_foto"])? $row["Actor_foto"] : "foto1.jpg";
+                    $output_all .= "
+                                     <li class='collection-item avatar'>
+                                       <a class = 'notif_link' href='item.php?name=". str_replace(' ', '-', $row['Item_Name']) . "&ID=" . $row['Item_ID'] . "'>
+                                         <img src='uplaodedFiles/usersFoto/" . $src . "' alt='' class='circle'>
+                                         <span class='title'>". $activite_type . "</span>
+                                         <p>" . $row["Actor_Name"] ." ". $varb . "<br>"
+                                            .$row["Item_Name"] ."
+                                         </p>
+                                       <a>
+                                      </li>
+                                      ";
+                    }
+
+
+        
+          
+          
+          
+      }else {
+            
+          $output_all = "<li class = 'collection-item '><span class='title'>". lang("NO_NOTIF") . "</span></li>"; 
+            
+      }
+        
+            
+      $stmt2 = checkItem("user_ID", "nontifications", $id, "AND is_seen = 0 ORDER BY ID DESC");
+        
+
+      $count_unseen_notif = $stmt2;
+        
+
+
+        $data =[
+            "notif"        => $output_all,
+            "unseen_notif" => $count_unseen_notif
+            ];
+        
+       echo  json_encode($data);
+        
+        
+//       
+     
+    }elseif ($do == "seen"){ 
+        
+        
+        $stmt = $con-> prepare("UPDATE nontifications SET is_seen = 1 WHERE user_ID= ?");
+                
+        $stmt-> execute([$_SESSION['ID']]);
+        
+        
+        
+    }elseif ($do == "search"){ 
+        
+        $keywrod = $_POST["ajxSearchInput"];
+        
+        $stmt = $con->prepare("(SELECT Name,Item_ID, 'item' as type FROM items WHERE Name LIKE '%" . $keywrod . "%')
+                               UNION 
+                               (SELECT username,userID, 'user' as type FROM users WHERE username LIKE '%" . $keywrod . "%')");
+        
+        $stmt->execute();
+        
+        $rows = $stmt->fetchAll();
+        
+        if (!empty($rows)){
+            
+            foreach($rows as $row){
+
+                if($row["type"] == "user"){
+
+                   $url = "profile.php?Member-name=" . $row['Name'] . "&id=" . $row['Item_ID'];
+
+                } elseif ($row["type"] == "item") {
+
+                   $url = "item.php?name=" . $row['Name'] . "&ID=" . $row['Item_ID']; 
+                }
+
+                echo "<a href = '$url'>" . $row['Name'] . "</a>";
+            }
+            
+        } else {
+            echo "<a>" . lang('NO_RESULT_FUOND') . "</a>";
+        }
+        
+        
+        
+    }elseif ($do == "show_inputs_field"){ ?>
                           
           <?php $info =  GetSpecialInfo("users","userID","",  $_SESSION['ID'], ""); ?>
            <form class="ajax-form" data-do = "update-user-info" data-place = "#user-info" >
@@ -289,7 +416,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                 
                 $stmt-> execute([$foto, $_SESSION['ID']]);
               
-                $new_foto = getSpecialInfo("users", "userID", "",$_SESSION["ID"] , "")["Foto"];
+                $new_foto = getSpecialInfoOnce("users", "userID", "",$_SESSION["ID"] , "")["Foto"];
               
                 refresh_foto($new_foto);
           }
@@ -470,7 +597,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
            $item_ID = $_POST['ajxID']; 
         
-           $item_info =  getSpecialInfo("items", "Item_ID", "Member_ID", $item_ID, $_SESSION["ID"]); 
+           $item_info =  getSpecialInfoOnce("items", "Item_ID", "Member_ID", $item_ID, $_SESSION["ID"]); 
 ?>
            <div class="details ">
               <form class=" edit-form ajax-form" data-do = "edit_item" data-place ="#item-details" data-id = <?php echo $item_info["Item_ID"]; ?> >
@@ -638,16 +765,122 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
         
     } elseif ($do == "buy_item"){
-        echo "yses";
+        
+
+        $item_id   = $_POST["ajxID"];
+        
+        $user_id   = $_SESSION["ID"];
+        
+        $owner_id  = $_POST["ajxOwnerId"];
+        
+        $price     =  filter_var($_POST["ajxItemPrice"], FILTER_SANITIZE_NUMBER_INT);
+        
+        $nums_item =  $_POST["ajxNumsItem"];
+    
+        if($nums_item > "0") {
+            
+            $total_price = $price   * $nums_item ;
+            
+            if (getSpecialInfoOnce("users", "userID", "", $user_id, "", "")['Amount'] >= $total_price){
+                
+                 // Reduce the current user's Amount
+                
+                 $stmt= $con->prepare("UPDATE users SET Amount = Amount - ? WHERE userID = ?");
+        
+                 $stmt-> execute([$price , $user_id]);
+                
+                
+                 // Send money to the owner
+                
+                 $stmt2= $con->prepare("UPDATE items SET nums_item = nums_item - ? WHERE Item_ID = ?");
+        
+                 $stmt2-> execute([$total_price, $item_id]);
+                
+                 // Send money to the owner
+                
+                 $stmt3= $con->prepare("UPDATE users SET Amount = Amount + ? WHERE userID = ?");
+        
+                 $stmt3-> execute([$total_price, $owner_id]);
+                
+                
+
+                
+                
+                 $stmt4= $con->prepare("INSERT INTO 
+                                              buy_operations
+                                                (`Seller_ID`, `Buyer_ID`, `nums_item`, `Item_ID`, Total_Amount, `Total_Price`, `Time_Of_Purchase`)
+                                              VALUES 
+                                                (:zSeller_ID, :zBuyer_ID, :znums_item, :zItem_ID, :zTotal_Amount, :zTotal_Price,  now())");
+                
+                 $stmt4->execute(["zSeller_ID"         => $owner_id,
+                                   "zBuyer_ID"         => $user_id, 
+                                   "znums_item"        => $nums_item,
+                                   "zTotal_Price"      => $total_price,
+                                   "zItem_ID"          => $item_id,
+                                   "zTotal_Amount"     => $price 
+                                 ]); 
+           
+
+                $stmt5= $con->prepare("INSERT INTO 
+                                              nontifications
+                                                (`user_ID`, `Actor_ID`, `source_id`, `activity_type`, `date`, `is_seen`)
+                                              VALUES 
+                                                (:zuser_ID, :zActor_ID, :zsource_id, :zactivity_type, now(), 0)");
+                
+                 $stmt5->execute(["zuser_ID"         => $owner_id,
+                                   "zActor_ID"       => $user_id, 
+                                   "zsource_id"      => $item_id,
+                                   "zactivity_type"  => "Sold"
+                                 ]);  
+                echo 'yes';
+            } else {
+                echo getSpecialInfoOnce("users", "userID", "", $user_id, "", "")['Amount'] . "<br>";
+                echo "You haven't enough money in your account";
+                
+            }
+            
+        } else {
+            
+            echo "this item is SOLD";
+            
+        }
+        
         
     } elseif ($do == "add_money"){
-        echo "moneymoneymoneymoney";  
+        
+       $user_id     = $_POST["ajxID"];
+                             
+       $added_money = $_POST["ajxAddedMoney"];
+        
+       $stmt= $con->prepare("UPDATE users SET Amount= Amount + ? WHERE userID = ?");
+        
+       $stmt-> execute([$added_money, $user_id]);
     
+       $stmt2= $con->prepare("INSERT INTO 
+                                      debit_deposit_operations
+                                        (`userID`, `Amount_Deposited`, `Data`)
+                                      VALUES 
+                                        (:zuserID, :zAmount_Deposited,  now())");
+        
+        $stmt2->execute(["zuserID"            => $user_id,
+                         "zAmount_Deposited"  => $added_money]);
+                      
+
+
+            
+            
+        echo "$". getSpecialInfoOnce("users", "userID", "", $user_id, "")['Amount'];    
+            
+            
+            
+            
     } elseif ($do == "add_comment") {
         
         $comment    = filter_var($_POST['ajxComment'], FILTER_SANITIZE_STRING);
         
         $item_ID    = $_POST["ajxID"];
+        
+        $owner_id    = $_POST["ajxOwnerID"];
         
         $check = checkItem("Item_ID", "items", $item_ID);
         
@@ -658,9 +891,22 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                                                 VALUES 
                                                      (:zComment, 1, now(), :zItem_ID, :zMember_ID)");
 
-            $stmt->execute(["zComment"         => $comment,
-                                "zItem_ID"     => $item_ID,
-                                "zMember_ID"   => $_SESSION['ID']]);
+            $stmt->execute(["zComment"     => $comment,
+                            "zItem_ID"     => $item_ID,
+                            "zMember_ID"   => $_SESSION['ID']]);
+           
+
+            $stmt5= $con->prepare("INSERT INTO 
+                                              nontifications
+                                                (`user_ID`, `Actor_ID`, `source_id`, `activity_type`, `date`, `is_seen`)
+                                              VALUES 
+                                                (:zuser_ID, :zActor_ID, :zsource_id, :zactivity_type, now(), 0)");
+                
+            $stmt5->execute(["zuser_ID"              => $owner_id,
+                                  "zActor_ID"        => $_SESSION['ID'], 
+                                  "zsource_id"       => $item_ID,
+                                  "zactivity_type"   => "comment"
+                                 ]); 
         }else {
             
             echo "kusha";
@@ -669,11 +915,43 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         // and sent item comments back
         
         showComment($item_ID);
-    }
-    
-    
-    
-    
+        
+        
+        
+    } elseif ($do == "update_comment") {
+        
+
+            $commentID = $_POST['ajxCommentID'];
+          
+            $comment = filter_var($_POST['ajxComment'], FILTER_SANITIZE_STRING);
+        
+            $item_ID = $_POST["ajxID"];
+        
+            //check if ID allredy exists in database
+         
+            $check = checkItem("C_ID", "comments", $commentID) ;
+                  
+            // check if this id has info in database, when yes then activate the user
+         
+            if ($check > 0){
+                     
+            $stmt=$con->prepare("UPDATE 
+                                   comments
+                                 SET
+                                   comment =?
+                                 WHERE 
+                                   C_ID = ?");  //Info Updating
+
+            $stmt->execute([$comment, $commentID]); //insert new value
+         
+             } else {
+                echo "kushs";
+            }
+        
+        
+        showComment($item_ID);
+
+        }
     } //ende 
     
     

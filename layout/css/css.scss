@@ -390,11 +390,15 @@ input[type="search"]:not(.browser-default){
 }
 
 #notification > .events ul{
+    max-width: 230px;
     overflow-y: auto;
     left: -80px;
     max-height: 340px;
 }
-
+.events ul .collection-item .notif_link{
+    display: block;
+    color: inherit;
+}
 nav .nav-wrapper i {
     height: 55px;
 }
@@ -619,7 +623,17 @@ button[type = submit]{
    
     
 }
-
+#Amount-btn{
+    background-color: $col1 !important;
+    color: $col3 !important;
+    height: 70px;
+    width: 70px;
+    line-height: 70px;
+    font-size: 30px;
+    left: 423px;
+    margin: 30px 0;
+    
+}
 .img{
     height: 100%;
     width: 15% !important;
@@ -820,11 +834,15 @@ button[type = submit]{
         text-decoration: underline;
     }
 }
+
+.item_user_name{
+    @extend .tags;
+}
 #buy-rst {
     display: flex;
     align-content: center;
     justify-content: center;
-    margin: 50px 0;
+    margin: 10px 0;
     padding: 5px;
 }
 
@@ -907,6 +925,10 @@ button[type = submit]{
     display: flex;
 }
 
+.items-comment .comment-controller {
+    padding: 0 25px;
+}
+
 .add-comment .area{
     width: 100%
 }
@@ -927,6 +949,13 @@ button[type = submit]{
 .items-comment span {
     position: static;
     
+}
+.items-comment .comment-controller i{
+    cursor: pointer;  
+    border-radius: 5px;
+    &:hover {
+        background-color: $col1;
+    }
 }
 //End item page
 

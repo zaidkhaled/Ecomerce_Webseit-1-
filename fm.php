@@ -9,21 +9,27 @@ include "init.php";
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     
-   $do = $_POST['ajxdo']; 
+//   $do = $_POST['ajxdo']; 
 //    json_encode($_POST);
 //    var_dump($_POST);
 //    echo "<br><br><br><br>";
 //    var_dump($_FILES);
 //     echo "<br><br><br><br>";
 //       var_dump($_POST);
-    foreach($_FILES as $file){
-        var_dump($file);
-        echo "<br><br><br>";
-    }
+//    foreach($_FILES as $file){
+//        var_dump($file);
+//        echo "<br><br><br>";
+//    }
    
-        var_dump($_POST);
-        echo "<br>";
+//        var_dump($_POST);
+//        echo "<br>";
     
+    $data = [
+        "out" => $_POST,
+        "out1" => "dfdf"
+    ];
+      
+      echo  json_encode($data);
 
 //    echo "HIHIHI";
 //    $data_required = !empty($_POST['ajxdata_required']) ?  $_POST['ajxdata_required'] : 'no_required';  

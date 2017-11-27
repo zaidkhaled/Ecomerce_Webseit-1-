@@ -91,19 +91,50 @@ function getSpecialInfo($table, $what, $what2 = NULL, $var1, $var2 = NULL, $valu
         $stmt->execute ([$var1]);
     }
     
-       
-    if (checkItem($what, $table, $var1) > 1){
+        $all = $stmt->fetchAll(); 
         
-      $all = $stmt->fetchAll(); 
-        
-    } else {
-        
-      $all= $stmt->fetch();
-        
-    }
-    return $all;
+
+        return $all;
     
 }
+
+
+/*
+// function to get special INFO depent on tow values 
+// it will be helpfull to give user ability to do something like ability to login and edit on item his own item
+// once something like just one item info or one user info
+*/
+
+function getSpecialInfoOnce($table, $what, $what2 = NULL, $var1, $var2 = NULL, $value = NULL){
+    
+    global $con;
+        
+    $query = empty($value) ? " " : $value ;
+        
+    if ($what2 != NULL){
+        
+       $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? AND $what2 = ? $query ");
+        
+       $stmt->execute ([$var1, $var2]);
+     
+    }  else {
+        
+        $stmt = $con->prepare("SELECT * FROM $table WHERE $what = ? ");
+        
+        $stmt->execute ([$var1]);
+    }
+    
+        $all = $stmt->fetch(); 
+        
+
+        return $all;
+    
+}
+
+
+
+
+
 
 /*
 ** function to fetch items from category depent on Item_ID
@@ -218,11 +249,11 @@ function redirectPage($msg, $url = null, $seconds = 3){
 ** $value = The value of select [ Example: Paul, Pic, Electronics]
 */
 
-function checkItem($select, $from, $value) {
+function checkItem($select, $from, $value, $query = " ") {
     
     global $con;
         
-    $statement = $con->prepare("SELECT $select FROM $from WHERE $select = ?");
+    $statement = $con->prepare("SELECT $select FROM $from WHERE $select = ? $query");
     
     $statement->execute([$value]);
     
@@ -371,13 +402,19 @@ function home_items() {
 /*
 //function to profile page: it will make loop for user items and print them in profile page
 */
-function profile_Items(){
+function profile_Items($member_ID){
     
-     $items = getSpecialInfo("items", "Member_ID", "", $_SESSION["ID"]);
+     $items = getSpecialInfo("items", "Member_ID", "", $member_ID);
     
      if (!empty($items)){
          
-        foreach ($items as $item) { ?> 
+        $login_status =  isset($_SESSION['ID'] ,$_SESSION['user']) ? $_SESSION['ID'] : "0";
+    
+        foreach ($items as $item) {
+
+
+
+        ?>    
                  <!-- start card item  -->
                  <div class="col s12 m4">
                    <div class="card"> 
@@ -390,6 +427,7 @@ function profile_Items(){
                      <div class="card-content">
                        <div class="row profile-item-icons">   
                          <!--Delete Butten-->
+                        <?php if($member_ID == $login_status){ ?>  
                          <a class='modal-trigger' 
                             href="#modal<?php echo $item['Item_ID'];?>"
                             onclick= "$('.modal').modal();"
@@ -398,9 +436,11 @@ function profile_Items(){
                          </a><!--Delete Butten-->   
                          <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item"> 
                            <i class="material-icons right">edit</i> 
-                        </a> 
+                        </a>
+                          
                         <?php
-                         if($item["approve"] == 0){    ?>   
+                        } 
+                         if($item["approve"] == "0"){    ?>   
                             <a href ="item.php?name=<?php echo $item['Name']; ?>&ID=<?php echo $item['Item_ID']; ?>&do=edit-item" title = "<?php echo lang("APPROVE_WAIT"); ?>"> 
                                 <i class='material-icons purple-text  text-accent-2'>hourglass_empty</i>
                             </a>     
@@ -453,6 +493,7 @@ function profile_Items(){
 */
 
 function ifEmpty($value, $msg) {
+    
     $feedback = empty($value) || !isset($value) ? $msg : $value;
     
     return $feedback;
@@ -467,11 +508,31 @@ function ifEmpty($value, $msg) {
 
  function showItemInfo($item_ID) {
      
-      $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?>
+     global $con;
+//     $item_info = getSpecialInfoOnce("items", "Item_ID", "", $item_ID, ""); 
+     
+     $stmt = $con->prepare(" SELECT 
+                                     items.* ,
+                                     users.username AS User_Name 
+                                 FROM
+                                     items 
+                                 INNER JOIN 
+                                     users
+                                 ON 
+                                     users.userID = items.Member_ID 
+                                     
+                                     WHERE Item_ID = $item_ID ORDER BY Item_ID DESC");
+     
+     $stmt->execute();
+     
+     $item_info =$stmt->fetch(); 
+
+?>
       <table class="responsive-table">
         <thead>
           <tr style="">
               <th><?php echo  lang("ITEM_NAME1"); ?></th>
+              <th><?php echo  lang("OWNER"); ?></th>
               <th><?php echo  lang("PRICE"); ?></th>
               <th><?php echo  lang("NUMS_ITEM"); ?></th>
               <th><?php echo  lang("STATUS"); ?></th>
@@ -484,6 +545,7 @@ function ifEmpty($value, $msg) {
         <tbody>
           <tr>
             <td><?php echo ifEmpty($item_info["Name"], lang("EMPTY")) ?></td>
+            <td><a class ="item_user_name" href= "profile.php?Member-name=<?php echo $item_info["User_Name"] . "&id=" . $item_info["Member_ID"]; ?>"><?php echo $item_info["User_Name"]; ?></a></td>
             <td><?php echo ifEmpty($item_info["Price"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["nums_item"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Status"], lang("EMPTY")) ?></td>
@@ -510,36 +572,21 @@ function ifEmpty($value, $msg) {
 
  }
 
-function jkjk(){
-                 $item_info = getSpecialInfo("items", "Item_ID", "", $item_ID, ""); ?> 
-
-            <div class="row">
-              <p class=" col s4"> <?php echo  lang("ITEM_NAME1") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Name"]; ?> </p>
-              <p class=" col s4"> <?php echo  lang("PRICE") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Price"]; ?> </p>
- 
-              <p class=" col s4 "> <?php echo  lang("DESCRIPTION") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Description"]; ?> </p>
-              <p class=" col s4"> <?php echo  lang("MADE_IN") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Made_In"]; ?> </p>
-            </div>
-            <div class="row">
-              <p class=" col s4"> <?php echo  lang("STATUS") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Status"]; ?> </p>
-              <p class=" col s4 "> <?php echo  lang("TAG_SHOW") . "  : </p>" ."<p class = 'col s7 info'>"; ?>
-            </div>
-            <?php
-               $tags = explode("," , $item_info['tags']);     
-               foreach($tags as $tag){
-                 echo "<a class = 'tags' href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
-             } ?> </p>
-
-            <p class=" col s4"> <?php echo  lang("ADD_DATA") . "  : </p>" ."<p class = 'col s7 info'>" . $item_info["Add_Data"]; ?> </p><?php
-}
 function showComment($item_ID) {
     
          foreach(getSpecialComments($item_ID) as $comment) {?>
 
            <div class="items-comment">
-             <h5 class="written_by"><?php echo $comment["written_by"];?></h5>   
+             <h5 class="written_by left"><?php echo $comment["written_by"];?></h5>    
+             <div class="row comment-controller">    
+               <i class="material-icons right modal-trigger"
+                  onclick="$('.modal').modal();"
+                  data-id ="<?php echo $comment['C_ID']; ?> "
+                  href = "#comment-form" 
+                  >mode_edit</i>    
+             </div>     
              <span class ="comment-data right"><?php echo $comment["Comment_Data"];?></span>   
-             <p class ="comments"><?php echo $comment["Comment"];?></p>
+             <p class ="comment" id="comment"><?php echo $comment["Comment"];?></p>
            </div>
          <?php } 
 
@@ -547,7 +594,7 @@ function showComment($item_ID) {
 
 // to refrsh foto agter change 
 
-function refresh_foto($foto) { 
+function refresh_foto($foto, $profile_user = NULL) { 
     
          $img = !empty($foto)? $foto :  "foto1.jpg" ; ?> 
          <img class= "responsive-img" src="uplaodedFiles/usersFoto/<?php echo $img ?>">

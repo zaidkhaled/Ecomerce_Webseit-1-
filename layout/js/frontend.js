@@ -5,9 +5,12 @@ $(function () {
     "use strict";
      
      $('#select-user').material_select(); //trigger  select field
+    
     $(".button-collapse").sideNav(); //trigger sidenav for phones
     
     $('.modal').modal(); //trigger  msg or show form before some actions in website "confirm"
+    
+    $('.carousel').carousel(); // trigger carousel "Slider"
     
    
     
@@ -141,15 +144,19 @@ $(function () {
                
 
           
-        } else if ($do === "add_comment") {
-            
+        } else if ($do === "add_comment" || $do === "update_comment") {
+                          
             fData.append("ajxComment", $("#item-comment").val()); 
             
             fData.append("ajxID", $("#item-id").val()); 
             
-            $("#item-comment").val("");
+            fData.append("ajxCommentID", $("#comment-id").val());
             
-            $('.add-comment').slideUp();
+            fData.append("ajxOwnerID", $("#owner-id").val()); 
+            
+//            $("#item-comment").val("");
+            
+        
             
         } else if ($do === "check_foto" || $do === "change_user_foto") {
     
@@ -164,7 +171,25 @@ $(function () {
             }
 
             
-        } 
+        }else if ($do === "add_money") {
+            
+           fData.append("ajxAddedMoney", $("#added-money").val()); 
+            
+           $("#added-amount").val('');    
+            
+        } else if ($do === "buy_item") {
+               
+            fData.append("ajxItemPrice", $("#item-price").val()); 
+            
+            fData.append("ajxNumsItem", $("#nums-item").val()); 
+            
+            fData.append("ajxOwnerId", $("#owner-id").val()); 
+            
+        } else if ($do === 'search'){
+            
+            fData.append("ajxSearchInput", $(".search-nav").val()); 
+            
+        }
        
         
 
@@ -180,26 +205,6 @@ $(function () {
             processData : false,
             
             contentType : false
-//            {
-//                
-//                ajxdo          : $do,
-//                ajxID          : $id,
-//                ajxName        : name,
-//                ajxEmail       : email,
-//                ajxFname       : fname,
-//                ajxPass1       : pass1,
-//                ajxPass2       : pass2,
-//                ajxDescription : Description,
-//                ajxCateId      : cateId,
-//                ajxTags        : tags,
-//                ajxStatus      : $stus,
-//                ajxMadeIn      : madeIn,
-//                ajxPrice       : price,
-//                ajxComment     : comment,
-//                ajxFoto        : foto,
-//                ajxdata        : $data
-        
-//            }
             
         }).done(function (e) {
            
@@ -211,15 +216,54 @@ $(function () {
             alert("fail fail");
             
         });
+        
     }
    
-    // ajax call for user department
+    
+    // nontifications function 
+    
+    function notification($do = "check_notif" ) {
+        
+        $.ajax({
+            url      : "dbfunctions.php",
+            method   : "POST",
+            data     : {ajxdo : $do},
+            dataType : "json",
+            success  : function (data) {
+                
+                $("#notif").html(data.notif);
+                
+                if (data.unseen_notif > 0) {
+                 
+                    $("<span id = 'notif_new'>" + data.unseen_notif + "</span>").insertBefore("#notification .events");
+                } 
+            }
+        });
+        
+    }
+    
+    // run notification function with parameter do = seen 
+    
+    $('#notif-icon').click(function() {
+         notification('seen');
+         $('#notif_new').remove();
+        
+    });
+    
+    // check nontifications every 3 second
+    
+    setInterval(function(){notification();},3000);
+    
+    
+    // run  post function to sent ajax request
     
     $(document).on("click", ".ajax-click", function () {
     
         post($(this));
         
     });
+    
+    // run  post function to sent ajax request
     
     $(document).on("submit", ".ajax-form", function (e) {
         e.preventDefault();
@@ -229,7 +273,7 @@ $(function () {
     
 
     
- // if inputFile in add item form change do this 
+ // run files reder on input File change  
     
     $('#items-fotos').on("change", function (e) {
         
@@ -272,6 +316,8 @@ $(function () {
 
     });
     
+    
+    
     $('.nav-click-show').on("click", function () {
         $($(this).data('hide')).hide(10);
         $($(this).data('show')).toggle(500);
@@ -289,12 +335,22 @@ $(function () {
          $('#search-nav-sm').slideToggle().focos();
     });
     
+    
+       
    $(".search-nav, #search-nav-sm ").on('keyup', function() {
        
-        if($(this).val().length > 2){
+        if($(this).val().length > 1){
+            
             $($(this).data('show')).show();
+            
+            post($(this));
+            
+            $(".search-nav .search-box a, #search-nav-sm .search-box-sm a").remove();
+            
         } else {
+            
             $($(this).data('show')).hide();
+            
         }
 
    });
@@ -382,15 +438,11 @@ $(function () {
     });
     
 //    end navbar
-    
-/*    $('.formy').submit(function () {
-        
-        return false;
-    });*/
+
     
              /* <============= end login Register page ====================> */
     
-    
+     /* <============= start profile page ====================> */
     
              
     
@@ -420,48 +472,7 @@ $(function () {
         $('.addItemForm').slideToggle();
     });
     
-    // do not refresh the page on submit
-//    $('.foto-uplaod').on("submit", function () {
-//        
-//       if ($("#foto_file").val() !== ""){
-//            
-//            $('.foto-uplaod').modal('close');
-//        }
-//        
-//        var form_data = new FormData(this);
-//        
-//        post("", "updata_foto", "99", form_data);
-//        
-//        return false;
-//    });
-//   
-//    $(".foto-uplaod .modal-footer input").on("click", function() {
-//        
-//        if ($("#foto_file").val() !== ""){
-//            
-//            $('.foto-uplaod').modal('close');
-//        }
-//    });
-    
-//$('.foto-uplaod').submit( function( e ) {
-//      return false();
-//    $.ajax( {
-//      url: 'dbfunctions.php',
-//      type: 'GET',
-//      data: { ajx : new FormData(this) },
-//
-//    }).done(function (e) {
-//            
-//            $("#foto").html(e);
-//            
-//        }).fail(function () {
-//            
-//            alert("fail fail");
-//            
-//        });
-//  
-//  });    
-    
+
     
     /* <============= End profile page ====================> */
     
@@ -482,15 +493,27 @@ $(function () {
         
     }
     
+    
     $('#plus-comment-btn').on("click", function () {
         
-        $($(this).data("target")).slideToggle();
+        $('#add-comment-title').show();
+        
+        $('#update-comment-title').hide();
+        
+        $("#add-comment-form").attr("data-do", $("#add-comment-form").attr("data-addComment"));
+        
+        if ($(this).val().length < 2) {
+
+            $("#add-comment-btn").attr("disabled", "true");
+            
+        }
         
     });
     
     $('#item-comment').on('keyup', function () {
         
-        if ($("#item-comment").val().length > 0) {
+        if ($(this).val().length > 0) {
+           
             
             $("#add-comment-btn").removeAttr("disabled");
             
@@ -498,6 +521,21 @@ $(function () {
             
             $("#add-comment-btn").attr("disabled", "true");
         }
+    });
+    
+    
+    $(document).on("click", ".comment-controller i", function() {
+        
+        $('#add-comment-title').hide();
+        
+        $('#update-comment-title').show();
+        
+        $("#add-comment-form").attr("data-do", $("#add-comment-form").attr("data-updateComment"));
+        
+        $("#comment-id").val($(this).data('id'));
+        
+        $("#item-comment").val($(this).parent().siblings(".comment").html());
+        
     });
                    /* <============= end item  page ====================> */
     

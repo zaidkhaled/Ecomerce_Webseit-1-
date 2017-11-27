@@ -44,9 +44,9 @@ if(isset($_SESSION['username'])){
               <tr>
                 <th>#ID</th>
                 <th><?php echo lang("USER_NAME")?></th>  
+                <th><?php echo lang("CURRENCY_TYPE")?></th>
                 <th><?php echo lang("AMUONT_DEPOSITED")?></th>
                 <th><?php echo lang("WITHDRAWAL")?></th>
-                <th><?php echo lang("CURRENCY_TYPE")?></th>
                 <th><?php echo lang("TIME_OF_OPERATION")?></th>
               </tr>
             </thead> <!--End Table header-->

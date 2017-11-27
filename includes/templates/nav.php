@@ -13,18 +13,14 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
 </ul>
 
  <ul id="dropdown11" class="dropdown-content">
-    <li><a href = "profile.php"><?php echo lang("PROFILE")?></a></li>
+     <?php
+     
+     $url_profile = isset($_SESSION['user']) && $_SESSION['ID'] ? "profile.php?Member-name=" . $_SESSION['user'] . "&id=" . $_SESSION['ID'] : 'logReg.php';
+    ?>     
+    <li><a href = "<?php echo $url_profile; ?>"><?php echo lang("PROFILE")?></a></li>
     <li><a href="#!"><?php echo lang('SETTING')?></a></li>
     <?php echo $login;?> 
     <?php echo $logout;?> 
-    
-</ul>
-
-<ul id="search-sm-rst" class="dropdown-content">
-   <a>hiihi</a>
-   <a>hiihi</a>
-   <a>hiihi</a>
-   <a>hiihi</a>
 </ul>
 
 <nav class="nav-fixed">
@@ -67,13 +63,9 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
           
         <ul class="left col s3 hide-on-med-and-down">
           <li  id = "search-icon" class="nav-click-show" data-hide = "#notification > .events" ><a><i class="material-icons">search</i></a></li>   
-          <input type="search" class="search-nav" data-show = ".search-box">
+          <input type="search"  class="search-nav" data-do = "search" data-place = ".search-box" data-show = ".search-box">
           <div class="search-box">
-              <a>ali ali ali ali aliali ali ali ali aliali ali ali ali ali </a>
-              <a>ali ali ali ali ali </a>
-              <a>ali ali ali ali ali </a>
-              <a>ali ali ali ali ali </a>
-              <a>ali ali ali ali ali </a>
+               
           </div>    
         </ul>
           
@@ -81,54 +73,16 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
            <li><a href="index.php" class="left-align brand-logo"><?php echo lang('HOME_ADMIN')?></a></li>         
         </ul>                    
           
+          
+          
+          
         <div class="left nav-click-show" id="notification" data-show = "#notification > .events" data-hide = ".search-nav, .search-box">
-          <a><i class="material-icons">add_alert</i></a>
-          <span>44</span>  
+          <a id = 'notif-icon'><i class="material-icons">add_alert</i></a>
           <div class="events" >
             <div id="up"></div>  
-            <ul class="collection">
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>  
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>
-              <li class="collection-item avatar">
-                <img src="uplaodedFiles/itemsFotos/foto1.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                   Second Line
-                </p>
-              </li>    
+            <ul class="collection" id="notif">
+                
+              <!-- content will be received by ajax -->
             </ul>    
          </div>
        </div>
