@@ -27,7 +27,7 @@ if(isset($_SESSION['username'])){
     
     if (isset($_GET['required']) && isset($_GET['ID'])){
         
-    $required = $_GET['required'] ;//category or members
+    $required = $_GET['required'] ; //category or members
     
     $ID = isset($_GET['ID'])? $_GET['ID'] : " "; // id from category or member
     
@@ -40,10 +40,10 @@ if(isset($_SESSION['username'])){
     }
      ?>
 
-   <div class="required-info" style="display:none">
-     <span id ='data_required'><?php echo $data_required; ?></span>
-   </div>
-     <!--start serch field-->
+<div class="required-info" style="display:none">
+  <span id ='data_required'><?php echo $data_required; ?></span>
+</div>
+<!--start serch field-->
 <div id="rst"></div>
    <div class="nav-wrapper" >
       <form>

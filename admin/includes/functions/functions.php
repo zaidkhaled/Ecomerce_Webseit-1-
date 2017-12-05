@@ -142,11 +142,11 @@ function redirectPage($errmsg = "", $url = null, $seconds = 3){
 ** $value = The value of select [ Example: Paul, Pic, Electronics]
 */
 
-function checkItem($select, $from, $value) {
+function checkItem($select, $from, $value, $query =" ") {
     
     global $con ;
     
-    $statement = $con->prepare("SELECT $select FROM $from WHERE $select = ?");
+    $statement = $con->prepare("SELECT $select FROM $from WHERE $select = ? $query");
     
     $statement->execute([$value]);
     

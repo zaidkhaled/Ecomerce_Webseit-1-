@@ -85,10 +85,12 @@ h1{
 }
 
 .login-form{
-    margin-top: 22vh;
+    margin-top: 10vh;
 }
 
-
+.ajax-click{
+    cursor: pointer;
+}
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=password]:not(.browser-default):focus:not([readonly]),
 input[type=email]:not(.browser-default):focus:not([readonly])
@@ -450,6 +452,7 @@ right: 10px
 // start items page
 
 .imgs-preview img {
+    padding: 5px;
     transition: all .6 cubic-bezier(.79,.14,.15,.86);
     @include trans(0.5s);
     cursor: pointer;

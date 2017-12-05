@@ -4,7 +4,7 @@ $(function () {
     
     "use strict";
      
-     $('#select-user').material_select(); //trigger  select field
+    $('#select-user').material_select(); //trigger  select field
     
     $(".button-collapse").sideNav(); //trigger sidenav for phones
     
@@ -12,9 +12,12 @@ $(function () {
     
     $('.carousel').carousel(); // trigger carousel "Slider"
     
-   
+    // Hide sideNav
+//    $('.button-collapse').sideNav('hide');
+    // Destroy sideNav
+//    $('.button-collapse').sideNav('destroy');
     
-    /* <=============define impotant functions ====================> */
+    // <=============define impotant functions ====================> 
 
                 
     
@@ -22,20 +25,6 @@ $(function () {
     
     function post(value) {
         
-//        var name         = "",
-//            email        = "",
-//            fname        = "",
-//            pass1        = "",
-//            pass2        = "",
-//            Description  = "",
-//            price        = "",
-//            madeIn       = "",
-//            $stus        = "",
-//            cateId       = "",
-//            tags         = "",
-//            foto         = "",
-//            comment      = "";
-//        console.log('yse');
         var fData = new FormData(),
             
             $where = value.data("place"),
@@ -68,6 +57,7 @@ $(function () {
             fData.append("ajxName", $('#item-name').val());
             fData.append("ajxDescription", $('#item-descrp').val());
             fData.append("ajxPrice", $('#item-price').val());
+            fData.append("ajxItemNum", $('#item-price').val());
             fData.append("ajxMadeIn", $("#made-in").val());
             fData.append("ajxTags", $("#tags").val());
             fData.append("ajxStatus", $('#select-status option:selected').val());
@@ -125,21 +115,21 @@ $(function () {
 
             
             
-            //        empty inputs after ajax call
+            //  empty inputs after ajax call
             
             $(".progress .determinate").css("width", "0px");
             
             $("#main-item-foto .user-foto").remove();
             
-//            $("form .items-fotos-preview .delete-img").each(function () { $(this).remove(); });
+            $("form .items-fotos-preview .delete-img").each(function () { $(this).remove(); });
             
-//            $('.addItemForm .input, #item-descrp').each(function () { $(this).val(""); });
+            $('.addItemForm .input, #item-descrp').each(function () { $(this).val(""); });
 
             // reset selectors inputs
+       
+            $('select').prop('selectedIndex', -1);
 
-//            $('select').prop('selectedIndex', -1);
-
-//            $('select').material_select(); // materialze requirement
+            $('select').material_select(); // materialze requirement
                      
                
 
@@ -154,7 +144,7 @@ $(function () {
             
             fData.append("ajxOwnerID", $("#owner-id").val()); 
             
-//            $("#item-comment").val("");
+            // $("#item-comment").val("");
             
         
             
@@ -185,9 +175,17 @@ $(function () {
             
             fData.append("ajxOwnerId", $("#owner-id").val()); 
             
-        } else if ($do === 'search'){
+        } else if ($do === 'search') {
             
+            if ($(".search-nav").val().length > 2) { 
+                
             fData.append("ajxSearchInput", $(".search-nav").val()); 
+                
+            } else {
+                
+                fData.append("ajxSearchInput", $("#search-nav-sm").val()); 
+                
+            }
             
         }
        
@@ -219,10 +217,10 @@ $(function () {
         
     }
    
-    
+   
     // nontifications function 
     
-    function notification($do = "check_notif" ) {
+    function ajax_check($do) {
         
         $.ajax({
             url      : "dbfunctions.php",
@@ -242,17 +240,25 @@ $(function () {
         
     }
     
-    // run notification function with parameter do = seen 
+    // run ajax_check function with parameter do = seen 
     
     $('#notif-icon').click(function() {
-         notification('seen');
+         ajax_check('seen');
          $('#notif_new').remove();
         
     });
     
     // check nontifications every 3 second
     
-    setInterval(function(){notification();},3000);
+    setInterval(function() {ajax_check("check_notif");}, 3000);
+    
+    // if user has been logged sent Last activate time every 5 second
+    
+    if ($("#logout").length > 0){
+
+        setInterval(function(){ajax_check("Last_activated");}, 5000);
+    }
+
     
     
     // run  post function to sent ajax request
@@ -269,6 +275,10 @@ $(function () {
         e.preventDefault();
         post($(this));
         
+    });
+    
+    $("#select-lang").change(function () {
+        $("#lang-form").submit();
     });
     
 
@@ -360,7 +370,7 @@ $(function () {
     
     var deletingImgs = [];
     
-    // add deleting fotos to deletingImgs array and and set imgs num in inputFile attr to now if num is acceptable
+    // add deleted fotos to deletingImgs array and and set imgs num in inputFile attr to now if num is acceptable
     
     $(document).on('click', "form .items-fotos-preview .delete-img", function () {
         
@@ -402,7 +412,7 @@ $(function () {
                 $(removeContent).remove();
                 
                 $(previewPlace).append(template); // show foto
-                
+
             };
             
             reader.readAsDataURL(foto.files[0]);
@@ -415,8 +425,11 @@ $(function () {
    
 
     $("form .user-img").on('change', function () {fotoReader(this); post($(this)); }); 
-    $(" .item-main-img").on('change', function () {fotoReader(this); }); 
-                    /* <============= start login page ====================> */
+    $(".item-main-img").on('change', function () {fotoReader(this); }); 
+    
+    
+    
+                     // <============= start login page ====================> 
     
 
     // show login input if user click on login in logReg page and show register form when user ckick on 
@@ -440,11 +453,21 @@ $(function () {
 //    end navbar
 
     
-             /* <============= end login Register page ====================> */
+       // <============= end login Register page ====================> 
     
-     /* <============= start profile page ====================> */
     
-             
+    
+    
+     // <============= start profile page ====================> 
+    
+    
+    
+     $("#mobile-dimo").on("click", function () {
+        // Hide sideNav
+//        $('.button-collapse').sideNav('hide');
+         console.log('jj');
+         $('.button-collapse').sideNav('destroy');
+     })      
     
     // show  item comment when user click on item name 
     
@@ -474,10 +497,10 @@ $(function () {
     
 
     
-    /* <============= End profile page ====================> */
+    // <============= End profile page ====================> 
     
     
-    /* <============= start item  page ====================> */
+    // <============= start item  page ====================> 
     
     
     // condition to make edit on item directly after page load
@@ -537,8 +560,12 @@ $(function () {
         $("#item-comment").val($(this).parent().siblings(".comment").html());
         
     });
-                   /* <============= end item  page ====================> */
+                   // <============= end item  page ====================> 
     
+                  // <============= public style  ====================>
+    
+    
+
 });  //ende
 
 

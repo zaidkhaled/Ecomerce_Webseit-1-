@@ -69,8 +69,8 @@ if(!isset($nonav)){
 }
    include $tpl. "header.php"; 
 ?> 
-
-     <form action="<?php $_SERVER['PHP_SELF']?>" method="post" class="col s12 .login-form">
+     <h1 class="center-align">Admin login</h1>
+     <form action="<?php $_SERVER['PHP_SELF']?>" method="post" class="col s12 login-form">
             
        <div class="row">
          <div class="input-field col s10 m4 push-s1  push-m4">

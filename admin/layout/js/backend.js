@@ -40,6 +40,37 @@ $(function () {
         
     }
     
+    // show the user foto functions 
+    
+    function fotoReader_item(foto) {
+        
+        var previewPlace = foto.getAttribute("preview"),
+            
+            removeContent = foto.getAttribute("remove");
+        
+        
+        if (foto.files && foto.files[0]) {
+            
+            var reader = new FileReader();
+            
+            reader.onloadend = function (e) {
+                
+                var template = "<img class ='user-foto responsive-img' style='width:100%;height:144px;'  foto-name = '' src='" + e.target.result + "'>";
+                
+                $(removeContent).remove();
+                
+                $(previewPlace).append(template); // show foto
+
+            };
+            
+            reader.readAsDataURL(foto.files[0]);
+           
+        } 
+        
+    }
+    
+    $(".item-main-img").on('change', function () {fotoReader_item(this); console.log('from chage'); }); 
+    
     // prepare deleting item img array
     
     var deletingImgs = [];
@@ -135,9 +166,10 @@ $(function () {
 
                 colName  = value.attr("col-name"),
 
-                required  = value.data("required"),
+                required  = value.data("required") === undefined ? $('#data_required').html() : value.data("required"),
 
                 itemID  = value.data("item");
+            
 
             fData.append("ajxID", value.data('id'));
             fData.append("ajxStatus", newStaus);
@@ -180,9 +212,13 @@ $(function () {
                 fData.append("ajxPrice", $('#item-price').val());
                 fData.append("ajxMadeIn", $("#made-in").val());
                 fData.append("ajxTags", $("#tags").val());
+                fData.append("ajxItemNum", $("#num-item").val());
                 fData.append("ajxStatus", $('#select-status option:selected').val());
                 fData.append("ajxUserId", $('#select-user option:selected').val());
                 fData.append("ajxCateId", $('#select-cate option:selected').val());
+            // send fotos just with add item form 
+
+
 
 
                 // send fotos just with add item form 
@@ -200,7 +236,12 @@ $(function () {
                         fData.delete();
 
                     } else {
+                        
+                        if ($("#item-main-img").attr("len") > 0) {
 
+                        fData.append("main_foto", $("#item-main-img")[0].files[0]);
+
+                        }
                         for (i; i < len; i++) {
 
                               // sent just imgs, which user did not delete    
@@ -235,7 +276,6 @@ $(function () {
             var $where = $place;
             fData.append('open', $place);
             fData.append('ajxdata_required', $('#data_required').html());
-            console.log($('#data_required').html()); // تجربه 
         }
         
         $.ajax({
@@ -302,15 +342,14 @@ $(function () {
             
             sendData(undefined, $where);
             
-//            post($where);
         }); 
     }
     
     
 /*
                <======================================================================>
-     function to looking for a specific values in the table, the function will recognize data by class .search-in.
-     the function will filter table INFO and return the best result
+      function to looking for a specific values in the table, the function will recognize data by class .search-in.
+      the function will filter table INFO and return the best result
                <=======================================================================>
 */
     
@@ -347,7 +386,7 @@ $(function () {
                                 
                         //if yes then show all info it about it and change the background-color
                                 
-                    $(this).css("background-color", "red").parent($search_in).show();
+                    $(this).css("background-color", "rgba(184, 110, 154, 0.61)").parent($search_in).show();
 
                 } else {
                     
@@ -597,7 +636,7 @@ $(function () {
         
         $(".addItem").attr("data-do", $(".addItem").data('add'));
         
-        $('.form-title-add, .files-place, .imgs-preview').show(); // sohw send btn "#add-new-item" and add form title
+        $('.form-title-add, .files-place, .imgs-preview, .img-preview h5').show(); // sohw send btn "#add-new-item" and add form title
         
         $('.form-title-update').hide(); // hide update btn "#update-item" and update form title
         
@@ -631,6 +670,7 @@ $(function () {
         $('#item-name').val($(this).parent().siblings(".ItemName").html());
         $('#item-descrp').val($(this).parent().siblings(".Descrp").html());
         $('#item-price').val($(this).parent().siblings(".Price").html());
+        $('#num-item').val($(this).parent().siblings(".nums_item").html());
         $("#made-in").val($(this).parent().siblings(".MadeIn").html());
         $("#tags").val($(this).parent().siblings(".tags").html());
       
@@ -642,7 +682,7 @@ $(function () {
         
         $('.form-title-update').show(); // show update btn "#update-item" and update form title
         
-        $('.form-title-add, .files-place, .imgs-preview').hide(); // hide send btn "#add-new-item" and add form title
+        $('.form-title-add, .files-place, .imgs-preview, .img-preview h5').hide(); // hide send btn "#add-new-item" and add form title
         
     });
     

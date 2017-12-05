@@ -52,11 +52,29 @@ if(isset($_SESSION['user'])){//check if user alrady logined
 
              $_SESSION['ID'] = $row['userID']; // Registering the sesstion ID.
 
+             
+            // add login time to login_details table          
+            // check out if this id is already exist
+             
+            if(checkItem("user_ID", 'login_details', $_SESSION['ID']) > 0 ){
+                
+                // make  update 
+                
+                UpdateLastActivity('login_details', $_SESSION['ID']);
+                
+            } else {
+                // add new id 
+                LastActivity('login_details', $_SESSION['ID']);
+                
+            }
+             
              header("Location:index.php");// redirect to index.php.
 
              exit();
          }
-     }else {
+         
+         
+     }elseif(isset($_POST['register'])) {
          
           $userName  = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
           $email     = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
@@ -145,9 +163,9 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                 
                 move_uploaded_file($fotoTmp, "uplaodedFiles/usersFoto/" . $foto);
                 
-                $stmt = $con-> prepare("INSERT INTO users (username, Foto, Email, password, fullName, regStatus, data)
-                                                          VALUES
-                                                              (:zusername, :zfoto, :zEmail ,:zpassword, :zfullName, 0, now())");
+                $stmt = $con-> prepare("INSERT INTO users (username, Foto, Email, password, fullName, regStatus, Amount, data)
+                                                VALUES
+                                                          (:zusername, :zfoto, :zEmail ,:zpassword, :zfullName, 0, 0, now())");
                 
                 $stmt->execute(["zusername"  => $userName,
                                 "zfoto"      => $foto,
@@ -158,14 +176,26 @@ if(isset($_SESSION['user'])){//check if user alrady logined
           
 
                 
-                $fetchInfo =   getSpecialInfo("users", "userName", "password", $userName, $password1);
+                $fetchInfo =   getSpecialInfoOnce("users", "userName", "password", $userName, $password1);
                 
                 $_SESSION['user'] = $fetchInfo["username"];
                 $_SESSION['ID']   = $fetchInfo["userID"];
                 
+        
+                // add user id into "login_details" table  
+                    
+                LastActivity('login_details', $_SESSION['ID']);
+         
+                
                 redirectPage(lang("PHP_SUCCMSG_REGISTER"));
                 
+                
+//             header("Location:index.php");// redirect to index.php.
 
+            } else {
+                foreach ($ErrArray as $err){
+                    echo "<p>" . $err . "</p>";
+                }
             }
             
      }// end check login and register
@@ -310,13 +340,20 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                       <span>File</span>
                       <input type="file"
                              class = 'user-img'
-                             name  = "foto">
+                             id = "user-img"
+                             preview = ".img-preview"
+                             onchange="$(this).attr('len',this.files.length);"
+                             remove = ".img-preview h5, .img-preview img"
+                             name  = "foto"
+                             data-do = "check_foto"
+                             data-place = "#foto-erorr">
                     </div>
                     <div class="file-path-wrapper">
                       <input class = "file-path validate"
                              placeholder = "<?php echo lang("FOTO_UPLOAD"); ?>">
                         
                     </div>
+                    <div class="center-align" id="foto-erorr"></div>  
                   </div>  
                 </div>   
               </div> 

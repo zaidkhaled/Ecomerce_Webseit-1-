@@ -6866,7 +6866,10 @@ h1 {
   color: #cfcbab; }
 
 .login-form {
-  margin-top: 22vh; }
+  margin-top: 10vh; }
+
+.ajax-click {
+  cursor: pointer; }
 
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=password]:not(.browser-default):focus:not([readonly]),
@@ -6975,8 +6978,6 @@ nav i, nav i.material-icons {
   position: absolute;
   top: 0;
   left: 0; }
-
-
 
 thead tr {
   background-color: #B86E9A;
@@ -7094,6 +7095,7 @@ thead tr {
   line-height: 13px; }
 
 .imgs-preview img {
+  padding: 5px;
   transition: all 0.6 cubic-bezier(0.79, 0.14, 0.15, 0.86);
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;

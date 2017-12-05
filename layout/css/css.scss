@@ -13,6 +13,8 @@
 
 // colors
 
+
+
 $col1:#203E38;
 $col2:#BD8D0D;
 $col3:#F0F7CE;
@@ -20,7 +22,6 @@ $col4:#ECD51A;
 $col5:#945B02;
 $succCol:#F0F7CE;
 $rongCol:#E30627;
-
 
 // old color 3
 //$col1:#14080C;
@@ -38,7 +39,7 @@ $rongCol:#E30627;
 
 
 // old color 2
-//18473F
+//#18473F
 //D2CF9A
 //C98F09
 //96C0B4
@@ -47,7 +48,7 @@ $rongCol:#E30627;
 //026292
 //======== old color
 //cfcbab
-//B86E9A
+//#B86E9A
 //467885
 //333
 //6499b5
@@ -102,10 +103,79 @@ body{
     font-size: 16px;
 }
 
+
+// select 
+
+.card-padding{
+  padding: 30px 10px !important;  
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #2c3e50;
+  background-image: none;
+}
+/* Custom Select */
+.select {
+  position: relative;
+  display: block;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  background: $col1;
+  overflow: hidden;
+  border-radius: .25em;
+}
+select {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 0 0 .5em;
+  color: #fff;
+  cursor: pointer;
+}
+select::-ms-expand {
+  display: none;
+}
+/* Arrow */
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 1em;
+  background: #34495e;
+  pointer-events: none;
+}
+/* Transition */
+.select:hover::after {
+  color: #f39c12;
+}
+.select::after {
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+
+
+// end select 
+
+
 h1{
     font-weight: bold;
     color: $col5;
     margin: 50px;
+}
+.centering{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn{
     text-transform: none;
@@ -188,7 +258,7 @@ thead tr{
 }
 
 .input-field label{
-    color: $col1;
+    color: $col1 !important;
 }
 
 .contactForm{
@@ -229,6 +299,10 @@ input[type=email].valid:not(.browser-default)
 {
     border-bottom: 1px solid $col5;
     box-shadow: 0 1px 0 0 $col5;
+}
+
+input[type="number"]:not(.browser-default) {
+    border-bottom:2px solid $col1;
 }
 
 
@@ -333,7 +407,10 @@ nav {
     justify-content: center;
 }
 #nav-sm > a{
+    padding: 6px;
+    margin: 0 19px;     
     cursor: pointer;
+    color: $col4;   
     
 }
 #sidenav-overlay{
@@ -418,6 +495,9 @@ nav .nav-wrapper i {
 #search-nav-sm {
     width: 100%;
 }
+.side-nav {
+    z-index: 44 !important;
+}
 .side-nav li > a {
     min-width: 150px;
 }
@@ -425,7 +505,6 @@ nav .nav-wrapper i {
     padding: 0 10px !important;
     color: $col1;
 }
-
 
 .search-box-sm a, .search-box a{
     color: $col1;
@@ -443,7 +522,7 @@ nav .nav-wrapper i {
 }
 
 .dropdown-button{
-    width :100px !important;
+    width :115px !important;
 }
 
 nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li > a{
@@ -454,9 +533,8 @@ nav .brand-logo,nav .button-collapse i,nav ul a,.dropdown-content li > a{
     
 }
 .dropdown-content {
-    
+    width: auto !important;
     margin-top: 56px;
-    min-width: 130px;
    
 }
 #dropdownSM{
@@ -532,6 +610,17 @@ nav i,nav i.material-icons {
    margin-bottom: 0;
 }
 
+.card-content{
+  height: 130px;
+  max-height: 130;
+
+}
+.card-content .card-title{
+    width: 170px;
+    height: 33px;
+    overflow: hidden;
+}
+
  .login-title{
      
  color: $col3;
@@ -566,6 +655,14 @@ label {
 form .items-foto-preview{
     padding: 15px;
 }
+
+#items-fotos-preview{
+    display: table;
+}
+#items-fotos-preview img{
+    display: table-cell;
+    vertical-align: middle;
+}
 .preview-fotos{
     overflow-y: scroll;
     display: inline-block;
@@ -594,7 +691,7 @@ form .delete-img{
 }
 
 button[type = submit]{
-    margin-bottom: 400px;
+    margin-bottom: 180px;
     margin-top: 100px;
 }
 
@@ -620,20 +717,34 @@ button[type = submit]{
 
 .side-list{
 
-   
     
 }
+
+
 #Amount-btn{
     background-color: $col1 !important;
     color: $col3 !important;
     height: 70px;
-    width: 70px;
-    line-height: 70px;
+    line-height: 50px;
     font-size: 30px;
-    left: 423px;
-    margin: 30px 0;
+    margin: 30px 100px;
+    padding: 10px;
     
 }
+.modal.modal-fixed-footer#add-money{
+    height: 35% !important;
+}
+#info-side-btn{
+    position: relative;
+    top: 50px;
+    right: 50px;
+    cursor: pointer;
+}
+#info-side-btn > i{
+    color: $col3;
+    font-size: 50px !important;
+}
+
 .img{
     height: 100%;
     width: 15% !important;
@@ -731,7 +842,7 @@ button[type = submit]{
 .addItemForm{
     padding: 10px !important;
     border: 4px $col1 dashed;
-    border-radius: 3%;
+    border-radius: 8% 0 8% 0;
     display: none;
     margin-bottom: 50px;
 }
@@ -746,10 +857,7 @@ button[type = submit]{
     justify-content: center;
 }
 
-//.addItemForm .imgs-preview {
-//    padding: 15px;
-//    margin: 30px 0;
-//} 
+
 
 .items {
     margin-top:40px;
@@ -782,7 +890,10 @@ button[type = submit]{
     margin-bottom: 20px;
     right: 5vh;
 }
-
+#item-descrp {
+    max-height: 85px !important;
+    overflow: hidden !important;
+}
 #add-new-item-btn{
     right: 8vh;
 }
@@ -797,6 +908,10 @@ button[type = submit]{
         text-decoration-line: underline;
     }
 } 
+
+.card .card-reveal {
+    z-index: 1 !important;
+}
 .profile-item-icons{
    padding: 10px;  
 
@@ -806,6 +921,61 @@ button[type = submit]{
     color: $col1;
    
 }
+
+  @media #{$small-and-down} {
+      
+    // styles for small screens and down
+      
+      #user-foto-place{
+          width: 130px !important;
+      }
+      #info-side-btn{
+          top: 201px;
+          right: 27px;
+      }
+      .card-content .card-title{
+          width: 110px;
+          height: 33px;
+          overflow: hidden;
+          
+      }
+      .card-content{
+         font-size: 16px;
+          
+      }
+      .card .card-reveal{
+          padding: 5px;
+      }
+      .card .card-title, .card p{
+          font-size: 18px;
+      }
+      
+      
+  }
+  @media #{$medium-and-up} {
+      
+    // styles for medium screens and larger
+      
+      #user-foto-place{
+          width: 130px !important;
+      } 
+      
+      #info-side-btn{
+      
+      right: 39px;
+      }
+  }
+  @media #{$medium-and-down} {
+    // styles for medium screens and down
+  }
+  @media #{$large-and-up} {
+    // styles for large screens and up
+  }
+  @media #{$extra-large-and-up} {
+    // styles for extra large screens and up
+  }
+
+
 // end profile
 
 
@@ -875,7 +1045,7 @@ button[type = submit]{
     margin: 30px;
 }
 .update-btn{
-    left: -55px;
+    left: -7px;
     position: relative;
     top: 11px;
     margin: 20px 0;
@@ -959,9 +1129,19 @@ button[type = submit]{
 }
 //End item page
 
+//start footer
+#select-lang{
+     background-color: $col4 !important;
+}
+.page-footer{
+    background-color: $col1;
+    bottom: 0;
+//    position: absolute;
+    left: 0;
+    right: 0;
+}
 
-
-
+//end footer
 
 
 

@@ -3,18 +3,10 @@
 // show login und register btn just if no $_SESSION['user'] exist.
 
 $login = !isset($_SESSION['user'])? "<li><a href='logReg.php'>". lang("LOGIN/REGISETER") . "</a></li>" : "";
-$logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') . "</a></li>" : "";
+$logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". lang('LOGOUT') . "</a></li>" : "";
 ?>
- <ul id="dropdownSM" class="dropdown-content">
-  <li><a  href ="profile.php"> <?php echo lang("PROFILE")?> </a></li>
-  <li><a href="#"><?php echo lang('SETTING')?></a></li>
-  <?php echo $login;?>
-  <?php echo $logout;?>
-</ul>
-
  <ul id="dropdown11" class="dropdown-content">
      <?php
-     
      $url_profile = isset($_SESSION['user']) && $_SESSION['ID'] ? "profile.php?Member-name=" . $_SESSION['user'] . "&id=" . $_SESSION['ID'] : 'logReg.php';
     ?>     
     <li><a href = "<?php echo $url_profile; ?>"><?php echo lang("PROFILE")?></a></li>
@@ -22,6 +14,8 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
     <?php echo $login;?> 
     <?php echo $logout;?> 
 </ul>
+
+
 
 <nav class="nav-fixed">
    <div class="container">
@@ -53,7 +47,7 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
                    
                   </ul> 
          <?php  } ?>
-          <li><a class="dropdown-button" class = "dropdown-button" data-activates="dropdown11"><?php $value = isset($_SESSION['user'])? $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li> 
+          <li><a class="dropdown-button" class = "dropdown-button" data-activates="dropdown11"><?php $value = isset($_SESSION['user'])? 'hi' . " ". $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li> 
         </ul>
           
         <ul class="right col s3 hide-on-large-only">
@@ -65,7 +59,7 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
           <li  id = "search-icon" class="nav-click-show" data-hide = "#notification > .events" ><a><i class="material-icons">search</i></a></li>   
           <input type="search"  class="search-nav" data-do = "search" data-place = ".search-box" data-show = ".search-box">
           <div class="search-box">
-               
+            <!--content will be called by ajax-->   
           </div>    
         </ul>
           
@@ -95,27 +89,31 @@ $logout = isset($_SESSION['user'])? "<li><a href='logout.php'>". lang('LOGOUT') 
                    echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; ?>
                
          <?php  }?>                                                              
-           <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>
+           <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? 'hi' . " ".$_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
      </div>
    </div>
+    
+   <ul id="dropdownSM" class="dropdown-content">
+    <li><a  href ="profile.php"> <?php echo lang("PROFILE")?> </a></li>
+    <li><a href="#"><?php echo lang('SETTING')?></a></li>
+    <?php echo $login;?>
+    <?php echo $logout;?>
+   </ul>
+    
    <div class="search-sm hide-on-large-only">
-     <input type="search" class="search-nav-sm" data-show = ".search-box-sm" id="search-nav-sm">  
+     <input type="search" class="search-nav-sm" data-show = ".search-box-sm" id="search-nav-sm" data-do = "search" data-place = ".search-box-sm" data-show = ".search-box">  
      <div class="search-box-sm">
-       <a>ali ali ali ali aliali ali ali ali aliali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
-       <a>ali ali ali ali ali </a>
+         
+         <!-- search content will be received by ajax --> 
+         
      </div>   
    </div>
+   <div id="nav-sm" class="hide-on-large-only">
+     <a data-activates="mobile-demo" id = 'mobile-sm-nav' class="button-collapse"><i class="material-icons">menu</i></a>  
+   </div>    
 </nav>
-<div id="nav-sm" class="hide-on-large-only">
-  <a  data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>  
-</div>
 
+
+
+        

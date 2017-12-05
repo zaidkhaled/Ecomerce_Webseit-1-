@@ -14,6 +14,7 @@ function lang($phrase){
     "LOGS"                => "Logs",    
     "EDIT"                => "Edit",    
     "SETTING"             => "Setting",    
+    "Online"              => "Online",    
     "LOGOUT"              => "Logout",
     "LOG_IN"              => 'Log in',
     "HOME_ADMIN"          => "Home",  
@@ -33,6 +34,7 @@ function lang($phrase){
     "ERRMSG_VALIDATE_EMAIL"=> "This email is not valid",   
     "SURE_MSG"            => "Are you sure",
     "SURE_FULLNAME_MSG"   => "you will delete this user : ",
+    "SURE_ITEM_MSG"       => "you will delete this Item : ",
     "FIRST_NAME"          => "First name", 
     "EMAIL"               => "Email", 
     "PASSWORD"            => "Password", 
@@ -55,7 +57,7 @@ function lang($phrase){
     "SECONDS"             => "seconds",
     "SUCCESS"             => "Mission completed",
     "FAILED"              => "Mission failed",
-    "LATEST_USER"         => "Latest Registerd Users",
+    "LATEST_USER"         => "Latest Registered Users",
     "GRUOP"               => "Gruop",
     "TOTAL_MEMBERS"       => "Total Members",
     "PENDING_MEMBERS"     => "Pending Members",
@@ -146,7 +148,7 @@ function lang($phrase){
      
     "ITEM_NAME"           => "Item_name",
     "WRITTEN_IN"          => "Written in",
-    "SURE_MSG_COMMENTS"   => "Delete comments from : ",
+    "SURE_MSG_COMMENTS"   => "Delete comment from : ",
     
     ];
         

@@ -44,8 +44,8 @@ include $tpl."nav.php";
        
             <!-- Modal Trigger -->
             <?php
-            //   
-            if (empty($check_info)){
+            // if this user is not the owner let him buy this item
+            if (empty($check_info) ){
                 echo "
                  <div id = 'buy-rst'> </div>  
                    <div class='row'>
@@ -55,11 +55,11 @@ include $tpl."nav.php";
                      </a>  
                   
                    <!--Modal Structure-->
-                   <div id='buy-form-modal' class='modal'>
+                   <div id='buy-form-modal' class='modal modal-fixed-footer'>
                      <form class = 'ajax-form buy-form' data-do = 'buy_item'   data-place = '#buy-rst' data-id ='" . $item_ID . "'>
                        <div class='modal-content center-align'>
                          <h4>" . lang("BUY") . " : " . $pageTitle . "</h4>
-                         <h4>" . $row["Price"] . "</h4>
+                         <h4>$" . $row["Price"] . "</h4>
                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip   ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu   fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt   mollit anim id est laborum</p>
                          <div class='row'> 
                            <div class='input-field col m6 s10 push-m3 push-s1'>
@@ -72,7 +72,7 @@ include $tpl."nav.php";
                                     min='1' 
                                     max=" .  ifEmpty($row["nums_item"], '1') .  "
                                     required>
-                             <label for='icon_prefix'>" . lang("HOW_MANY") . " </label>
+                             <label for='icon_prefix'>" . lang("HOW_MANY_ITEM") . " </label>
                         </div>   
                       </div>   
                     </div>
@@ -140,7 +140,7 @@ include $tpl."nav.php";
     <div class = "comments col 12">
       <?php  if (isset($_SESSION['user'])){ ?>
                    <div class="add-comment-icon row">
-                     <a id = "plus-comment-btn" href = "#comment-form" title="<?php echo lang("ADD_NEW_COMMENT")?>" class="btn-floating btn-large waves- effect waves-light  right modal-trigger "><i class="material-icons">add</i></a>
+                     <a id = "plus-comment-btn" href = "#comment-form" title="<?php echo lang("ADD_NEW_COMMENT")?>" class="btn-floating btn-large waves- effect waves-light  right modal-trigger "><i class="material-icons">comment</i></a>
                    </div>
                    <div class="add-comment modal" id="comment-form" style="display:none">
                       <form class="ajax-form" data-addComment = "add_comment" data-updateComment = "update_comment" data-do = "" data-place = "#comment-call" id="add-comment-form" > 

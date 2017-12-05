@@ -170,27 +170,33 @@ function user_status($ID){
 
 
 /*
-** function getLatest to print the last registerd users /////////
-** $select <=> depend of which table////////////////
-** $from   <=> which Table
-** $order  <=> Descending depend of which Column
-** $limit  <=> how many rows do I want to show
+** function to Update spacial table
 */
 
-//
-//function getLatest($select, $from, $order, $limit) {
-//    
-//    global $con ;
-//    
-//    $getStmt = $con->prepare("SELECT $select FROM $from ORDER BY $order DESC LIMIT $limit");
-//    
-//    $getStmt->execute();
-//    
-//    return $getStmt->fetchAll();
-//}
+function  LastActivity($table, $val){
+    
+    global $con;
+    
+    $stmt =$con->prepare("INSERT INTO `$table`
+                                           (`user_ID`, `last_activity`) 
+                                         VALUES 
+                                           (:zuserID, now())");
+    
+    $stmt->execute(["zuserID" => $val]);
+}
 
+/*
+** function to Update spacial table
+*/
 
+function  UpdateLastActivity($table, $val){
+    
+    global $con;
 
+    $stmt =$con->prepare("UPDATE `$table` SET `last_activity` = now() WHERE user_ID = ?");
+    
+    $stmt->execute([$val]);
+}
 
 /*
 ** Title function, which Echo the page title in case the page 
@@ -224,7 +230,7 @@ function redirectPage($msg, $url = null, $seconds = 3){
     
      echo "<div class= 'succmsg_php center-align' style ='display:block'> 
      
-             <p class= 'msg'>" . " " . $msg . " " .lang("REDIRECTED") . " " .$seconds . " " . lang("SECONDS") . "</p>
+             <p class= 'msg'>" . " " . $msg . " " . lang("REDIRECTED") . " " .$seconds . " " . lang("SECONDS") . "</p>
            <div>";
  
     
@@ -315,8 +321,6 @@ function getAll($select, $from, $id = NULL) {
     
     global $con ;
     
-    
-    
     if(!empty($id)){
         
        $getAll = $con->prepare("SELECT $select FROM $from WHERE userID != $id "); 
@@ -337,19 +341,27 @@ function getAll($select, $from, $id = NULL) {
 
 function home_items() {
     
-    foreach (globalGet("*", "items", "WHERE approve != 0", "", "Item_ID", "DESC", "") as $item){  ?>
+    foreach (globalGet("*", "items", "WHERE approve != 0", "", "Item_ID", "DESC", "") as $item){  
+ 
+             if (isset($_SESSION["ID"]) && $item["Member_ID"] == $_SESSION["ID"]) { 
+                 
+                 $controle_ability = "";
+                 
+                }
+         ?>
 
-             <div class="col s12 m4">
+             <div class="col s6 m3">
                <div class="card"> 
                  <div class="card-image waves-effect waves-block waves-light">
                   <?php 
                     $img = empty($item["Main_Foto"]) ? "foto1.jpg" : $item["Main_Foto"];
                     ?>           
-                  <img class="activator" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
+                  <img class="activator" style="height:198px" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                  </div>
-                 <div class="card-content">
+                 <div class="card-content <?php if(!isset($controle_ability)) {echo "card-padding";} ?>">
+                     
                   <!-- check if user has ability to edit and delete this item -->     
-                  <?php if (isset($_SESSION["ID"]) && $item["Member_ID"] == $_SESSION["ID"]) { ?>    
+                  <?php if (isset($controle_ability)) { ?>    
                    <div class="row profile-item-icons">   
                    <!--Delete Butten-->
                      <a class='modal-trigger' 
@@ -363,6 +375,7 @@ function home_items() {
                     </a>     
                    </div>
                    <?php } ?> 
+                     
                    <span class="card-title activator"><?php echo $item['Name'];?></span>
                    <span class="right"><?php echo $item['Price'];?></span>        
                    <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
@@ -387,12 +400,12 @@ function home_items() {
                  <p><?php echo lang("DELETE_ITEM_MSG")?> <?php echo $item['Name']?></p>
                </div>
                <div class='modal-footer'>
-                 <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>   
+                 <a class='modal-action modal-close waves-effect waves-green btn-flat'><?php echo lang("CLOSE"); ?></a>   
 
                  <a class='modal-action delete modal-close waves-effect waves-green btn-flat ajax-click'
                     data-do= "delete_item"
-                    data-place = "#profile-items" 
-                    data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" >Delete</a>
+                    data-place = "#index-items" 
+                    data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" ><?php echo lang("DELETE"); ?></a>
               </div><!--end modal Delete Butten--> 
             </div>                        
 
@@ -412,17 +425,15 @@ function profile_Items($member_ID){
     
         foreach ($items as $item) {
 
-
-
         ?>    
                  <!-- start card item  -->
-                 <div class="col s12 m4">
+                 <div class="col s6 m3">
                    <div class="card"> 
                      <div class="card-image waves-effect waves-block waves-light">
                       <?php 
                         $img = empty($item["Main_Foto"]) ? "foto1.jpg" : $item["Main_Foto"];
                         ?>           
-                      <img class="activator" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
+                      <img class="activator" style="height:198px" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                      </div>
                      <div class="card-content">
                        <div class="row profile-item-icons">   
@@ -472,18 +483,18 @@ function profile_Items($member_ID){
                      <p><?php echo lang("DELETE_ITEM_MSG")?> <?php echo $item['Name']?></p> 
                    </div>
                    <div class='modal-footer'>
-                     <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>   
+                     <a class='modal-action modal-close waves-effect waves-green btn-flat'><?php echo lang("CLOSE"); ?></a>   
 
                      <a class='modal-action delete modal-close waves-effect waves-green btn-flat ajax-click'
                         data-do= "delete_item"
                         data-place = "#profile-items" 
-                        data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" >Delete</a>
+                        data-id='<?php echo $item['Item_ID']; ?>' id="delete-item" ><?php echo lang("DELETE"); ?> </a>
                   </div><!--end modal Delete Butten--> 
                 </div>                        
 
               <?php }
      } else {
-         echo "<h3 class= 'center-align'>there is no items</h3>";
+         echo "<h3 class= 'center-align'>" . lang("NO_ITEM") . "</h3>";
      }
 }
 
@@ -538,7 +549,7 @@ function ifEmpty($value, $msg) {
               <th><?php echo  lang("STATUS"); ?></th>
               <th><?php echo  lang("MADE_IN"); ?> </th>
               <th><?php echo  lang("TAG_SHOW"); ?></th>
-              <th><?php echo lang("ADD_DATA"); ?></th>
+              <th><?php echo  lang("ADD_DATA"); ?></th>
           </tr>
         </thead>
 
@@ -594,13 +605,17 @@ function showComment($item_ID) {
 
 // to refrsh foto agter change 
 
-function refresh_foto($foto, $profile_user = NULL) { 
+function refresh_foto($foto, $foto_change) { 
     
          $img = !empty($foto)? $foto :  "foto1.jpg" ; ?> 
          <img class= "responsive-img" src="uplaodedFiles/usersFoto/<?php echo $img ?>">
+
+         <?php 
+         if ($foto_change === "1"){
+         ?>     
          <a href="#change-foto" class="modal-trigger"><?php echo lang("CHANGE"); ?> </a> 
-<?php
-}
+<?php    } //end condition
+} // end function
 
 
 

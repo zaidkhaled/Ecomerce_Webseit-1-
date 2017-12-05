@@ -34,7 +34,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                                      items
                                  ON 
                                      items.Item_ID = nontifications.source_id
-                                    WHERE user_ID = $id ORDER BY ID DESC;");
+                                    WHERE user_ID = $id AND ACTOR_ID != $id ORDER BY ID DESC;");
      
        
         $stmt1->execute();
@@ -53,7 +53,8 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                            
                     } elseif ($row["activity_type"] === "Sold") {      
                        $activite_type = lang("SOLD");
-                       $varb = lang("BOUGHT YOUR");
+                       $varb = lang("BOUGHT_YOUR");
+                    
 
                     }
                     $src = isset($row["Actor_foto"])? $row["Actor_foto"] : "foto1.jpg";
@@ -82,7 +83,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
       }
         
             
-      $stmt2 = checkItem("user_ID", "nontifications", $id, "AND is_seen = 0 ORDER BY ID DESC");
+      $stmt2 = checkItem("user_ID", "nontifications", $id, "AND is_seen = 0");
         
 
       $count_unseen_notif = $stmt2;
@@ -96,9 +97,17 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
        echo  json_encode($data);
         
+      
+    //update Last activated data to know if user is online or not     
         
-//       
-     
+    }elseif ($do == "Last_activated"){         
+        
+        // make  update 
+
+        UpdateLastActivity('login_details', $_SESSION['ID']);
+        
+    // nontification updating when it seen     
+    
     }elseif ($do == "seen"){ 
         
         
@@ -107,14 +116,15 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         $stmt-> execute([$_SESSION['ID']]);
         
         
+    // return search result 
         
     }elseif ($do == "search"){ 
         
         $keywrod = $_POST["ajxSearchInput"];
         
-        $stmt = $con->prepare("(SELECT Name,Item_ID, 'item' as type FROM items WHERE Name LIKE '%" . $keywrod . "%')
+        $stmt = $con->prepare("(SELECT Name, Item_ID, 'item' as type FROM items WHERE Name LIKE '%" . $keywrod . "%')
                                UNION 
-                               (SELECT username,userID, 'user' as type FROM users WHERE username LIKE '%" . $keywrod . "%')");
+                               (SELECT username, userID, 'user' as type FROM users WHERE username LIKE '%" . $keywrod . "%')");
         
         $stmt->execute();
         
@@ -122,8 +132,8 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
         if (!empty($rows)){
             
-            foreach($rows as $row){
-
+            foreach($rows as $row){  // if search resut type is  user then return profile link, else print return to item page 
+                
                 if($row["type"] == "user"){
 
                    $url = "profile.php?Member-name=" . $row['Name'] . "&id=" . $row['Item_ID'];
@@ -131,6 +141,11 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                 } elseif ($row["type"] == "item") {
 
                    $url = "item.php?name=" . $row['Name'] . "&ID=" . $row['Item_ID']; 
+                    
+                } elseif ($row["type"] == "tag") {
+                    
+                    $url = "tags.php?tag=" . $row['tag'];  
+                    
                 }
 
                 echo "<a href = '$url'>" . $row['Name'] . "</a>";
@@ -144,7 +159,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
     }elseif ($do == "show_inputs_field"){ ?>
                           
-          <?php $info =  GetSpecialInfo("users","userID","",  $_SESSION['ID'], ""); ?>
+          <?php $info =  GetSpecialInfoOnce("users","userID","",  $_SESSION['ID'], ""); ?>
            <form class="ajax-form" data-do = "update-user-info" data-place = "#user-info" >
               <div class="row"> 
                  <!--  End input "Add user Name" field-->
@@ -240,7 +255,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
           
             //print new info in profile page 
         
-            $info =  getSpecialInfo("users","userID","",  $_SESSION['ID'], "");?>
+            $info =  getSpecialInfoOnce("users","userID","",  $_SESSION['ID'], "");?>
 
            <p class="user-info"><?php echo lang("FIRST_NAME");?>: <?php echo $info['username'];?></p>
            <p class="user-info"><?php echo lang("EMAIL");?>:      <?php echo $info['Email'];?></p>
@@ -310,21 +325,30 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
          if ($check > 0) {
 
-            $stmt=$con->prepare("DELETE FROM items  WHERE Item_ID = :zItemID");
+            $stmt = $con->prepare("DELETE FROM items  WHERE Item_ID = :zItemID");
 
-            $stmt->bindParam(":zItemID", $itemID);
+            $stmt -> bindParam("zItemID", $itemID);
 
             $stmt->execute();
 
          }
         
         
+        if (preg_match('/profile/', $_SERVER['HTTP_REFERER'])){
+            
+            profile_Items($_SESSION['ID']);
+            
+        } else {
+            
+            home_items();
+            
+        } 
+         
         
-         profile_Items();
+        
+        
         
         // End delete Item
-   
-    
         
     }elseif($do == "check_foto"){
         
@@ -418,7 +442,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
               
                 $new_foto = getSpecialInfoOnce("users", "userID", "",$_SESSION["ID"] , "")["Foto"];
               
-                refresh_foto($new_foto);
+                refresh_foto($new_foto, "1");
           }
              
     // start add item
@@ -430,6 +454,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
            $Name    = filter_var($_POST['ajxName'], FILTER_SANITIZE_STRING);
            $descrp  = filter_var($_POST['ajxDescription'], FILTER_SANITIZE_STRING);
            $price   = filter_var($_POST['ajxPrice'], FILTER_SANITIZE_NUMBER_INT);
+           $item_num = filter_var($_POST['ajxItemNum'], FILTER_SANITIZE_NUMBER_INT);
            $made_in = filter_var($_POST['ajxMadeIn'], FILTER_SANITIZE_STRING);
            $status  = $_POST['ajxStatus'];
            $userId  = $_SESSION['ID'];
@@ -547,7 +572,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                
                 
                
-            // if yes then insert the new user to database
+            // if yes then insert the new item to database
                
            }else {
                
@@ -570,26 +595,27 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                
                $stmt = $con->prepare("INSERT INTO
                                                 items
-                                                     (Name, Fotos, Main_Foto, Description, Price, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID, tags)
+                                                     (Name, Fotos, Main_Foto, Description, Price, nums_item, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID, tags)
                                                 VALUES 
-                                                     (:zName, :zFotos, :zMain_Foto, :zdescrp, :zPrice, :zMade_in, :zStatus, now(), 0,:zcateID, :zmemberID, :ztags)");
+                                                     (:zName, :zFotos, :zMain_Foto, :zdescrp, :zPrice, :znums_item, :zMade_in, :zStatus, now(), 0,:zcateID, :zmemberID, :ztags)");
                
                 $stmt->execute(["zName"    => $Name,
                                 "zFotos"  => $serialized_foto_array,
                                 "zMain_Foto" => $Mainfoto,
                                 "zdescrp"  => $descrp,
                                 "zPrice"   => $price,
+                                "znums_item" => $item_num,
                                 "zMade_in" => $made_in,
                                 "zStatus"  => $status,
                                 "zcateID"  => $cateId,
                                 "ztags"    => $tags,
                                 "zmemberID"=> $userId]);
-               echo "ali ail";
+               
                
          
          }   
         
-          profile_Items();
+          profile_Items($_SESSION['ID']);
     
     // send edit item form 
         
@@ -633,27 +659,37 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                        <label for="icon_prefix"><?php echo lang("ITEMS_DESCRP")?></label>
                     </div>
                  </div>
-                 <div class="row">
-                   <!-- stsrt "made in" field -->
-                   <div class="input-field col m5 s12 push-m1 ">
-                     <i class="material-icons prefix">texture</i>
-                     <input id ='made-in'
-                            type="text"
-                            class="validate password1 input"
-                            value = "<?php echo $item_info["Made_In"]; ?>">
-                     <label for="icon_telephone"><?php echo lang("ITEMS_MIND_IN")?></label>
-                   </div><!-- stsrt "made in" field -->
+                  <!-- stsrt "made in" field -->
+                  <div class="row">
+                    <div class="input-field col m3 s10 push-m1 push-s1 ">
+                      <i class="material-icons prefix">texture</i>
+                      <input id ='made-in'
+                             type="text"
+                             class="validate password1 input"
+                             value = "<?php echo $item_info["Made_In"]; ?>">
+                      <label for="icon_telephone"><?php echo lang("ITEMS_MIND_IN")?></label>
+                    </div><!-- stsrt "made in" field -->
 
-                   <!-- start "tags" field -->
-                   <div class="input-field col m5 s12 push-m1">
-                     <i class="material-icons prefix">texture</i>
-                     <input id ='tags'
-                            type="text"
-                            value = "<?php echo $item_info["tags"]; ?>"
-                            class="validate password1 input">
-                     <label for="icon_telephone"><?php echo lang("TAGS")?></label>
-                   </div><!-- end "tags" field -->
-                  </div>
+                    <div class="input-field col m3 s10 push-m1 push-s1">
+                      <i class="material-icons prefix">texture</i>
+                      <input id ='tags'
+                             type="text"
+                             value = "<?php echo $item_info["tags"]; ?>"
+                             class="validate password1 input">
+                      <label for="icon_telephone"><?php echo lang("TAGS")?></label>
+                     </div><!-- stsrt "made in" field -->
+                     <div class=" input-field col m3 s10 push-m2 push-s1">    
+                       <input type="number"
+                              value = "<?php echo $item_info["nums_item"]; ?>"
+                              min= "1" 
+                              max= "100000"
+                              id = "num-item">
+                        <label for="icon_prefix"><?php echo lang("HOW_MANY_ITEM")?></label>
+                      </div> 
+                    </div> 
+                  
+                  
+              
                   <div class="row">
                     <!--start category selector-->
                     <div class="col col m5 s12 push-m1">  
@@ -702,6 +738,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
            $Name    = filter_var($_POST['ajxName'], FILTER_SANITIZE_STRING);
            $descrp  = filter_var($_POST['ajxDescription'], FILTER_SANITIZE_STRING);
            $price   = filter_var($_POST['ajxPrice'], FILTER_SANITIZE_NUMBER_INT);
+           $item_num = filter_var($_POST['ajxItemNum'], FILTER_SANITIZE_NUMBER_INT);
            $made_in = filter_var($_POST['ajxMadeIn'], FILTER_SANITIZE_STRING);
            $status  = $_POST['ajxStatus'];
            $cateId  = $_POST['ajxCateId'];
@@ -752,11 +789,11 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
            $stmt=$con->prepare("UPDATE 
                                  items
                                SET
-                                 Name =?, Description =?, Price =?, Made_in =?, Status =?, Cate_ID =?, tags = ?
+                                 Name =?, Description =?, Price =?, nums_item =?, Made_in =?, Status =?, Cate_ID =?, tags = ?
                                WHERE 
                                  Item_ID = ? ");  //Info Updating
 
-            $stmt->execute([$Name, $descrp, $price, $made_in, $status, $cateId, $tags, $itemID]); //insert new values
+            $stmt->execute([$Name, $descrp, $price, $item_num, $made_in, $status, $cateId, $tags, $itemID]); //insert new values
               
             showItemInfo($itemID);   
   

@@ -46,6 +46,7 @@ if(isset($_SESSION['username'])){
                 <th><?php echo lang("BUYER")?></th>
                 <th><?php echo lang("SELLER")?></th>
                 <th><?php echo lang("ITEMS_NAME")?></th>
+                <th>nums_Item</th>
                 <th><?php echo lang("ITEMS_PRICE")?></th>
                 <th><?php echo lang( "TIME_OF_PURCHASE")?></th>
               </tr>

@@ -62,6 +62,7 @@ if(isset($_SESSION['username'])){
               <th><?php echo lang("FULLNAME")?></th>
               <th><?php echo lang("ITEMS_NUM")?></th>
               <th><?php echo lang("COMMENT_TIMES" )?></th>
+              <th><?php echo lang("Online" )?></th>
               <th><?php echo lang("REGISTERED")?></th>
               <th><?php echo lang("CONTROL")?></th>
           </tr>

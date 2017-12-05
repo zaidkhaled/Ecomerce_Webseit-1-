@@ -106,7 +106,8 @@ function lang($phrase){
     "AGREE"               => "Agree",    
     "CLOSE"               => "Close",    
     "EMPTY"               => "Empty",
-    "HOW_MANY"            => "How many",
+    "HOW_MANY"            => "How many  $",
+    "HOW_MANY_ITEM"       => "How many",
     "ITEMS_MANGER"        => "Items manger", 
     "ADD_NEW_ITEMS"       => "Add New Item",    
     "ADD_NEW_COMMENT"     => "Add New Comment",
@@ -148,9 +149,11 @@ function lang($phrase){
     "NUMS_ITEM"           => "Nums_item",
     "ADD_COMMENT"         => "Add comment",
     "UPDATE_COMMENT"      => "Update comment",
+    "DELETE"              => "Delete",    
     "SOLD"                => "Sold",
     "BOUGHT YOUR"         => "bought your",
     "NO_RESULT_FUOND"     => "No result found",
+    "NO_ITEM"             => "there is no items to show",
     
     //comments Page  
      
@@ -158,6 +161,9 @@ function lang($phrase){
     "WRITTEN_IN"          => "Written in",
     "NO_NOTIF"            => "No notification found ",
     
+   //lang
+        
+    "CHANGE_LANG"         => "Change lang"
     ];
         
     return $lang[$phrase];

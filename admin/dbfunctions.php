@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
      $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '';  
     
-     $data_required = !empty($_POST['ajxdata_required']) ?  $_POST['ajxdata_required'] : 'no_required';  
+     $data_required = $_POST['ajxdata_required'] !== "undefined" ?  $_POST['ajxdata_required'] : 'no_required';  
  
 //    <================== start mamber page ==================>
 
@@ -533,64 +533,102 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
          
           //Insert new user info 
              
-           $Name    = $_POST['ajxName'];
-           $descrp  = $_POST['ajxDescription'];
-           $price   = $_POST['ajxPrice'];
-           $made_in = $_POST['ajxMadeIn'];
+//           $Name    = $_POST['ajxName'];
+//           $descrp  = $_POST['ajxDescription'];
+//           $price   = $_POST['ajxPrice'];
+//           $made_in = $_POST['ajxMadeIn'];
+//           $status  = $_POST['ajxStatus'];
+//           $userId  = $_POST['ajxUserId'];
+//           $tags    = $_POST['ajxTags'];
+//           $cateId  = $_POST['ajxCateId'];
+
+           //Insert new user info 
+             
+           $Name    = filter_var($_POST['ajxName'], FILTER_SANITIZE_STRING);
+           $descrp  = filter_var($_POST['ajxDescription'], FILTER_SANITIZE_STRING);
+           $price   = filter_var($_POST['ajxPrice'], FILTER_SANITIZE_NUMBER_INT);
+           $item_num = filter_var($_POST['ajxItemNum'], FILTER_SANITIZE_NUMBER_INT);
+           $made_in = filter_var($_POST['ajxMadeIn'], FILTER_SANITIZE_STRING);
            $status  = $_POST['ajxStatus'];
            $userId  = $_POST['ajxUserId'];
-           $tags    = $_POST['ajxTags'];
            $cateId  = $_POST['ajxCateId'];
-
+           $tags    = filter_var($_POST['ajxTags'], FILTER_SANITIZE_STRING);
+        
            $count = count($_FILES);
            // Make an error array for add item form 
+         
+        
+            // Make an error array for add item form 
          
            $addFormErr = [];
            $asutiv_arr = [];
         
            $fotoAllowedExtension = ["png", "jpg", "jpeg", "gif"];
-           
+        
+           // receive main foto at first 
+        
+           $MainfotoName = $_FILES['main_foto']['name'];
+           $MainfotoSize = $_FILES['main_foto']['size'];
+           $MainfotoTmp  = $_FILES['main_foto']['tmp_name'];
+           $MainfotoType = $_FILES['main_foto']['type'];
+        
+           $value = explode(".", $MainfotoName);
+
+           $mainfotoextension = strtolower(end($value));
+        
+           if (!in_array($mainfotoextension, $fotoAllowedExtension)) {
+              
+               $addFormErr[] = $MainfotoName ." : " . lang("PHP_ERR_FOTO_EXTENTIONS");
+           }
+        
+           if ($MainfotoSize > 4194304){
+              
+               $addFormErr[] = $MainfotoName ." : " .  lang("PHP_ERR_FOTO_SIZE");
+              
+           }
+        
+        
+           // receive items fotos
+        
            // make loop to controll all fotos, which received
         
            foreach ($_FILES as $value => $name){
                
                $foto = str_replace(".", "_", reset($name));
                
-               $fotoName = $_FILES[$foto]['name'];
-               $fotoSize = $_FILES[$foto]['size'];
-               $fotoTmp  = $_FILES[$foto]['tmp_name'];
-               $fotoType = $_FILES[$foto]['type'];    
-               
-               $array = explode(".", $fotoName);
+               if ($value !== 'main_foto') {
+                    
+                   $fotoName = $_FILES[$foto]['name'];
+                   $fotoSize = $_FILES[$foto]['size'];
+                   $fotoTmp  = $_FILES[$foto]['tmp_name'];
+                   $fotoType = $_FILES[$foto]['type'];    
 
-               $fotoextension = strtolower(end($array));
-                      
-               if ($fotoSize > 4194304){
-              
-                   $addFormErr[] = $fotoName. " : " . lang("PHP_ERR_FOTO_SIZE");
-              
+                   $array = explode(".", $fotoName);
+
+                   $fotoextension = strtolower(end($array));
+
+                   if ($fotoSize > 4194304){
+
+                       $addFormErr[] = $fotoName. " : " . lang("PHP_ERR_FOTO_SIZE");
+
+                    }
+
+                   if (!in_array($fotoextension, $fotoAllowedExtension)) {
+
+                       $addFormErr[] = $fotoName . " : " . lang("PHP_ERR_FOTO_EXTENTIONS");
+                    }
+
+
+                    $randName = rand(0, 100000) . "_" . $fotoName;
+
+                    // insert all fotos name into this array
+                   
+                    $asutiv_arr[$fotoTmp]  = $randName ;
                 }
-               
-               if (!in_array($fotoextension, $fotoAllowedExtension)) {
-              
-                   $addFormErr[] = $fotoName . " : " . lang("PHP_ERR_FOTO_EXTENTIONS");
-                }
-               
-                 
-                $randName = rand(0, 100000) . "_" . $fotoName;
-               
-                $asutiv_arr[$fotoTmp]  = $randName ;
-              
-        }
-        
-        
-            
-//           $serialized_fotos_array = serialize($fotosName); 
-//           $unserialized_array = unserialize($serialized_array);
-        
+            }
         
          
-           if ($count > 8){
+           if ($count > 9){
                
                $addFormErr[] = "foto shuld not be more than 8 fotos";
            }
@@ -659,24 +697,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                    $fotosName_array[] = $imgName;
                }
                
+               
+               $Mainfoto = rand(0, 100000). "_" . $MainfotoName;
+                
+                move_uploaded_file($MainfotoTmp, "../uplaodedFiles/itemsFotos/" . $Mainfoto);
+               
+               
                $serialized_foto_array = serialize($fotosName_array);
                
                
                
                $stmt = $con->prepare("INSERT INTO
                                                 items
-                                                     (Name, Fotos, Description, Price, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID, tags)
+                                                     (Name, Fotos, Main_Foto, Description, Price, nums_item, Made_in, Status, Add_Data, approve, Cate_ID, Member_ID, tags)
                                                 VALUES 
-                                                     (:zName, :zfotos, :zdescrp, :zPrice, :zMade_in, :zStatus, now(), 1,:zcateID, :zmemberID, :ztags)");
+                                                     (:zName, :zFotos, :zMain_Foto, :zdescrp, :zPrice, :znums_item,  :zMade_in, :zStatus, now(), 0,:zcateID, :zmemberID, :ztags)");
                
                 $stmt->execute(["zName"    => $Name,
-                                "zfotos"   => $serialized_foto_array,
+                                "zFotos"   => $serialized_foto_array,
+                                "zMain_Foto" => $Mainfoto,
                                 "zdescrp"  => $descrp,
                                 "zPrice"   => $price,
+                                "znums_item" => $item_num,
                                 "zMade_in" => $made_in,
                                 "zStatus"  => $status,
-                                "ztags"    => $tags,
                                 "zcateID"  => $cateId,
+                                "ztags"    => $tags,
                                 "zmemberID"=> $userId]);
                
          
@@ -893,7 +939,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
          
          // select all users except admin
         
-         $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query ORDER BY userID DESC ");
+         $stmt = $con->prepare("SELECT 
+                                     users.*,
+                                     login_details.Last_activity AS online
+                                FROM
+                                     users
+                                     INNER JOIN
+                                     login_details
+                                ON
+                                     login_details.user_ID = users.userID
+                                WHERE
+                                       GroupID != 1 $query ORDER BY userID DESC ");
          
          $stmt->execute();
          
@@ -923,6 +979,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                  <a  href="comments.php?required=Member&ID=<?php echo $row['userID'];?>"><?php echo checkItem("Member_ID", "comments", $row['userID']);?>
                 </a>
                </td>
+               <td class = 'online'><?php echo $row['online'] ?></td>
                <td class = 'date'><?php echo $row['data'] ?></td>
 
                <!-- start table body   -->
@@ -1317,15 +1374,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     } elseif (preg_match('/items/', $fromPage) && $data_required != "comments" ) { 
          
         // check if there is special query 
-        $data_required = !empty($_post['ajxdata_required']) ?  $_post['ajxdata_required'] : 'no_required'; 
-        if ($data_required != "no_required"){
+        
+        if ($data_required !== "no_required"){
             
-        $query ="WHERE items.$data_required"; 
-            
+        $query ="WHERE $data_required"; 
+            echo $data_required;
         } else {
             
             $query =" "; 
-            
+          
         }
 
          // select all items and make a two new column for category name and user Name, who posted the item 
@@ -1364,18 +1421,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
              <td class = 'ItemName search-in ajax-click' data-required ="comments" data-id = "<?php echo $item_ID ?>" data-place ="#comments-item"><?php echo $row['Name']?></td>
              <!-- prepare fotos to show them    -->
              <?php
-               
-                if (empty($row['Fotos'])) {
+
+                $imgs = unserialize($row['Fotos']);
+             
+                if (empty($row['Main_Foto'])) {
                      $img = "<img class = ''  data-id='" . $item_ID . "'  height ='60' width ='60' src='../uplaodedFiles/itemsFotos/foto1.jpg'>"; 
                     
                 } else {
-                    $imgs = unserialize($row['Fotos']);
-                    $img = "<img class =' modal-trigger item-foto' data-id='" . $item_ID . "'  height ='60' width ='60' src='../uplaodedFiles/itemsFotos/" . $imgs[0] . "'>"; 
-                }  
-
+                    
+                    $img = "<img class =' modal-trigger item-foto' data-id='" . $item_ID . "'  height ='60' width ='60' src='../uplaodedFiles/itemsFotos/" . $row['Main_Foto'] . "'>"; 
+                } 
+             
               ?>     
              <td class = 'itemFoto'><?php echo $img; ?></td>
-             <td><?php echo checkItem("Item_ID", "comments", $row['nums_item']);?></td>     
+             <td class="nums_item"><?php echo $row['nums_item']; echo $query ?> </td>     
              <td><?php echo checkItem("Item_ID", "comments", $row['Item_ID']);?></td>     
              <td class = 'Descrp search-in'><?php echo $row['Description']?></td>
              <td class = 'MadeIn search-in'><?php echo $row['Made_In']?></td>
@@ -1419,7 +1478,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                  <div id="modal<?php echo $row['Item_ID']; ?>" class='modal' >
                    <div class='modal-content'>
                      <h4><?php echo lang("SURE_MSG")?> </h4>
-                     <p><?php echo lang("SURE_FULLNAME_MSG")?> <?php echo $row['Name']?></p>
+                     <p><?php echo lang("SURE_ITEM_MSG") . $row['Name']?></p>
                    </div>
                    <div class='modal-footer'>
                      <a class='modal-action modal-close waves-effect waves-green btn-flat'>Close</a>    
@@ -1455,14 +1514,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         
     }elseif(preg_match('/comments/', $fromPage)) { 
          
-        if (!empty($_post['ajxdata_required'])){
+        if ($data_required !== 'no_required'){
             
-        $data_require = $_post['ajxdata_required'];
-            
-        $query ="WHERE comments.$data_require";   
+            $query ="WHERE comments.$data_required";   
             
         } else {
-            $query =" ";  
+            
+            $query =" "; 
+            
         }
                 
         
@@ -1568,8 +1627,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                      $stmt = $con->prepare('SELECT 
                                                 comments.*,
-                                                users.username as written_by
-                                            FROM
+                                                users.username as written_by,
+                                                users.Foto as member_FOTO
+                                             FROM
                                                 comments
                                             INNER JOIN 
                                                 users
@@ -1595,8 +1655,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                  <a class="secondary-content delete-btn-to-item modal-trigger" onclick="$('.modal').modal();" data-id="<?php echo $row['C_ID'];?>"  href="#modal-item<?php echo $row['C_ID'];?>" >
                                   <i class="material-icons" >delete_forever</i>
                                  </a>
-                               </div>       
-                               <i class="circle material-icons">folder</i>
+                               </div> 
+                                
+                               <img class="circle" src = "../uplaodedFiles/usersFoto/<?php echo ifEmpty($row['member_FOTO'], "foto1.png"); ?>">
+
                                <p><?php echo $row['written_by'];?></p>
                                 <p class="comment"><?php echo $row['Comment'];?></p>
                                <span><?php echo $row['Comment_Data'];?> </span> 
@@ -1673,7 +1735,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                <td class = 'commenID'><?php echo $row['ID']?></td>
                <td class = 'UserName search-in'><?php echo $row['Buyer_Name']?> </td>
                <td class = 'comment search-in'><?php echo $row['Seller_Name']?> </td>
-               <td class = 'itemName search-in'><?php echo $row['Bought_Item']?></td>
+               <td class = 'nums-item search-in'><?php echo $row['Bought_Item']?></td>
+               <td class = 'itemName search-in'><?php echo $row['nums_item']?></td>
                <td class = 'itemName search-in'>$<?php echo $row['Total_Price']?></td>
                <td class = 'writtenIn search-in'><?php echo $row['Time_Of_Purchase']?></td>
              </tr>

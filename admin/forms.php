@@ -321,7 +321,7 @@
                     </div><!--end user and categories selector -->
                     <!--start status selector "new, old"-->
                     <div class ='row'>
-                      <div class="input-field col s8 m5 push-m1 push-s2">
+                      <div class="input-field col m3 s10 push-s1 push-m1">
                         <select id="select-status"> 
                           <option value="new" selected><?php echo lang("NEW")?></option>
                           <option value="like-new"><?php echo lang("LIKE_NEW")?></option>
@@ -332,36 +332,70 @@
                      </div><!--end status selector "new, old"-->
                     
                    <!-- start "tags" field -->
-                     <div class="input-field col s8 m5 push-m1 push-s2">
+                     <div class="input-field col m4 s10 push-m1 push-s1">
                        <i class="material-icons prefix">texture</i>
                        <input id ='tags'
                               type="text"
                               class="validate input">
                        <label for="icon_telephone"><?php echo lang("TAGS")?></label>
                      </div><!-- end "tags" field -->
+                     <div class=" input-field col m3 s10 push-m1 push-s1">    
+                       <input type="number"
+                              value = "1" 
+                              min= "1" 
+                              max= "100000"
+                              id = "num-item">
+                        <label for="icon_prefix">how many</label>
+                      </div>   
                    </div>         
                         
                   <div class = "row files-place">
-                     <div class="file-field input-field col m6 s12 push-m3">
+                     <div class="file-field input-field col s8 m5 push-m1 push-s2">
                         <div class="btn">
                           <span>File</span>
-                        <input type="hidden" id="user-id" value="<?php echo $_SESSION["ID"]; ?>">         
-                        <input id = "imgs"
-                               type="file"
-                               name= "foto" multiple 
-                               onchange="$(this).attr('len',this.files.length);"
-                               >
+                          <input type="hidden" id="user-id" value="<?php echo $_SESSION["ID"]; ?>">         
+                          <input id = "imgs"
+                                 type="file"
+                                 name= "foto" multiple 
+                                 onchange="$(this).attr('len',this.files.length);"
+                                 >
+                         </div>
+                         <div class="file-path-wrapper">
+                           <input class = "file-path validate"
+                                  id = 'filePath'
+                                  placeholder = "<?php echo lang("FOTO_ITEM_UPLOAD"); ?>">
+                         </div>
+                      </div> 
+                      <div class="main-foto col s8 m5 push-m1 push-s2">
+                        <div class="file-field input-field ">
+                          <div class="btn" >
+                            <span>File</span>
+                            <input data-do = "check_foto"
+                                   data-place = "#foto-erorr"
+                                   id = "item-main-img"
+                                   class = "item-main-img"
+                                   type="file"
+                                   remove = "#main-item-foto h5, #main-item-foto .user-foto "
+                                   onchange="$(this).attr('len',this.files.length);"
+                                   name= "foto" 
+                                   preview = "#main-item-foto">
+                           </div>
+                           <div class="file-path-wrapper">
+                             <input class = "file-path validate"
+                                    id = "#path-main-item"
+                                    placeholder = "Main foto">
+                           </div>
                         </div>
-                        <div class="file-path-wrapper">
-                          <input class = "file-path validate"
-                                 id = 'filePath'
-                                 placeholder = "<?php echo lang("FOTO_ITEM_UPLOAD"); ?>">
-                       </div>
-                     </div>  
+
+                     </div> 
                   </div>
                   <div class="row">
-                    <div class="imgs-preview col m6 s12 push-m3 center-align">
+                    <div class="imgs-preview col m5 s12 push-m1">
+                        <h5 class="center-align">item-fotos</h5>
                     </div>  
+                    <div class="img-preview col m5 s12 push-m1" id="main-item-foto">
+                      <h5 class="center-align">Main foto</h5>
+                    </div>   
                   </div>
                   
                </div><!--end modal contant-->
@@ -381,7 +415,7 @@
                     <i class="material-icons prefix">mode_edit</i>
                     <textarea id="icon_prefix2 " class="materialize-textarea comment-update-field"></textarea>
                     <input type="hidden" class="comment-id">
-                    <label for="icon_prefix2">First Name</label>
+                    <label for="icon_prefix2">update Comment</label>
                   </div>
                 </div><!--end modal contant--> 
                <div class="modal-footer">
@@ -393,15 +427,17 @@
              
   <?php  } elseif (strpos($url, 'comments') !== false) { ?>
 
-     <!--start edit comments-->, 
+     <!--start edit comments-->
      <div id="update-comments-form" class="modal">
+           
        <form class = 'ajax-form edit-comment' data-do= "update_comment"  data-id ="" data-place = '#comments-table-body'>
+         <h1 class="center-align">Update comment</h1>     
          <div class="modal-content"> 
            <div class="input-field col s6">
              <i class="material-icons prefix">mode_edit</i>
              <textarea id="icon_prefix2 " class="materialize-textarea comment-update-field"></textarea>
              <input type="hidden" class="comment-id">
-             <label for="icon_prefix2">First Name</label>
+             <label for="icon_prefix2">update Comment</label>
            </div>
          </div><!--end modal contant--> 
         <div class="modal-footer">

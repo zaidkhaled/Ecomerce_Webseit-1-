@@ -56,28 +56,22 @@ $pageTitle = "Dashbord";
         </div> 
          
         <div class="row">
-            <div class="col s6  m3 box">
+            <div class="col s6  m3 box push-m1">
                 <div class="stat ">
                     <p><?php echo lang( "BUY_OPERATIONS"); ?></p>
                     <span><a href="statistics.php"><?php echo countItems("ID","buy_operations")?></a></span>
                 </div>
             </div>
-            <div class="col s6  m3 box">
+            <div class="col s6  m3 box push-m1">
                 <div class="stat ">
                     <p><?php echo lang( "DEPIT_DEPOSIT"); ?></p>
                     <span><a href="debit_deposit.php"><?php echo countItems("ID","debit_deposit_operations")?></a></span>
                 </div>
             </div>
-            <div class="col s6  m3 box">
+            <div class="col s6  m3 box push-s3 push-m1">
                 <div class="stat ">
-                    <p><?php echo lang( "TOTAL_COMMENTS"); ?></p>
-                    <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
-                </div>
-            </div>
-            <div class="col s6  m3 box">
-                <div class="stat ">
-                    <p>Total comments</p>
-                    <span><a href="comments.php"><?php echo countItems("C_ID","comments")?></a></span>
+                    <p><?php echo lang("Online")?></p>
+                    <span><a><?php echo countItems("ID","login_details WHERE last_activity > DATE_SUB(NOW(), INTERVAL 5 SECOND)")?></a></span>
                 </div>
             </div>
         </div> 
