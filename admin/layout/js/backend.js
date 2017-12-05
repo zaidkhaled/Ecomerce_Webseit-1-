@@ -169,7 +169,7 @@ $(function () {
                 required  = value.data("required") === undefined ? $('#data_required').html() : value.data("required"),
 
                 itemID  = value.data("item");
-            
+               console.log(required);
 
             fData.append("ajxID", value.data('id'));
             fData.append("ajxStatus", newStaus);
@@ -274,7 +274,11 @@ $(function () {
             
         } else {
             var $where = $place;
+//                required  = $('#data_required').html().length > 3 ? $('#data_required').html() : "undefined";
+//                console.log($('#data_required').html().length);
+//                console.log(required);
             fData.append('open', $place);
+
             fData.append('ajxdata_required', $('#data_required').html());
         }
         

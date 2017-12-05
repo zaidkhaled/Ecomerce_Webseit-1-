@@ -33,16 +33,10 @@ if(isset($_SESSION['username'])){
     
     $data_required = "$required"."_ID=$ID";
         
-    } else {
-        
-       $data_required = ""; 
-        
+    echo "<span style='display:none' id ='data_required'>$data_required</span>";    
     }
      ?>
 
-<div class="required-info" style="display:none">
-  <span id ='data_required'><?php echo $data_required; ?></span>
-</div>
 <!--start serch field-->
 <div id="rst"></div>
    <div class="nav-wrapper" >

@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
      $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '';  
     
-     $data_required = $_POST['ajxdata_required'] !== "undefined" ?  $_POST['ajxdata_required'] : 'no_required';  
+     $data_required = $_POST['ajxdata_required'] != "undefined"?  $_POST['ajxdata_required'] : 'no_required';  
  
 //    <================== start mamber page ==================>
 
@@ -1520,15 +1520,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             
         } else {
             
-            $query =" "; 
+            $query =""; 
             
         }
                 
         
          // select all items and make a two new column for category name and user Name, who posted the item 
         
-         $stmt = $con->prepare(" SELECT 
-                                     comments.* ,
+         $stmt = $con->prepare("SELECT 
+                                     comments.*,
                                      items.Name AS Item_Name, 
                                      users.username AS User_Name 
                                  FROM
@@ -1541,7 +1541,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                      users 
                                  ON 
                                      users.userID = comments.Member_ID
-                                     $query"); 
+                                      $query"); 
          $stmt->execute();
          
          //fetch all items with their info from Datebase
@@ -1684,8 +1684,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                      echo "kusha" .'<br><br><br><br>'. $itemID .'<br><br><br><br>';
                  }
     } elseif (preg_match('/statistics/', $fromPage)){
+        
         // check if there is special query 
+        
         $data_required = !empty($_post['ajxdata_required']) ?  $_post['ajxdata_required'] : 'no_required'; 
+        
         if ($data_required != "no_required"){
             
         $query ="WHERE items.$data_required"; 
@@ -1746,7 +1749,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }elseif (preg_match('/debit_deposit/', $fromPage)){
         
         // check if there is special query 
+        
         $data_required = !empty($_post['ajxdata_required']) ?  $_post['ajxdata_required'] : 'no_required'; 
+        
         if ($data_required != "no_required"){
             
         $query ="WHERE items.$data_required"; 
