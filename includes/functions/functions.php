@@ -48,7 +48,8 @@ function getSpecialComments($Item_ID) {
         
     $statement = $con->prepare("SELECT 
                                     comments.*,
-                                    users.username as written_by
+                                    users.username as written_by,
+                                    users.Foto as actor_foto
                                 FROM 
                                     comments 
                                 INNER JOIN
@@ -377,7 +378,7 @@ function home_items() {
                    <?php } ?> 
                      
                    <span class="card-title activator"><?php echo $item['Name'];?></span>
-                   <span class="right"><?php echo $item['Price'];?></span>        
+                   <span class="right">$<?php echo $item['Price'];?></span>        
                    <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
                        <?php echo lang('VIST');?>
                        </a>
@@ -459,7 +460,7 @@ function profile_Items($member_ID){
                                    
                        </div>   
                        <span class="card-title activator"><?php echo $item['Name']; ?></span>
-                       <span class="right"><?php echo $item['Price'];?></span>        
+                       <span class="right">$<?php echo $item['Price'];?></span>        
                        <p><a href="item.php?name=<?php echo str_replace(" ", "-",$item['Name']); ?>&ID=<?php echo $item['Item_ID'];?>">
                            <?php echo lang('VIST');?>
                            </a>
@@ -557,7 +558,7 @@ function ifEmpty($value, $msg) {
           <tr>
             <td><?php echo ifEmpty($item_info["Name"], lang("EMPTY")) ?></td>
             <td><a class ="item_user_name" href= "profile.php?Member-name=<?php echo $item_info["User_Name"] . "&id=" . $item_info["Member_ID"]; ?>"><?php echo $item_info["User_Name"]; ?></a></td>
-            <td><?php echo ifEmpty($item_info["Price"], lang("EMPTY")) ?></td>
+            <td>$<?php echo ifEmpty($item_info["Price"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["nums_item"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Status"], lang("EMPTY")) ?></td>
             <td><?php echo ifEmpty($item_info["Made_In"], lang("EMPTY")) ?></td>  
@@ -587,17 +588,20 @@ function showComment($item_ID) {
     
          foreach(getSpecialComments($item_ID) as $comment) {?>
 
-           <div class="items-comment">
+           <div class="items-comment ">
+             <div class=" circle img-container">   
+               <img class=" img-responsive actor-img" style="width:60px;" src="uplaodedFiles/usersFoto/<?php echo $comment["actor_foto"]; ?>">   
+             </div>     
              <h5 class="written_by left"><?php echo $comment["written_by"];?></h5>    
              <div class="row comment-controller">    
-               <i class="material-icons right modal-trigger"
+               <i class="material-icons right modal-trigger comment-edit-btn"
                   onclick="$('.modal').modal();"
                   data-id ="<?php echo $comment['C_ID']; ?> "
                   href = "#comment-form" 
                   >mode_edit</i>    
-             </div>     
-             <span class ="comment-data right"><?php echo $comment["Comment_Data"];?></span>   
+             </div>      
              <p class ="comment" id="comment"><?php echo $comment["Comment"];?></p>
+             <div class ="comment-data right"><?php echo $comment["Comment_Data"];?></div>   
            </div>
          <?php } 
 

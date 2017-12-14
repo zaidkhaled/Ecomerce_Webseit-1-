@@ -13,8 +13,8 @@ function lang($phrase){
         
     "VIST"                 => "Besuchen",
     "PROFILE"              => "Profil",
-    "LOGIN"                => "Anmeldung",
-    "LOGIN/REGISETER"      => "Anmeldung/Registrieren",
+    "LOGIN"                => "Einloggen",
+    "LOGIN/REGISETER"      => "Einloggen/Registrieren",
     "PERSONAL_INFO"        => "Persönliche Info",
     "CHANGE_PASSWORD"      => "Passwort ändern",
     "CHANGE"               => "Ändern",
@@ -66,6 +66,7 @@ function lang($phrase){
         
         
     "SURE_FULLNAME_MSG"   => "Sie werden diesen Benutzer löschen:",
+    "FIRST_NAME_OR_EMAIL" => "Vorname oder E-mail",
     "FIRST_NAME"          => "Vorname",
     "EMAIL"               => "Email", 
     "PASSWORD"            => "Password", 

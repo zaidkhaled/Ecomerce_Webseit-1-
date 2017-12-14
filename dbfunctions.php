@@ -122,9 +122,9 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
         $keywrod = $_POST["ajxSearchInput"];
         
-        $stmt = $con->prepare("(SELECT Name, Item_ID, 'item' as type FROM items WHERE Name LIKE '%" . $keywrod . "%')
-                               UNION 
-                               (SELECT username, userID, 'user' as type FROM users WHERE username LIKE '%" . $keywrod . "%')");
+        $stmt = $con->prepare("(SELECT Name, Item_ID,    'item'     as     type   FROM    items WHERE Name     LIKE '%" . $keywrod . "%')
+                                 UNION 
+                                (SELECT username, userID, 'user'    as    type   FROM    users WHERE username LIKE '%" . $keywrod . "%')");
         
         $stmt->execute();
         
@@ -137,18 +137,19 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                 if($row["type"] == "user"){
 
                    $url = "profile.php?Member-name=" . $row['Name'] . "&id=" . $row['Item_ID'];
+                    
+                   $named_showd =  $row['Name'];       
 
                 } elseif ($row["type"] == "item") {
 
                    $url = "item.php?name=" . $row['Name'] . "&ID=" . $row['Item_ID']; 
                     
-                } elseif ($row["type"] == "tag") {
-                    
-                    $url = "tags.php?tag=" . $row['tag'];  
+                   $named_showd =  $row['Name'];   
                     
                 }
-
-                echo "<a href = '$url'>" . $row['Name'] . "</a>";
+                
+               
+                echo "<a href = '$url'>" . $named_showd  . "</a>";
             }
             
         } else {

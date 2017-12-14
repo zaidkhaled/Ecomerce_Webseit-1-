@@ -6863,7 +6863,7 @@ select {
 .select {
   position: relative;
   display: block;
-  width: 20em;
+  width: 100%;
   height: 3em;
   line-height: 3;
   background: #203E38;
@@ -7366,7 +7366,7 @@ button[type=submit] {
 .comment-data {
   display: inline-block;
   position: relative;
-  right: -60%; }
+  bottom: 17px; }
 
 .info-item-clm {
   background-color: #F0F7CE;
@@ -7377,6 +7377,11 @@ button[type=submit] {
   height: 92vh;
   margin-top: -8vh;
   overflow-y: scroll; }
+
+#comment {
+  top: -22px;
+  position: relative;
+  left: 7px; }
 
 .password-change {
   cursor: pointer;
@@ -7409,6 +7414,24 @@ button[type=submit] {
   align-items: center;
   justify-content: center; }
 
+.img-container .actor-img {
+  left: 4px;
+  position: relative; }
+
+.written_by {
+  position: relative;
+  left: 79px;
+  top: -52px; }
+
+.comment-edit-btn {
+  position: relative;
+  top: -53px; }
+
+.img-container {
+  overflow: hidden;
+  width: 70px;
+  height: 70px; }
+
 .items {
   margin-top: 40px; }
 
@@ -7433,7 +7456,8 @@ button[type=submit] {
 #add-item-btn {
   background-color: #945B02 !important;
   margin-bottom: 20px;
-  right: 5vh; }
+  right: 5vh;
+  top: 14px; }
 
 #item-descrp {
   max-height: 85px !important;
@@ -7482,7 +7506,13 @@ button[type=submit] {
     padding: 5px; }
 
   .card .card-title, .card p {
-    font-size: 18px; } }
+    font-size: 18px; }
+
+  .addItemForm {
+    border-radius: 1%; }
+
+  .comment-data {
+    bottom: -57px; } }
 @media only screen and (min-width: 601px) {
   #user-foto-place {
     width: 130px !important; }

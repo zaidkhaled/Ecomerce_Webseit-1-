@@ -9,7 +9,7 @@ if(isset($_SESSION['username'])){
     
      include "init.php";
     
-     $pageTitle = lang("DEPIT_DEPOSIT");
+     $pageTitle = lang("DEBIT_DEPOSIT");
     
      include $tpl. "header.php";
     
@@ -29,7 +29,7 @@ if(isset($_SESSION['username'])){
           <i class="material-icons close Large">close</i>
         </div>
       </div> <!--end serch field-->
-      <h1 class="center-align"><?php echo lang("DEPIT_DEPOSIT"); ?></h1>
+      <h1 class="center-align"><?php echo lang("DEBIT_DEPOSIT"); ?></h1>
       <div id="rst"></div>
       <div class="container">
         <!--in this div "required-info" requests will be saved, to send as ajax request-->

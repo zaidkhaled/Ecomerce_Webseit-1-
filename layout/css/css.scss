@@ -124,7 +124,7 @@ select {
 .select {
   position: relative;
   display: block;
-  width: 20em;
+  width: 100%;
   height: 3em;
   line-height: 3;
   background: $col1;
@@ -799,10 +799,10 @@ button[type = submit]{
     margin-top: 8px;
     
 }
-.comment-data {
+ .comment-data {
     display: inline-block;
     position: relative;
-    right: -60%;
+    bottom: 17px;
 }
 .info-item-clm {
     background-color : $col3;
@@ -815,7 +815,11 @@ button[type = submit]{
     overflow-y: scroll;   
 
 }
-
+#comment {
+    top: -22px;
+    position: relative;
+    left: 7px;
+}
 
 .password-change{
     cursor: pointer;
@@ -857,7 +861,26 @@ button[type = submit]{
     justify-content: center;
 }
 
+.img-container .actor-img{
+    left: 4px;
+    position: relative;
+}
 
+.written_by {
+    position: relative;
+    left: 79px;
+    top: -52px;
+}
+.comment-edit-btn {
+    position: relative;
+    top: -53px;
+}
+
+.img-container{
+    overflow: hidden;
+    width: 70px;
+    height: 70px;
+}
 
 .items {
     margin-top:40px;
@@ -889,6 +912,7 @@ button[type = submit]{
     background-color: $col5 !important;
     margin-bottom: 20px;
     right: 5vh;
+    top: 14px;
 }
 #item-descrp {
     max-height: 85px !important;
@@ -950,7 +974,12 @@ button[type = submit]{
           font-size: 18px;
       }
       
-      
+      .addItemForm{
+          border-radius: 1%;
+      }
+      .comment-data {
+        bottom: -57px;
+      }
   }
   @media #{$medium-and-up} {
       

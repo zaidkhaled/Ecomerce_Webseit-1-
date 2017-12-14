@@ -14,8 +14,9 @@ include "init.php";
 $Cate_ID    = $_GET['ID'];
 
 if(checkItem("ID", "categories", $Cate_ID) > 0){ // at first chick if this category already exist 
-
-        echo "<h1 class = 'center-align'>". $pageTitle . "</h1><br>";?>
+      
+        echo   "<div class='margin'></div>   <h1 class = 'center-align'>". $pageTitle . "</h1><br>"; ?>
+       
         <div class="container">
           <div class="row">
 
@@ -23,10 +24,13 @@ if(checkItem("ID", "categories", $Cate_ID) > 0){ // at first chick if this categ
 
         <?php foreach (getItems("Cate_ID" , $Cate_ID) as $item){ ?> 
              <!-- start card item  -->
-             <div class="col s12 m4">
+             <div class="col s6 m3">
                <div class="card"> 
                 <div class="card-image waves-effect waves-block waves-light">
-                  <img class="activator" src="layout/images/Lv.jpg">
+                 <?php 
+                   $img = empty($item["Main_Foto"]) ? "foto1.jpg" : $item["Main_Foto"];
+                    ?>           
+                  <img class="activator" style="height:198px" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                 </div>
                 <div class="card-content">
                   <span class="card-title activator"><?php echo $item['Name'];?>
@@ -38,6 +42,11 @@ if(checkItem("ID", "categories", $Cate_ID) > 0){ // at first chick if this categ
                 <div class="card-reveal">
                   <span class="card-title"><?php echo $item['Name'];?><i class="material-icons right">close</i></span>
                   <p><?php echo $item['Description'];?>.</p>
+                   <?php 
+                    $tags = explode("," , $item['tags']);     
+                    foreach($tags as $tag){
+                       echo "<a href='tags.php?tag=" . str_replace(" ", "-", $tag) . "'> ". $tag . "</a> |";
+                     } ?>  
                 </div>
               </div><!-- start card item  -->
             </div>

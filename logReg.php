@@ -13,6 +13,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
  include "init.php"; 
  
  include $tpl."header.php";
+
  include $tpl."nav.php";
 
  if ($_SERVER['REQUEST_METHOD'] == "POST"){ 
@@ -21,34 +22,56 @@ if(isset($_SESSION['user'])){//check if user alrady logined
      
      if (isset($_POST['login'])){
          
-         $userName = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-
-         $hashedpass = sha1($_POST['pass']);
-
          // check if user is realy exist in Database.
-
+         
+         $hashedpass = sha1($_POST['pass']);
+         
+         $value = $_POST['name_or_email'];
+          
+         
+         if(preg_match('/@/', $value) || preg_match('/.com/', $value)){
+             
+             $req     = "Email";
+             
+             $req_val = filter_var($_POST['name_or_email'], FILTER_SANITIZE_EMAIL);
+             
+             
+         } else {
+             
+             $req     = "username";
+             
+             $req_val = filter_var($_POST['name_or_email'], FILTER_SANITIZE_STRING);
+             
+         }
+         
+         
+         // $count = checkItem("password", "users", $hashedpass, "AND username = $userName");
+             
+             
          $stmt=$con->prepare("SELECT
                                  userID, username, password
                               FROM 
                                  users 
                               WHERE 
-                                 username = ? 
+                                 $req = ?
                               AND 
                                  password = ? 
                               LIMIT 1");
 
-         $stmt->execute([$userName,$hashedpass]);
+         $stmt->execute([$req_val,$hashedpass]);
 
-        $row = $stmt->fetch();
+         $row = $stmt->fetch();
 
          $count= $stmt->rowCount();
+             
+             
 
          if($count > 0){      //check if the user is admin, if yes then 
 
 
              // fetch all user info, it should be helpful, in case that user want to edit his personal data "for edit form".
 
-             $_SESSION['user'] = $userName; // Registering the sesstion name.
+             $_SESSION['user'] = $req_val; // Registering the sesstion name.
 
              $_SESSION['ID'] = $row['userID']; // Registering the sesstion ID.
 
@@ -63,7 +86,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                 UpdateLastActivity('login_details', $_SESSION['ID']);
                 
             } else {
-                // add new id 
+                // add new id to login_details table
                 LastActivity('login_details', $_SESSION['ID']);
                 
             }
@@ -71,6 +94,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
              header("Location:index.php");// redirect to index.php.
 
              exit();
+            
          }
          
          
@@ -218,11 +242,11 @@ if(isset($_SESSION['user'])){//check if user alrady logined
               <input    id="icon_telephone"
                         type="text"
                         class="validate"
-                        name="name" 
+                        name="name_or_email" 
                         autocomplete="off"
                         value="<?php if (isset($userName)){echo $userName;}?>"
                         >
-              <label for="first_name"><?php echo lang('FIRST_NAME')?></label>
+              <label for="first_name"><?php echo lang("FIRST_NAME_OR_EMAIL")?></label>
           </div>
         </div>  
 

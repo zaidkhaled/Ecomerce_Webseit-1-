@@ -70,7 +70,7 @@ function lang($phrase){
 
     //Category Page 
         
-    "MANGE CATEGORIES"    => "Mange categories",    
+    "MANGE CATEGORIES"    => "Manage categories",    
     "ADD_NEW_CATEGORIES"  => "Add New Category",    
     "EIDT_CATEGORIES"     => "Edit  Category",
     "PHP_CATE_NAME"       => "Category name is empty",
@@ -96,7 +96,7 @@ function lang($phrase){
          
     //depit deposit page
         
-     "DEPIT_DEPOSIT"      => "Depit - Deposit",
+     "DEBIT_DEPOSIT"      => "Debit - Deposit",
      "AMOUNT"             => "Amount",
      "TIME_OF_OPERATION"  => "Time of operation",
      "AMUONT_DEPOSITED"   => "Amount deposited",

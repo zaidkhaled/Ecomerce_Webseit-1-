@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
      $fromPage = isset( $_SERVER['HTTP_REFERER']) ?  $_SERVER['HTTP_REFERER'] : '';  
     
-     $data_required = $_POST['ajxdata_required'] != "undefined"?  $_POST['ajxdata_required'] : 'no_required';  
+     $data_required = $_POST['ajxdata_required'] != "undefined" && !empty($_POST['ajxdata_required']) ?  $_POST['ajxdata_required'] : 'no_required';  
  
 //    <================== start mamber page ==================>
 
@@ -1378,7 +1378,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if ($data_required !== "no_required"){
             
         $query ="WHERE $data_required"; 
-            echo $data_required;
+           
         } else {
             
             $query =" "; 
@@ -1417,8 +1417,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
          $item_ID = $row['Item_ID'];     
 ?>
              <tr class="table-row"> 
-             <td class = 'itemID search-in'><?php echo $item_ID ?></td>
-             <td class = 'ItemName search-in ajax-click' data-required ="comments" data-id = "<?php echo $item_ID ?>" data-place ="#comments-item"><?php echo $row['Name']?></td>
+             <td class = 'itemID search-in'><?php echo $item_ID ?> </td>
+             <td class = 'ItemName search-in ajax-click' data-required ="comments" data-id = "<?php echo $item_ID ?>" data-place ="#comments-item"><?php echo $row['Name']; ?></td>
              <!-- prepare fotos to show them    -->
              <?php
 

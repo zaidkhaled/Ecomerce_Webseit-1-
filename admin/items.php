@@ -50,7 +50,7 @@ if(isset($_SESSION['username'])){
    </div><!-- end search btn-->
 <div id="rst">
 </div>
-    <h1 class="center-align">Items Manger</h1>
+    <h1 class="center-align">Manage Items</h1>
     <div class="container">
        <!-- start add btn-->    
        <div class="row">

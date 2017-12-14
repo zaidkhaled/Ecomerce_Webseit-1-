@@ -47,7 +47,7 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
                    
                   </ul> 
          <?php  } ?>
-          <li><a class="dropdown-button" class = "dropdown-button" data-activates="dropdown11"><?php $value = isset($_SESSION['user'])? 'hi' . " ". $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li> 
+          <li><a class="dropdown-button" class = "dropdown-button" data-activates="dropdown11"><?php $value = isset($_SESSION['user'])? 'Hi' . " ". $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li> 
         </ul>
           
         <ul class="right col s3 hide-on-large-only">
@@ -89,7 +89,7 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
                    echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; ?>
                
          <?php  }?>                                                              
-           <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? 'hi' . " ".$_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>
+           <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? 'Hi' . " ".$_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
      </div>
    </div>

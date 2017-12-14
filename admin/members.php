@@ -35,7 +35,7 @@ if(isset($_SESSION['username'])){
           <i class="material-icons close Large">close</i>
         </div>
       </div> <!--end serch field-->
-      <h1 class="center-align">Mange members</h1>
+      <h1 class="center-align">Manage members</h1>
       <div class="container">
         <div class="row">
          <a id="add-btn"
