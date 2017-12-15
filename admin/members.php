@@ -100,3 +100,4 @@ if(isset($_SESSION['username'])){
  }
 
 ob_end_flush();
+?>

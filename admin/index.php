@@ -1,4 +1,4 @@
- <?php 
+<?php 
  ob_start();
  session_start();
 
@@ -112,4 +112,3 @@ if(!isset($nonav)){
 include $tpl."footer.php";
 ob_end_flush();
 ?>
-

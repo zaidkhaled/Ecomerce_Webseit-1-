@@ -9,3 +9,4 @@ session_destroy(); //destroy the sesstion
 header('location:index.php');
 
 exit();
+?>

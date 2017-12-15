@@ -26,3 +26,4 @@ if($do == 'Mange') {
     echo "Erorr there\'s no Page with Name";
     
 }
+?>

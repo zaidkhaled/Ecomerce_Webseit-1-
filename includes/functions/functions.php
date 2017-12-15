@@ -621,10 +621,4 @@ function refresh_foto($foto, $foto_change) {
 <?php    } //end condition
 } // end function
 
-
-
-
-
-
-
-
+?>

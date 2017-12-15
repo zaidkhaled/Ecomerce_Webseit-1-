@@ -1,7 +1,12 @@
  <?php 
- ob_start();
- session_start();
 
+
+
+
+
+
+ session_start();
+ ob_start();
  $pageTitle = "shop-online";
 
  include "init.php"; 
@@ -13,7 +18,7 @@
 <div class="container margin">
   <h1 class="center-align">Shop Online</h1>
 <?php 
-if  (isset($_SESSION["user"])) { ?>
+if (isset($_SESSION["user"])) { ?>
 
   <div class="row plus-btn"> 
     <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>

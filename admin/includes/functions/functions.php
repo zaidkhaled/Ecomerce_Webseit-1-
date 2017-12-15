@@ -248,4 +248,4 @@ function getAll($select, $from, $id = NULL) {
 // html funtions 
 // functions for special department in the website 
 */
-
+?>

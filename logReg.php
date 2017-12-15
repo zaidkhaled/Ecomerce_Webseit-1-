@@ -408,8 +408,3 @@ if(isset($_SESSION['user'])){//check if user alrady logined
     include $tpl."footer.php";
     ob_end_flush();
 ?>
-
-
-
-
-
