@@ -128,22 +128,37 @@ $(function () {
 
             $('select').material_select(); // materialze requirement
                      
-             $('.addItemForm').slideUp();   
+             $('.addItemForm').slideUp();
 
           
-        } else if ($do === "add_comment" || $do === "update_comment") {
+
+        } else if ($do === "update_comment") {
                           
-            fData.append("ajxComment", $("#item-comment").val()); 
-            
-            fData.append("ajxID", $("#item-id").val()); 
+            fData.append("ajxComment", $("#update-comment").val()); 
             
             fData.append("ajxCommentID", $("#comment-id").val());
             
+            fData.append("ajxID", $("#item-id").val()); 
+            
             fData.append("ajxOwnerID", $("#owner-id").val()); 
             
-            // $("#item-comment").val("");
+             $("#update-comment").val("");
+            
+              $('#update-comment-form').modal('close');
             
         
+        } else if ($do === "add_comment") {        
+            
+            fData.append("ajxComment", $("#add-comment").val()); 
+            
+            fData.append("ajxID", $("#item-id").val()); 
+            
+            fData.append("ajxOwnerID", $("#owner-id").val()); 
+            
+            $("#add-comment").val("");
+            
+            $('#add-comment-form').modal('close');
+            
             
         } else if ($do === "check_foto" || $do === "change_user_foto") {
     
@@ -191,7 +206,6 @@ $(function () {
         $.ajax({
             
             url : "dbfunctions.php",
-//            url : "fm.php",
             
             type : "POST",
             
@@ -204,7 +218,6 @@ $(function () {
         }).done(function (e) {
            
             $($where).html(e);
-//            $("#rst").html(e);
             
         }).fail(function () {
             
@@ -443,6 +456,7 @@ $(function () {
     });
 
 //    start navbar
+    
     $(".cate-menu").on("mouseover", function () {
         $(this).dropdown({ hover: false });
     });
@@ -461,8 +475,6 @@ $(function () {
     
      $("#mobile-dimo").on("click", function () {
         // Hide sideNav
-//        $('.button-collapse').sideNav('hide');
-         console.log('jj');
          $('.button-collapse').sideNav('destroy');
      })      
     
@@ -513,53 +525,35 @@ $(function () {
         
     }
     
-    
-    $('#plus-comment-btn').on("click", function () {
-        
-        $('#add-comment-title').show();
-        
-        $('#update-comment-title').hide();
-        
-        $("#add-comment-form").attr("data-do", $("#add-comment-form").attr("data-addComment"));
-        
-        if ($(this).val().length < 2) {
 
-            $("#add-comment-btn").attr("disabled", "true");
-            
-        }
-        
-    });
     
-    $('#item-comment').on('keyup', function () {
+    // make sure that comment is empty
+    
+    $('#add-comment, #update-comment').on('keyup', function () {
         
         if ($(this).val().length > 0) {
            
-            
-            $("#add-comment-btn").removeAttr("disabled");
+            $("#add-comment-btn, #update-comment-btn").removeAttr("disabled");
             
         } else {
             
-            $("#add-comment-btn").attr("disabled", "true");
+            $("#add-comment-btn, #update-comment-btn").attr("disabled", "true");
         }
+        
     });
     
+    // prepare edit comment form 
     
     $(document).on("click", ".comment-controller i", function() {
         
-        $('#add-comment-title').hide();
-        
-        $('#update-comment-title').show();
-        
-        $("#add-comment-form").attr("data-do", $("#add-comment-form").attr("data-updateComment"));
-        
         $("#comment-id").val($(this).data('id'));
         
-        $("#item-comment").val($(this).parent().siblings(".comment").html());
+        $("#update-comment").val($(this).parent().siblings(".comment").html());
         
     });
                    // <============= end item  page ====================> 
     
-                  // <============= public style  ====================>
+                  // <============= public style & layout  ====================>
     
     
 

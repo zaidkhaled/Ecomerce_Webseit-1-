@@ -599,14 +599,16 @@ function showComment($item_ID) {
              <div class=" circle img-container">   
                <img class=" img-responsive actor-img" style="width:60px;" src="uplaodedFiles/usersFoto/<?php echo $comment["actor_foto"]; ?>">   
              </div>     
-             <h5 class="written_by left"><?php echo $comment["written_by"];?></h5>    
+             <h5 class="written_by left"><?php echo $comment["written_by"];?></h5> 
+             <?php if ($comment['Member_ID'] === $_SESSION['ID']) { ?>   
              <div class="row comment-controller">    
                <i class="material-icons right modal-trigger comment-edit-btn"
                   onclick="$('.modal').modal();"
                   data-id ="<?php echo $comment['C_ID']; ?> "
-                  href = "#comment-form" 
+                  href = "#update-comment-form" 
                   >mode_edit</i>    
-             </div>      
+             </div>  
+             <?php } ?>   
              <p class ="comment" id="comment"><?php echo $comment["Comment"];?></p>
              <div class ="comment-data right"><?php echo $comment["Comment_Data"];?></div>   
            </div>

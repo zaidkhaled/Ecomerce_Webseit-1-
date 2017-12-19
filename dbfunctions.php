@@ -978,12 +978,12 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
                                  SET
                                    comment =?
                                  WHERE 
-                                   C_ID = ?");  //Info Updating
+                                   C_ID = ?");  //comment sUpdating
 
             $stmt->execute([$comment, $commentID]); //insert new value
          
              } else {
-                echo "kushs";
+                echo "don't work ";
             }
         
         

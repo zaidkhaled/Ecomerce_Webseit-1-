@@ -1,18 +1,22 @@
- <?php 
- @session_start();
- ob_start();
+<?php 
 
- if(isset($_GET["Member-name"], $_GET["id"])){
- $member_name = $_GET["Member-name"];
- $member_ID = $_GET["id"];
-
-
- $pageTitle =  $member_name;
-
- include "init.php"; 
+session_start();
+ob_start();
+ if(!isset($_GET["Member-name"], $_GET["id"])){
+     
+      header("Location:logReg.php");// redirect to index.php.
+     
+ } else {
+     
+ 
+ 
+ include "init.php";      
  include $tpl."header.php";
  include $tpl."nav.php";
 
+ $member_name = $_GET["Member-name"];
+ $member_ID = $_GET["id"];
+ $pageTitle =  $member_name;
  $login_status =  isset($_SESSION['ID'] ,$_SESSION['user']) ? $_SESSION['ID'] : "0";
 
      
@@ -410,13 +414,7 @@
              
 
  <?php 
-                                                                
-    } else {
-     
-      header("Location:logReg.php");// redirect to index.php.
  }
-
-
  include $tpl."footer.php";
 
  ob_end_flush();

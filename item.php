@@ -45,7 +45,7 @@ include $tpl."nav.php";
             <!-- Modal Trigger -->
             <?php
             // if this user is not the owner let him buy this item
-            if (empty($check_info) && isset($_SESSION['ID']) ){
+            if (empty($check_info) && isset($_SESSION['ID']) && $row['approve'] === "1" ){
                 echo "
                  <div id = 'buy-rst'> </div>  
                    <div class='row'>
@@ -140,17 +140,22 @@ include $tpl."nav.php";
     <div class = "comments col 12">
       <?php  if (isset($_SESSION['user'])){ ?>
                    <div class="add-comment-icon row">
-                     <a id = "plus-comment-btn" href = "#comment-form" title="<?php echo lang("ADD_NEW_COMMENT")?>" class="btn-floating btn-large waves- effect waves-light  right modal-trigger "><i class="material-icons">comment</i></a>
+                     <a id = "plus-comment-btn" href = "#add-comment-form" title="<?php echo lang("ADD_NEW_COMMENT")?>" class="btn-floating btn-large waves- effect waves-light  right modal-trigger "><i class="material-icons">comment</i></a>
                    </div>
-                   <div class="add-comment modal" id="comment-form" style="display:none">
-                      <form class="ajax-form" data-addComment = "add_comment" data-updateComment = "update_comment" data-do = "" data-place = "#comment-call" id="add-comment-form" > 
-                        <h4 class="center-align" id="add-comment-title"><?php echo lang("ADD_COMMENT"); ?></h4>     
-                        <h4 class="center-align" id="update-comment-title"><?php echo lang("UPDATE_COMMENT"); ?></h4>     
-                        <input type="hidden" id="item-id" value="<?php echo $item_ID; ?>"> 
-                        <input type="hidden" id="comment-id" value=""> 
-                        <input type="hidden" id = "owner-id" value="<?php echo $row['Member_ID'];?>"> 
+        
+                   <!-- start update form -->
+                   <div class="add-comment modal" id="add-comment-form" style="display:none">
+                      <form class="ajax-form" 
+                            data-do = "add_comment" 
+                            data-place = "#comment-call" 
+                            
+                            > 
+<!--                          id="add-comment-form"-->
+                        <h4 class="center-align" id="add-comment-title"><?php echo lang("ADD_COMMENT"); ?></h4>
+                        <input type="hidden" id = "owner-id" value="<?php echo $row['Member_ID'];?>">   
+                        <input type="hidden" id="item-id" value="<?php echo $item_ID; ?>">  
                         <div class="input-field area">
-                          <textarea id="item-comment"  class="materialize-textarea"></textarea>   
+                          <textarea id="add-comment"  class="add-comment materialize-textarea"></textarea>   
                           <label for="icon_prefix"><?php echo lang("WRITE_COMMENT")?></label>
                         </div>
                         <input type="submit"
@@ -160,7 +165,27 @@ include $tpl."nav.php";
                                value = <?php echo lang("SENT_IT")?>> 
 
                       </form>       
-                   </div>
+                   </div><!-- end update form -->
+        
+                   <!-- start update form -->
+                   <div class="add-comment modal" id="update-comment-form" style="display:none">
+                      <form class="ajax-form"
+                            data-do = "update_comment" 
+                            data-place = "#comment-call" >     
+                        <h4 class="center-align" id="update-comment-title"><?php echo lang("UPDATE_COMMENT"); ?></h4>     
+                        <input type="hidden" id="comment-id" value=""> 
+                        <div class="input-field area">
+                          <textarea id="update-comment"  class="update-comment materialize-textarea"></textarea>   
+                          <label for="icon_prefix"><?php echo lang("WRITE_COMMENT")?></label>
+                        </div>
+                        <input type="submit"
+                               disabled
+                               id="update-comment-btn" 
+                               class="waves-effect waves-light btn right"
+                               value = <?php echo lang("SENT_IT")?>> 
+
+                      </form>       
+                   </div><!-- end update form -->
         <?php } ?>
   
         <div id="comment-call">

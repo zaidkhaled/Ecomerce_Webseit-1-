@@ -45,6 +45,7 @@ foreach ( $getCateAll as $cat){
 <?php  } ?>
 </ul> <!-- end categories side nav -->
 
+<!--start nav-->
 <nav class="nav-fixed">
    <div class="container">
       <div class="nav-wrapper">
@@ -127,7 +128,7 @@ foreach ( $getCateAll as $cat){
    </div>
     
    <ul id="dropdownSM" class="dropdown-content">
-    <li><a  href ="profile.php"> <?php echo lang("PROFILE")?> </a></li>
+    <li><a href = "<?php echo $url_profile; ?>"><?php echo lang("PROFILE")?></a></li>
     <?php echo $login;?>
     <?php echo $logout;?>
    </ul>
@@ -143,7 +144,7 @@ foreach ( $getCateAll as $cat){
    <div id="nav-sm" class="hide-on-large-only">
      <a data-activates="mobile-demo" id = 'mobile-sm-nav' class="button-collapse"><i class="material-icons">menu</i></a>  
    </div>    
-</nav>
+</nav> <!--end navbar-->
 
 
 
