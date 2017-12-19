@@ -43,7 +43,7 @@ $pageTitle = "Dashbord";
             <div class="col s6  m3 box">
                 <div class="stat ">
                     <p><?php echo lang("TOTAL_ITEMS"); ?></p>
-                    <span><a href="mange.php"><?php echo countItems("item_ID","items")?></a></span>
+                    <span><a href="items.php"><?php echo countItems("item_ID","items")?></a></span>
                 </div>
             </div>
        
@@ -64,7 +64,7 @@ $pageTitle = "Dashbord";
             </div>
             <div class="col s6  m3 box push-m1">
                 <div class="stat ">
-                    <p><?php echo lang( "DEPIT_DEPOSIT"); ?></p>
+                    <p><?php echo lang("DEBIT_DEPOSIT"); ?></p>
                     <span><a href="debit_deposit.php"><?php echo countItems("ID","debit_deposit_operations")?></a></span>
                 </div>
             </div>

@@ -41,4 +41,11 @@ $src_lang = !isset($lang_selected)?  "Eng" : $lang_selected ;
 
  include $lang . $src_lang . ".php";
 
+
+// disable errors msgs
+
+define('DEBUG', true);
+
+error_reporting(E_ALL);
+ini_set('display_errors', DEBUG ? 'On' : 'Off');
 ?>

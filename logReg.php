@@ -1,7 +1,6 @@
 <?php
+@session_start();
 ob_start();
-session_start();
-
 $pageTitle = "Login & Regester";
 
 if(isset($_SESSION['user'])){//check if user alrady logined
@@ -23,6 +22,8 @@ if(isset($_SESSION['user'])){//check if user alrady logined
      if (isset($_POST['login'])){
          
          // check if user is realy exist in Database.
+         
+         $logPass = $_POST['pass'];
          
          $hashedpass = sha1($_POST['pass']);
          
@@ -211,10 +212,10 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                 LastActivity('login_details', $_SESSION['ID']);
          
                 
-                redirectPage(lang("PHP_SUCCMSG_REGISTER"));
+//                redirectPage();
                 
                 
-//             header("Location:index.php");// redirect to index.php.
+             header("Location:index.php");// redirect to index.php.
 
             } else {
                 foreach ($ErrArray as $err){
@@ -244,7 +245,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                         class="validate"
                         name="name_or_email" 
                         autocomplete="off"
-                        value="<?php if (isset($userName)){echo $userName;}?>"
+                        value="<?php if (isset($value)){echo $value;}?>"
                         >
               <label for="first_name"><?php echo lang("FIRST_NAME_OR_EMAIL")?></label>
           </div>
@@ -259,7 +260,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                         name="pass"
                         limit='3'
                         autocomplete = "new-password" 
-                        value="<?php if (isset($password)){echo $password;}?>">
+                        value="<?php if (isset($logPass)){echo $logPass;}?>">
                  <label for="icon_telephone"><?php echo lang('PASSWORD')?></label>
            </div>
        </div> 
@@ -280,7 +281,7 @@ if(isset($_SESSION['user'])){//check if user alrady logined
             <!--End input "Add user Name" field--> 
             <div class="input-field col s8 m5 push-m1 push-s2">
                <i class="material-icons prefix">account_circle</i>
-                  <input pattern=".{3,}"
+                  <input pattern=".{3,9}"
                          title = "pleace fill this field with more then 3 char"
                          id="add-name"
                          type="text" 
@@ -298,7 +299,6 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                   <input pattern=".{6,}"
                          title = "pleace fill this field with more then 6 char"
                          id="add-email" 
-                         limit ="6"
                          type="email"
                          class="validate input" 
                          name="email"
@@ -316,7 +316,6 @@ if(isset($_SESSION['user'])){//check if user alrady logined
                           type="password"
                           id="icon_prefix" 
                           class="validate password1 input" 
-                          limit ="6"
                           name ="pass1"
                          required>
 
@@ -406,5 +405,6 @@ if(isset($_SESSION['user'])){//check if user alrady logined
 <?php 
     
     include $tpl."footer.php";
+
     ob_end_flush();
 ?>

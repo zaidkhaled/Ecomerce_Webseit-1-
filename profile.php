@@ -1,6 +1,6 @@
  <?php 
+ @session_start();
  ob_start();
- session_start();
 
  if(isset($_GET["Member-name"], $_GET["id"])){
  $member_name = $_GET["Member-name"];
@@ -48,7 +48,7 @@
 ?>
   
 <!--       id="personal_info" class="side-nav"-->
-         <div class=" side-nav " id='personal_info'> <!-- Note that "m4 l3" was added -->
+         <div class="side-nav" id='personal_info'> <!-- Note that "m4 l3" was added -->
            
              <div class="container">
                <div class="info">
@@ -177,9 +177,9 @@
 
 
             <?php } ?>
-
-             <div class="row">
-               <!-- start personal img -->     
+               
+             <!-- start personal img --> 
+             <div class="row">    
                 <div id="rst"></div> 
                <div class="img left col push-m1" id = "user-foto-place">
              <?php 
@@ -187,14 +187,16 @@
                ?>
                </div>  <!-- end personal img -->   
 
-        <?php    if(isset($profile_user)){ ?>      
-
-                <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
+               <?php
+               if(isset($profile_user)){ 
+               ?>      
+                    <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
                <?php } ?>    
              </div> 
+             <!-- end personal img --> 
              <?php
             if(isset($profile_user)){  ?> 
-
+             <!-- start change foto form --> 
             <form class = "foto-uplaod modal ajax-form " 
                   enctype="multipart/form-data" 
                   id="change-foto" 
@@ -234,9 +236,10 @@
                          >   
                   <a class='modal-action modal-close waves-effect waves-green btn-flat'>close</a>
                 </div> 
-             </form>   
+             </form> 
+             <!-- end change foto form --> 
 
-
+             <!-- start add item form --> 
              <form class="form addItemForm ajax-form col s12"  
                    data-do ="insert_item" 
                    data-place ="#profile-items" 

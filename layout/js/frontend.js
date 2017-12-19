@@ -39,6 +39,7 @@ $(function () {
 
         
         if ($do === "update-user-info") {
+            
             fData.append("ajxName", $("#update-name").val());
             fData.append("ajxEmail", $("#update-email").val());
             fData.append("ajxFname", $("#update-fName").val());
@@ -69,13 +70,11 @@ $(function () {
 
                 // len is number of imgs
 
-
                 if ($("#item-main-img").attr("len") > 0) {
 
                     fData.append("main_foto", $("#item-main-img")[0].files[0]);
 
                 }
-
 
                 var i = 0, len = $("#items-fotos").attr('len');
 
@@ -113,8 +112,6 @@ $(function () {
             }
             
 
-            
-            
             //  empty inputs after ajax call
             
             $(".progress .determinate").css("width", "0px");
@@ -131,7 +128,7 @@ $(function () {
 
             $('select').material_select(); // materialze requirement
                      
-               
+             $('.addItemForm').slideUp();   
 
           
         } else if ($do === "add_comment" || $do === "update_comment") {

@@ -216,10 +216,7 @@ $(function () {
                 fData.append("ajxStatus", $('#select-status option:selected').val());
                 fData.append("ajxUserId", $('#select-user option:selected').val());
                 fData.append("ajxCateId", $('#select-cate option:selected').val());
-            // send fotos just with add item form 
-
-
-
+                // send fotos just with add item form 
 
                 // send fotos just with add item form 
 
@@ -274,9 +271,6 @@ $(function () {
             
         } else {
             var $where = $place;
-//                required  = $('#data_required').html().length > 3 ? $('#data_required').html() : "undefined";
-//                console.log($('#data_required').html().length);
-//                console.log(required);
             fData.append('open', $place);
 
             fData.append('ajxdata_required', $('#data_required').html());

@@ -143,6 +143,7 @@ function lang($phrase){
     "ITEM_COMMENT_MENGER" => "Item comment manger",
     "CHOSE_ITEM"          => "Chose Item",
     "NUMS_ITEMS"          => "Nums_item",
+    "DEBIT_DEPOSIT"       => "Debit & Deposit"
     
     //comments Page  
      

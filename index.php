@@ -1,11 +1,5 @@
  <?php 
-
-
-
-
-
-
- session_start();
+ @session_start();
  ob_start();
  $pageTitle = "shop-online";
 
@@ -18,20 +12,15 @@
 <div class="container margin">
   <h1 class="center-align">Shop Online</h1>
 <?php 
-if (isset($_SESSION["user"])) { ?>
+//if (isset($_SESSION["user"])){ ?>
 
   <div class="row plus-btn"> 
     <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
   </div> 
 
-<?php
-}
-?>
-    
+
   <!--staet add item form-->
 
-<?php     
-if  (isset($_SESSION["user"])) {   ?> 
     
      <form class="form addItemForm  ajax-form col s12"  
            data-do ="insert_item" 
@@ -192,7 +181,7 @@ if  (isset($_SESSION["user"])) {   ?>
             <input type="submit" id="add-new-item-btn" class="waves-effect waves-light btn right " value ="<?php echo lang("ADD_NEW_ITEMS")?>">
            </div>
        </form><!--End form-->  
-    <?php } ?>          
+            
     
   <div class="row" id = "index-items">
       

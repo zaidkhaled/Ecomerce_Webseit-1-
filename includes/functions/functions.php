@@ -343,10 +343,16 @@ function getAll($select, $from, $id = NULL) {
 function home_items() {
     
     foreach (globalGet("*", "items", "WHERE approve != 0", "", "Item_ID", "DESC", "") as $item){  
- 
-             if (isset($_SESSION["ID"]) && $item["Member_ID"] == $_SESSION["ID"]) { 
+             
+             // give owner ability to edit his own items 
+        
+             if (isset($_SESSION["ID"]) && $_SESSION["ID"] === $item["Member_ID"]) { 
                  
-                 $controle_ability = "";
+                 $controle_ability = "ON";
+                 
+                } else {
+                 
+                 $controle_ability = "Off";
                  
                 }
          ?>
@@ -359,10 +365,11 @@ function home_items() {
                     ?>           
                   <img class="activator" style="height:198px" src="uplaodedFiles/itemsFotos/<?php echo $img; ?>">
                  </div>
-                 <div class="card-content <?php if(!isset($controle_ability)) {echo "card-padding";} ?>">
+                 <div class="card-content <?php if($controle_ability === "Off") {echo "card-padding";} ?>">
                      
                   <!-- check if user has ability to edit and delete this item -->     
-                  <?php if (isset($controle_ability)) { ?>    
+                  <?php if ($controle_ability === "ON") { //echo $item["Member_ID"] . "<br>" . $_SESSION["ID"]; ?> 
+                     
                    <div class="row profile-item-icons">   
                    <!--Delete Butten-->
                      <a class='modal-trigger' 

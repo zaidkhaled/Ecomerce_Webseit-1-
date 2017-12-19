@@ -45,7 +45,7 @@ include $tpl."nav.php";
             <!-- Modal Trigger -->
             <?php
             // if this user is not the owner let him buy this item
-            if (empty($check_info) ){
+            if (empty($check_info) && isset($_SESSION['ID']) ){
                 echo "
                  <div id = 'buy-rst'> </div>  
                    <div class='row'>

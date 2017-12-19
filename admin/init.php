@@ -22,5 +22,10 @@ $css ="layout/css/"; // Css  Directory
 
  include $lang."Eng.php";
 
+// disable errors msgs
 
+define('DEBUG', true);
+
+error_reporting(E_ALL);
+ini_set('display_errors', DEBUG ? 'On' : 'Off');
 ?>

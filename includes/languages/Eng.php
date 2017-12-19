@@ -107,7 +107,7 @@ function lang($phrase){
     "AGREE"               => "Agree",    
     "CLOSE"               => "Close",    
     "EMPTY"               => "Empty",
-    "HOW_MANY"            => "How many  $",
+    "HOW_MANY"            => "How many",
     "HOW_MANY_ITEM"       => "How many",
     "ITEMS_MANGER"        => "Items manger", 
     "ADD_NEW_ITEMS"       => "Add New Item",    

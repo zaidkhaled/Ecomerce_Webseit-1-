@@ -199,6 +199,9 @@ h1{
     overflow: scroll;
 }
 
+.pointer{
+   cursor: pointer;
+}
 .container-grid table{
     position: absolute;
     top: 0;
@@ -405,7 +408,14 @@ nav {
     display: flex;
     align-content: center;
     justify-content: center;
+    
 }
+
+nav a.button-collapse{
+    height: 56px;
+    line-height: 57px;
+}
+
 #nav-sm > a{
     padding: 6px;
     margin: 0 19px;     
@@ -423,6 +433,16 @@ nav {
    
     
 }
+
+#cotegories-side-nav  .dropdown-content{
+    width: 100% !important;
+    left: 40px;
+}
+
+.dropdown-content li {
+    text-align: center;
+}
+
 input[type="search"]:not(.browser-default){
     width: 0;
 }

@@ -10,12 +10,40 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
      $url_profile = isset($_SESSION['user']) && $_SESSION['ID'] ? "profile.php?Member-name=" . $_SESSION['user'] . "&id=" . $_SESSION['ID'] : 'logReg.php';
     ?>     
     <li><a href = "<?php echo $url_profile; ?>"><?php echo lang("PROFILE")?></a></li>
-    <li><a href="#!"><?php echo lang('SETTING')?></a></li>
     <?php echo $login;?> 
     <?php echo $logout;?> 
 </ul>
 
+<!-- categories side nav -->
 
+<ul id="cotegories-side-nav" class="side-nav">
+<?php      
+
+$getCateAll = globalGet("*", "categories", "WHERE Parent = 0", "", "ID", $ordering = "ASC");   
+    
+// fetch  main categories
+    
+foreach ( $getCateAll as $cat){
+
+      echo "<li class = 'pointer'><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; 
+
+?>
+      <ul id="drop<?php echo $cat['ID']; ?>"  class=" dropdown-content"> 
+<?php  
+
+          echo "<li class ='align-center'><a href='category.php?required=category&ID=" . $cat['ID'] . "&name=" . str_replace( " ", "-      ", $cat['Name']) . "'>" . $cat['Name'] . "</a></li>";
+
+          // fetch child category
+
+          $cate_child = globalGet("*", "categories", "WHERE Parent ={$cat['ID']}");
+
+                foreach ($cate_child as $child){
+
+                         echo "<li class='pointer'><a href='category.php?required=category&ID=" . $child['ID'] . "&name=" . str_replace( " ", "-", $child['Name']) . "'>" . $child['Name'] . "</a></li>"; 
+                } ?>
+      </ul> 
+<?php  } ?>
+</ul> <!-- end categories side nav -->
 
 <nav class="nav-fixed">
    <div class="container">
@@ -23,13 +51,16 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
         <ul class="left hide-on-med-and-down">
             
         <?php
-          // fetch category      
-          $getCate = globalGet("*", "categories", "WHERE Parent = 0", "", "ID", $ordering = "ASC");  
+            
+          // fetch category  
+            
+          $getCate = globalGet("*", "categories", "WHERE Parent = 0", "", "ID", $ordering = "ASC", "4");  
             
           foreach ( $getCate as $cat){
               
-                  echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; ?>
-            
+                  echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; 
+              
+         ?>
                   <ul id="drop<?php echo $cat['ID']; ?>"  class="dropdown-content"> <?php  
               
                       echo "<li><a href='category.php?required=category&ID=" . $cat['ID'] . "&name=" . str_replace( " ", "-", $cat['Name']) . "'>" . $cat['Name'] . "</a></li>";
@@ -40,13 +71,13 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
               
                             foreach ($cate_child as $child){
                                 
-                                     echo "<li><a href='category.php?required=category&ID=" . $child['ID'] . "&name=" . str_replace( " ", "-", $child['Name']) . "'>" . $child['Name'] . "</a></li>"; 
+                                     echo "<li><a href='category.php?required=category&ID=" . $child['ID'] . "&name=" .              str_replace( " ", "-", $child['Name']) . "'>" . $child['Name'] . "</a></li>"; 
                             } ?>
-                   
-                       
-                   
                   </ul> 
          <?php  } ?>
+            
+          <li><a class ='button-collapse nav-list' style="display:block" data-activates='cotegories-side-nav'><?php echo  lang("CATEGORIES");?></a></li>
+            
           <li><a class="dropdown-button" class = "dropdown-button" data-activates="dropdown11"><?php $value = isset($_SESSION['user'])? 'Hi' . " ". $_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li> 
         </ul>
           
@@ -69,7 +100,7 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
           
           
           
-          
+        <!-- start notification -->
         <div class="left nav-click-show" id="notification" data-show = "#notification > .events" data-hide = ".search-nav, .search-box">
           <a id = 'notif-icon'><i class="material-icons">add_alert</i></a>
           <div class="events" >
@@ -79,24 +110,24 @@ $logout = isset($_SESSION['user'])? "<li id ='logout'><a  href='logout.php'>". l
               <!-- content will be received by ajax -->
             </ul>    
          </div>
-       </div>
+       </div> <!-- end notification -->
 
         <ul class="side-nav" id="mobile-demo">
+          <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? 'Hi' . " ".$_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>    
         <?php    
-          foreach ( $getCate as $cat){
-                 //  echo "<li><a href='category.php?required=category&ID=" . $cat['ID'] . "&name=" . str_replace( " ", "-", $cat['Name']) . "'>" . $cat['Name'] . "</a></li>"; 
+          // fetch all categories
+            
+          foreach ( $getCateAll as $cat){
                    
-                   echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "'>" . $cat['Name'] . "</a></li>"; ?>
+                   echo "<li><a class = 'cate-menu' data-activates='drop". $cat['ID'] . "' href='category.php?required=category&ID=" . $cat['ID'] . "&name=" . str_replace( " ", "-", $cat['Name']) . "'>" . $cat['Name'] . "</a></li>"; ?>
                
          <?php  }?>                                                              
-           <li><a class="dropdown-button"  data-activates="dropdownSM"><?php $value = isset($_SESSION['user'])? 'Hi' . " ".$_SESSION['user']: "Drop"; echo $value; ?><i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
      </div>
    </div>
     
    <ul id="dropdownSM" class="dropdown-content">
     <li><a  href ="profile.php"> <?php echo lang("PROFILE")?> </a></li>
-    <li><a href="#"><?php echo lang('SETTING')?></a></li>
     <?php echo $login;?>
     <?php echo $logout;?>
    </ul>
