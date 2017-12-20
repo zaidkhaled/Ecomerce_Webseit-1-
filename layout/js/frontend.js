@@ -258,6 +258,27 @@ $(function () {
         
     });
     
+    
+    
+    $(window).on("load", function () {
+        
+        var pageTitle = location.href,
+            win_width = window.innerWidth;
+        
+        $.ajax({
+        url      : "dbfunctions.php",
+        method   : "POST",
+        data     : {ajxdo : "home-page-load", ajxtitle : pageTitle, ajxwidth: win_width},
+        dataType : "json",
+        success  : function (data) {
+          console.log(data);   
+        } 
+
+        });
+            
+    }); 
+        
+    
     // check nontifications every 3 second
     
     setInterval(function() {ajax_check("check_notif");}, 3000);

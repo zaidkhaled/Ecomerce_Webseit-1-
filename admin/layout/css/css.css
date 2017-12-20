@@ -6912,6 +6912,9 @@ input[type=email].valid:not(.browser-default) {
   .form .input-field {
     height: 110px; } }
 /*end form*/
+table.my-table {
+  margin-bottom: 150px; }
+
 .errmsg_php .msg {
   text-align: center;
   margin-top: 0; }

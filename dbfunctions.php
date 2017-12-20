@@ -97,7 +97,73 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
         
        echo  json_encode($data);
         
-      
+        
+      // home page onload: set ip
+          
+    }elseif ($do == "home-page-load"){  
+        
+        // functions to get cleit IP
+        
+        function get_client_ip() {
+            $ipaddress = '';
+            if (getenv('HTTP_CLIENT_IP'))
+                $ipaddress = getenv('HTTP_CLIENT_IP');
+            else if(getenv('HTTP_X_FORWARDED_FOR'))
+                $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+            else if(getenv('HTTP_X_FORWARDED'))
+                $ipaddress = getenv('HTTP_X_FORWARDED');
+            else if(getenv('HTTP_FORWARDED_FOR'))
+                $ipaddress = getenv('HTTP_FORWARDED_FOR');
+            else if(getenv('HTTP_FORWARDED'))
+               $ipaddress = getenv('HTTP_FORWARDED');
+            else if(getenv('REMOTE_ADDR'))
+                $ipaddress = getenv('REMOTE_ADDR');
+            else
+                $ipaddress = 'UNKNOWN';
+            return $ipaddress;
+        }
+
+        function get_client_ip2() {
+            $ipaddress = '';
+            if (isset($_SERVER['HTTP_CLIENT_IP']))
+                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+            else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            else if(isset($_SERVER['HTTP_X_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+            else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+            else if(isset($_SERVER['HTTP_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED'];
+            else if(isset($_SERVER['REMOTE_ADDR']))
+                $ipaddress = $_SERVER['REMOTE_ADDR'];
+            else
+                $ipaddress = 'UNKNOWN';
+            return $ipaddress;
+        }
+        
+        
+        if (get_client_ip() !== "UNKNOWN") {
+            
+            $cleitIP = get_client_ip(); 
+            
+        } else {
+            
+            $cleitIP = get_client_ip2(); 
+        }
+        
+        $pageTitle = $_POST['ajxtitle'];
+        
+        $pagewidth = $_POST['ajxwidth'];
+        
+        
+        $stmt = $con->prepare ("INSERT INTO `load-home-page` (`IP`, `page-title`, `win_width`, `Time`) VALUES ('$cleitIP', '$pageTitle', $pagewidth, now())");
+        
+        $stmt -> execute();
+        
+        
+        echo "yes";
+        
     //update Last activated data to know if user is online or not     
         
     }elseif ($do == "Last_activated"){         
@@ -111,7 +177,7 @@ if($_SERVER['REQUSET_METHOD'] = "POST"){
     }elseif ($do == "seen"){ 
         
         
-        $stmt = $con-> prepare("UPDATE nontifications SET is_seen = 1 WHERE user_ID= ?");
+        $stmt = $con->prepare("UPDATE nontifications SET is_seen = 1 WHERE user_ID= ?");
                 
         $stmt-> execute([$_SESSION['ID']]);
         

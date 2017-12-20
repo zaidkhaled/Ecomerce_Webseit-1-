@@ -344,6 +344,24 @@ $(function () {
     }
     
     
+    
+    $(window).on("load", function () {
+        
+        var pageTitle = location.href,
+            win_width = window.innerWidth;
+        
+        $.ajax({
+        url      : "dbfunctions.php",
+        method   : "POST",
+        data     : {do: "home-page-load", ajxtitle : pageTitle, ajxdata_required : 'undefined', ajxwidth: win_width},
+        dataType : "json",
+        success  : function (data) {
+          console.log(data);   
+        }
+        });
+            
+    }); 
+    
 /*
                <======================================================================>
       function to looking for a specific values in the table, the function will recognize data by class .search-in.

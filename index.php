@@ -11,17 +11,17 @@
 
 <div class="container margin">
   <h1 class="center-align">Shop Online</h1>
+    
 <?php 
-//if (isset($_SESSION["user"])){ ?>
+if (isset($_SESSION["user"])){ ?>
 
   <div class="row plus-btn"> 
     <a id ='add-item-btn' title="<?php echo lang("ADD_NEW_ITEMS")?>" class="btn-floating btn-large waves-effect waves-light red right add-item-btn"><i class="material-icons">add</i></a>
   </div> 
 
-
-  <!--staet add item form-->
-
+<?php } ?>
     
+  <!--staet add item form-->
      <form class="form addItemForm  ajax-form col s12"  
            data-do ="insert_item" 
            data-place ="#profile-items" 
